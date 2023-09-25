@@ -3,7 +3,7 @@
     v-if="showModal"
     class="fixed inset-0 flex items-center justify-center z-50"
   >
-    <div class="fixed inset-0 bg-black opacity-60"></div>
+    <div class="fixed inset-0 bg-black opacity-60" @click="closeModal"></div>
     <div
       class="bg-white p-6 rounded-lg shadow-lg z-50 max-w-screen-md max-h-screen-md"
     >

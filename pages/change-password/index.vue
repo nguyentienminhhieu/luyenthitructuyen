@@ -1,7 +1,9 @@
 <template>
-  <div class="flex justify-center items-center h-screen">
+  <div class="flex justify-center items-center mt-16 max-h-screen">
     <div class="flex flex-col items-center">
-      <h1 class="text-color-auth text-4xl font-semibold mb-4">Đăng nhập</h1>
+      <h1 class="text-color-auth text-4xl font-semibold mb-4">
+        Change-pasword
+      </h1>
       <form class="mt-8 space-y-6" @submit.prevent="submitForm">
         <div class="relative">
           <label for="password" class="block text-color-default"

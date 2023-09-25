@@ -4,7 +4,7 @@
     class="fixed inset-0 flex items-center justify-center z-50"
   >
     <!-- Lớp nền mờ -->
-    <div class="fixed inset-0 bg-black opacity-60"></div>
+    <div class="fixed inset-0 bg-black opacity-60" @click="closeModal"></div>
 
     <!-- Modal chứa nội dung -->
     <div

@@ -40,7 +40,7 @@ export default {
   methods: {
     pushArray() {
       const randomId = Math.random(10) * 10000
-      let question = {
+      const question = {
         id: randomId,
         title: '',
         slug: '',
@@ -54,9 +54,10 @@ export default {
           }
           // console.log(e)
         })
-      } else {
-        console.log('error array null')
       }
+      // else {
+      //   console.log('error array null')
+      // }
       // eslint-disable-next-line vue/no-mutating-props
       this.question.listQuestions.push(question)
     },

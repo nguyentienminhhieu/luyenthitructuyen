@@ -2,7 +2,7 @@
   <div class="mr-12 ml-12">
     <header class="bg-white p-4 h-16 flex justify-between items-center">
       <div class="flex items-center space-x-4">
-        <nuxt-link to="/" class="logo-color text-2xl font-bold">LOGO</nuxt-link>
+        <h1 to="/admin" class="logo-color text-2xl font-bold">LOGO</h1>
       </div>
       <div class="flex space-x-4">
         <nuxt-link

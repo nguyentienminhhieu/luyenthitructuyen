@@ -21,10 +21,13 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['@/plugins/api'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: [
+    '~/components/admin/exams/DetailExam/Question.vue',
+    '~/components/admin/exams/DetailExam/List/ListQuestions.vue',
+  ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -47,7 +50,10 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: process.env.BASE_URL || 'http://127.0.0.1:8000/api/admin',
+  },
+  env: {
+    baseURL: process.env.BASE_URL,
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -67,7 +73,36 @@ export default {
 
   // Content module configuration: https://go.nuxtjs.dev/config-content
   content: {},
-
+  // auth: {
+  //   strategies: {
+  //     local: {
+  //       token: {
+  //         property: 'token',
+  //         required: true,
+  //         type: 'Bearer',
+  //       },
+  //       user: {
+  //         property: 'user',
+  //         autoFetch: true,
+  //       },
+  //       endpoints: {
+  //         login: { url: '/admin/login', method: 'post' },
+  //         logout: { url: '/admin/logout', method: 'post' },
+  //         // user: { url: '/auth/user', method: 'get' }
+  //       },
+  //     },
+  //   },
+  //   redirect: {
+  //     login: '/login',
+  //     logout: '/',
+  //     callback: '/login',
+  //     home: '/',
+  //   },
+  // },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  server: {
+    port: 3000, // Cổng lắng nghe cho dự án này
+  },
 }

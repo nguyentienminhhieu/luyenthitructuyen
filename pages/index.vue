@@ -1,11 +1,15 @@
 <template>
   <div>
-    <nuxt-link to="/admin">Admin</nuxt-link>
+    <Login />
   </div>
 </template>
 
 <script>
+import Login from './login'
 export default {
   name: 'IndexPage',
+  components: {
+    Login,
+  },
 }
 </script>

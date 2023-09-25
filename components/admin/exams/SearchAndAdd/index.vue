@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     handleAddClick() {
-      this.$router.push('/admin/exams/add-exam')
+      this.$emit('add-clicked')
     },
   },
 }

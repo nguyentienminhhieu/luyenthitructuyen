@@ -37,7 +37,7 @@
           <!-- Ô trống cho nút Chỉnh sửa -->
         </tr>
       </thead>
-      <tbody class="max-h-400 overflow-y-auto" @click="goToDetailUser">
+      <tbody class="max-h-400 overflow-y-auto" @click="goToDetailExam">
         <!-- <tr v-for="student in students" :key="student.id">
           <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.id }}</td>
           <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.username }}</td>
@@ -57,75 +57,7 @@
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
             <input
               id="toggle"
-              :checked="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': isActive }"
-                class="w-12 h-6 bg-gray-300 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <button @click="editStudent">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteStudent">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">lớp</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">truong</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              :checked="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': isActive }"
-                class="w-12 h-6 bg-gray-300 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <button @click="editStudent">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteStudent">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">lớp</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">truong</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              :checked="isActive"
+              v-model="isActive"
               type="checkbox"
               class="hidden"
             />
@@ -164,13 +96,13 @@ export default {
   },
   methods: {
     editStudent() {
-      this.$emit('edit-clicked')
+      this.$router.push(`/admin/exams/${this.$route.params.id}`)
     },
     deleteStudent() {
       this.$emit('delete-clicked')
     },
-    goToDetailUser() {
-      // this.$router.push(`/admin/users/students/${this.$route.params.id}`)
+    goToDetailExam() {
+      // this.$router.push(`/admin/exams/${this.$route.params.id}`)
     },
   },
 }

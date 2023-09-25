@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-screen">
+  <div class="flex justify-center items-center mt-16 max-h-screen">
     <div class="flex flex-col items-center">
       <h1 class="text-color-auth text-4xl font-semibold mb-4">Register</h1>
       <form class="login-form mt-8 space-y-6" @submit.prevent="submitForm">
@@ -437,6 +437,4 @@ export default {
   },
 }
 </script>
-<style scope>
-
-</style>
+<style scope></style>

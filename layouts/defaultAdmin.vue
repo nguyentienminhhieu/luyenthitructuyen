@@ -4,10 +4,10 @@
     <div class="flex">
       <!-- Sidebar -->
       <aside
-        class="bg-[#181F35] text-white border-r-2 w-64 h-screen overflow-y-auto"
+        class="bg-[#181F35] text-white border-r-2 w-56 h-screen overflow-y-auto sticky top-0"
       >
         <div class="flex flex-col items-center mt-8 space-x-4">
-          <nuxt-link to="/" class="text-white text-4xl font-bold"
+          <nuxt-link to="/admin" class="text-white text-4xl font-bold"
             >LOGO</nuxt-link
           >
           <!-- <p class="ml-none text-sm">Administrator</p> -->
@@ -161,7 +161,7 @@
     <!-- Header -->
     <div class="w-full">
       <header
-        class="bg-white py-8 px-10 h-16 border-b-2 flex justify-between items-center sticky top-0 z-1000000"
+        class="bg-white py-8 px-10 h-16 border-b-2 flex justify-between items-center sticky top-0 z-50"
       >
         <div class="relative">
           <input
@@ -181,22 +181,33 @@
           >
             <i class="fas fa-bell"></i>
           </button>
-          <button
-            class="text-color-custom text-color-custom hover:text-color-custom"
-          >
-            <nuxt-link to="/login">
+          <div class="text-color-custom">
+            <div
+              class="relative cursor-pointer text-color-custom hover:text-color-custom"
+              @click="toggleAccountMenu"
+            >
               <i class="fas fa-user-circle"></i>
-            </nuxt-link>
-          </button>
+            </div>
+            <div>
+              <AccountMenuAdmin v-if="isMenuAccount" />
+            </div>
+          </div>
         </div>
       </header>
+      <ScrollToTop />
       <nuxt />
     </div>
   </div>
 </template>
 <script>
+import AccountMenuAdmin from '~/components/common/AccountMenu'
+import ScrollToTop from '~/components/common/ScrollToTop.vue'
 export default {
   name: 'DefaultAdmin',
+  components: {
+    AccountMenuAdmin,
+    ScrollToTop,
+  },
   data() {
     return {
       isMenuOpen: {
@@ -205,15 +216,15 @@ export default {
         // exercise: false,
         // posts: false,
       },
-      // isSidebarOpen: true,
+      isMenuAccount: false,
     }
   },
   methods: {
-    // toggleSidebar() {
-    //   this.isSidebarOpen = !this.isSidebarOpen
-    // },
     toggleUserMenu() {
       this.isMenuOpen.users = !this.isMenuOpen.users
+    },
+    toggleAccountMenu() {
+      this.isMenuAccount = !this.isMenuAccount
     },
     // toggleExamMenu() {
     //   this.isMenuOpen.exams = !this.isMenuOpen.exams

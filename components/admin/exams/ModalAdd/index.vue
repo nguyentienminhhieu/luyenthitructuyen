@@ -1,0 +1,161 @@
+<template>
+  <div
+    v-if="showModal"
+    class="fixed inset-0 flex items-center justify-center z-50"
+  >
+    <div class="fixed inset-0 bg-black opacity-60" @click="closeModal"></div>
+    <div
+      class="bg-white p-6 rounded-lg shadow-lg z-50 w-[400px] h-[500px] overflow-auto"
+    >
+      <h2 class="text-center text-xl font-semibold mb-10">Loại đề thi</h2>
+      <form class="flex flex-col" @submit.prevent="addExam">
+        <div class="mb-4">
+          <label for="examName" class="block text-color-default"
+            >Tên đề thi</label
+          >
+          <input
+            id="examName"
+            v-model="ruleForm.examName"
+            type="text"
+            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="examDescription" class="block text-color-default"
+            >Mô tả</label
+          >
+          <textarea
+            id="examDescription"
+            v-model="ruleForm.examDescription"
+            class="mt-1 p-2 block w-full h-40 rounded-md focus:outline-none border border-gray-300"
+          ></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label for="examSlug" class="block text-color-default"
+            >Slug đề thi</label
+          >
+          <input
+            id="examSlug"
+            v-model="ruleForm.examSlug"
+            type="text"
+            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="class" class="block text-color-default">Lớp</label>
+          <select
+            id="class"
+            v-model="ruleForm.class"
+            name="class"
+            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+            required
+          >
+            <option value="6">Lớp 6</option>
+            <option value="7">Lớp 7</option>
+            <option value="8">Lớp 8</option>
+            <option value="9">Lớp 9</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="class" class="block text-color-default">Môn Học</label>
+          <select
+            id="class"
+            v-model="ruleForm.subject"
+            name="class"
+            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+            required
+          >
+            <option value="1">Toan</option>
+            <option value="2">Van</option>
+            <option value="3">Van</option>
+            <option value="4">Anh</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="examTime" class="block text-color-default"
+            >Thời gian làm bài</label
+          >
+          <select
+            id="examTime"
+            v-model="ruleForm.examTime"
+            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+          >
+            <option value="50">50 phút</option>
+            <option value="60">60 phút</option>
+            <option value="90">90 phút</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="totalQuestions" class="block text-color-default"
+            >Tổng câu hỏi</label
+          >
+          <select
+            id="totalQuestions"
+            v-model="ruleForm.totalQuestions"
+            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+          >
+            <option value="40">40 câu</option>
+            <option value="50">50 câu</option>
+          </select>
+        </div>
+
+        <div class="col-span-3 flex justify-between mt-4">
+          <button
+            type="button"
+            class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 mr-2"
+            @click="closeModal"
+          >
+            Thoát
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Thêm
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  name: 'ModalAddExam',
+  props: {
+    showModal: Boolean,
+  },
+  data() {
+    return {
+      ruleForm: {
+        examName: '',
+        examDescription: '',
+        examSlug: '',
+        class: null,
+        subject: null,
+        examTime: '50',
+        totalQuestions: '40',
+      },
+    }
+  },
+  methods: {
+    closeModal() {
+      this.$emit('close')
+    },
+    addExam() {
+      // Đưa dữ liệu giáo viên vào hàm hoặc gửi đến API ở đây
+      // Sau khi thêm xong, đóng modal
+      //   const invalid = this.$v.ruleForm.$invalid
+      //   if (invalid) {
+      //     this.$v.ruleForm.$touch()
+      //   } else {
+      console.log('Dung')
+      this.$emit('close')
+      //   }
+    },
+  },
+}
+</script>
+<style></style>

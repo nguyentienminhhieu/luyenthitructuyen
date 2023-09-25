@@ -12,15 +12,15 @@
     >
     <p>/</p>
     <nuxt-link
-      to="/admin/exams/add-exam"
+      :to="'/admin/exams/' + $route.params.id"
       class="text-color-custom hover:text-color-custom"
-      >Add</nuxt-link
+      >{{ $route.params.id }}</nuxt-link
     >
   </div>
 </template>
 <script>
 export default {
-  name: 'HeadingAddExam',
+  name: 'HeadingDetailExam',
 }
 </script>
 <style></style>

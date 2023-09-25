@@ -39,7 +39,7 @@ export default {
   methods: {
     pushArray() {
       const randomId = Math.random(10) * 1000
-      let question = {
+      const question = {
         id: randomId,
         title: '',
         slug: '',

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-screen">
+  <div class="flex justify-center items-center mt-16 max-h-screen">
     <div class="flex flex-col items-center">
       <h1 class="text-color-auth text-4xl font-semibold mb-4">Login</h1>
       <form class="mt-8 space-y-6" @submit.prevent="submitForm">
@@ -19,6 +19,7 @@
                 : '',
             ]"
             @blur="$v.ruleForm.email.$touch()"
+            @keydown.enter.prevent="submitForm"
           />
           <div
             v-if="checkStatusClass($v.ruleForm.email)"
@@ -54,6 +55,7 @@
                   : '',
               ]"
               @blur="$v.ruleForm.password.$touch()"
+              @keydown.enter.prevent="submitForm"
             />
             <span class="cursor-pointer" @click="togglePassword">
               <i
@@ -115,12 +117,13 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
+import { mapActions } from 'vuex'
 import { checkStatusClass } from '~/mixins/ruleValidator'
+
 export default {
   name: 'LoginForm',
   mixins: [validationMixin],
   layout: 'authLayout',
-  // auth: 'guest',
 
   data() {
     return {
@@ -144,10 +147,15 @@ export default {
       },
     },
   },
+  computed: {
+    // ...mapFields({
+    // data: "fileStore.state"
+    // })
+  },
 
   methods: {
+    ...mapActions('authen', ['login']),
     checkStatusClass,
-
     togglePassword() {
       this.isPasswordVisible = !this.isPasswordVisible
       const passwordInput = document.getElementById('password')
@@ -155,12 +163,25 @@ export default {
         passwordInput.type = this.isPasswordVisible ? 'text' : 'password'
       }
     },
-    submitForm() {
+    async submitForm() {
       const invalid = this.$v.ruleForm.$invalid
       if (invalid) {
         this.$v.ruleForm.$touch()
       } else {
-        console.log('Dung')
+        try {
+          const payload = {
+            email: this.ruleForm.email,
+            password: this.ruleForm.password,
+          }
+          const response = await this.login(payload)
+          if (response) {
+            this.$router.push('/admin')
+          } else {
+            alert('sai mat khau hoặc số điện thoại')
+          }
+        } catch (error) {
+          console.log('Submit Failed', error)
+        }
       }
     },
   },

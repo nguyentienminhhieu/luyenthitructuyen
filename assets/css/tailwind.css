@@ -6,12 +6,11 @@
 
 body {
   font-family: Poppins, sans-serif;
-  /* margin: 0 50px; */
 }
 
-body::-webkit-scrollbar {
+/* body::-webkit-scrollbar {
   display: none;
-}
+} */
 
 .overlay {
   position: relative;
@@ -85,6 +84,4 @@ body::-webkit-scrollbar {
     pointer-events: none;
     position: fixed;
   }
-  
 }
-
