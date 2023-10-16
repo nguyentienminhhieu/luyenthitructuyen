@@ -44,62 +44,57 @@
           />
         </div>
         <div class="mb-4">
-          <label for="class" class="block text-color-default">Lớp</label>
+          <label for="grade" class="block text-color-default">Lớp</label>
           <select
-            id="class"
-            v-model="ruleForm.class"
-            name="class"
+            id="grade"
+            v-model="ruleForm.grade"
+            name="grade"
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
             required
           >
-            <option value="6">Lớp 6</option>
-            <option value="7">Lớp 7</option>
-            <option value="8">Lớp 8</option>
-            <option value="9">Lớp 9</option>
+            <option v-for="item in listGrade" :key="item.id" :value="item.id">
+              {{ item.name }}
+            </option>
           </select>
         </div>
         <div class="mb-4">
-          <label for="class" class="block text-color-default">Môn Học</label>
+          <label for="subject" class="block text-color-default">Môn Học</label>
           <select
-            id="class"
+            id="subject"
             v-model="ruleForm.subject"
-            name="class"
+            name="subject"
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
             required
           >
-            <option value="1">Toan</option>
-            <option value="2">Van</option>
-            <option value="3">Van</option>
-            <option value="4">Anh</option>
+            <option v-for="item in listSubject" :key="item.id" :value="item.id">
+              {{ item.name }}
+            </option>
           </select>
         </div>
         <div class="mb-4">
           <label for="examTime" class="block text-color-default"
             >Thời gian làm bài</label
           >
-          <select
+          <input
             id="examTime"
             v-model="ruleForm.examTime"
+            type="number"
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
-          >
-            <option value="50">50 phút</option>
-            <option value="60">60 phút</option>
-            <option value="90">90 phút</option>
-          </select>
+            min="1"
+          />
         </div>
 
         <div class="mb-4">
           <label for="totalQuestions" class="block text-color-default"
             >Tổng câu hỏi</label
           >
-          <select
+          <input
             id="totalQuestions"
             v-model="ruleForm.totalQuestions"
+            type="number"
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
-          >
-            <option value="40">40 câu</option>
-            <option value="50">50 câu</option>
-          </select>
+            min="1"
+          />
         </div>
 
         <div class="col-span-3 flex justify-between mt-4">
@@ -122,6 +117,7 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'ModalAddExam',
   props: {
@@ -133,14 +129,24 @@ export default {
         examName: '',
         examDescription: '',
         examSlug: '',
-        class: null,
+        grade: null,
         subject: null,
         examTime: '50',
         totalQuestions: '40',
       },
     }
   },
+  computed: {
+    ...mapState('grade', ['listGrade']),
+    ...mapState('subject', ['listSubject']),
+  },
+  mounted() {
+    this.getGrade()
+    this.getSubjects()
+  },
   methods: {
+    ...mapActions('grade', ['getGrade']),
+    ...mapActions('subject', ['getSubjects']),
     closeModal() {
       this.$emit('close')
     },

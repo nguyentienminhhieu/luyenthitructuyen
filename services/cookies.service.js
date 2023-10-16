@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
 const TOKEN = 'token'
-const USER = 'user'
+const USER = 'admin'
 const EMAIL = 'email'
 
 export const getToken = () => {

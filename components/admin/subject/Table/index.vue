@@ -19,69 +19,24 @@
             Slug
           </th>
           <th class="px-2 py-3 border-2"></th>
-          <!-- Ô trống cho nút Chỉnh sửa -->
         </tr>
       </thead>
       <tbody class="max-h-400 overflow-y-auto custom-scrollbar">
-        <!-- <tr v-for="student in student" :key="student.id">
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.id }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.username }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.roles }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.truong }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.email }}</td>
+        <tr v-for="subject in listSubject" :key="subject.id">
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+            {{ subject.id }}
+          </td>
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+            {{ subject.name }}
+          </td>
           <td class="px-6 py-4 border-2 whitespace-no-wrap">
+            {{ subject.slug }}
           </td>
-        </tr> -->
-        <!-- Nội dung của <tbody> -->
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editSubject">
+            <button @click="editSubject(subject)">
               <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
             </button>
-            <button @click="deleteSubject">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editSubject">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteSubject">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editSubject">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteSubject">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editSubject">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteSubject">
+            <button @click="deleteSubject(subject.id)">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
           </td>
@@ -91,14 +46,26 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'TableSubjects',
+  computed: {
+    ...mapState('subject', ['listSubject']),
+    ...mapState('subject', ['detailSubject']),
+  },
+  mounted() {
+    this.getSubjects()
+  },
   methods: {
-    editSubject() {
-      this.$emit('edit-clicked')
+    ...mapActions('subject', ['getSubjects']),
+    ...mapActions('subject', ['getDetailSubjects']),
+    async editSubject(subjectItem) {
+      await this.getDetailSubjects(subjectItem.id)
+      this.$emit('edit-clicked', this.detailSubject)
+      console.log('subject', this.detailSubject)
     },
-    deleteSubject() {
-      this.$emit('delete-clicked')
+    deleteSubject(subjectId) {
+      this.$emit('delete-clicked', subjectId)
     },
   },
 }

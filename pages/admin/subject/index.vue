@@ -3,16 +3,18 @@
     <HeadingSubjects />
     <SearchAddOptionSubjects @add-clicked="showAddModal = true" />
     <TableSubjects
-      @edit-clicked="showEditModal = true"
-      @delete-clicked="showDeleteModal = true"
+      @edit-clicked="handleUpdateClicked"
+      @delete-clicked="handleDeleteClicked"
     />
     <ModalAddSubject :show-modal="showAddModal" @close="showAddModal = false" />
     <ModalEditSubject
       :show-modal="showEditModal"
+      :subject-item="subjectItemUpdate"
       @close="showEditModal = false"
     />
     <ModalDelete
       :show-modal="showDeleteModal"
+      :subject-id="subjectIdToDelete"
       @close="showDeleteModal = false"
     />
   </div>
@@ -40,7 +42,19 @@ export default {
       showAddModal: false,
       showEditModal: false,
       showDeleteModal: false,
+      subjectItemUpdate: null,
+      subjectIdToDelete: null,
     }
+  },
+  methods: {
+    handleUpdateClicked(subjectItem) {
+      this.subjectItemUpdate = subjectItem
+      this.showEditModal = true
+    },
+    handleDeleteClicked(subjectId) {
+      this.subjectIdToDelete = subjectId
+      this.showDeleteModal = true
+    },
   },
 }
 </script>

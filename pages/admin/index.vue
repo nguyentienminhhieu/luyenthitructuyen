@@ -25,6 +25,7 @@ export default {
     // TestExam2Components,
   },
   layout: 'defaultAdmin',
+
   data() {
     return {
       listQuestions: [],

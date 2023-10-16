@@ -3,16 +3,18 @@
     <HeadingClasses />
     <SearchAddOptionClasses @add-clicked="showAddModal = true" />
     <TableClasses
-      @edit-clicked="showEditModal = true"
-      @delete-clicked="showDeleteModal = true"
+      @edit-clicked="handleUpdateClicked"
+      @delete-clicked="handleDeleteClicked"
     />
     <ModalAddClass :show-modal="showAddModal" @close="showAddModal = false" />
     <ModalEditClass
       :show-modal="showEditModal"
+      :grade-item="gradeItemUpdate"
       @close="showEditModal = false"
     />
     <ModalDelete
       :show-modal="showDeleteModal"
+      :grade-id="gradeIdToDelete"
       @close="showDeleteModal = false"
     />
   </div>
@@ -41,7 +43,19 @@ export default {
       showAddModal: false,
       showEditModal: false,
       showDeleteModal: false,
+      gradeItemUpdate: null,
+      gradeIdToDelete: null,
     }
+  },
+   methods: {
+    handleUpdateClicked(gradeItem) {
+      this.gradeItemUpdate = gradeItem
+      this.showEditModal = true
+    },
+    handleDeleteClicked(gradeId) {
+      this.gradeIdToDelete = gradeId
+      this.showDeleteModal = true
+    },
   },
 }
 </script>

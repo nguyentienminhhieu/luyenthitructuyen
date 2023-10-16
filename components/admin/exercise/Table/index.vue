@@ -38,16 +38,6 @@
         </tr>
       </thead>
       <tbody class="max-h-400 overflow-y-auto" @click="goToDetailUser">
-        <!-- <tr v-for="student in students" :key="student.id">
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.id }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.username }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.roles }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.truong }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.email }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">
-          </td>
-        </tr> -->
-        <!-- Nội dung của <tbody> -->
         <tr class="hover:bg-gray-50 cursor-pointer">
           <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
           <td class="px-6 py-4 border-2 whitespace-no-wrap">username</td>
@@ -63,8 +53,8 @@
             />
             <label for="toggle" class="flex items-center cursor-pointer">
               <div
-                :class="{ 'bg-[#253d90]': isActive }"
-                class="w-12 h-6 bg-gray-300 rounded-full p-1"
+                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
+                class="w-12 h-6 rounded-full p-1"
               >
                 <div
                   :class="{ 'translate-x-6': isActive }"
@@ -74,10 +64,10 @@
             </label>
           </td>
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <button @click="editStudent">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
+            <button @click="editExercise">
+              <i class="fas fa-edit text-blue-500 hover:text-blue-700 ml-2"></i>
             </button>
-            <button @click="deleteStudent">
+            <button @click="deleteExercise">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
           </td>
@@ -95,10 +85,10 @@ export default {
     }
   },
   methods: {
-    editStudent() {
-      this.$emit('edit-clicked')
+    editExercise() {
+      this.$router.push(`/admin/exercise/${this.$route.params.id}`)
     },
-    deleteStudent() {
+    deleteExercise() {
       this.$emit('delete-clicked')
     },
     goToDetailUser() {

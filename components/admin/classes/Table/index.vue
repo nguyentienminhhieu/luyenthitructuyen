@@ -23,65 +23,21 @@
         </tr>
       </thead>
       <tbody class="max-h-400 overflow-y-auto">
-        <!-- <tr v-for="student in student" :key="student.id">
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.id }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.username }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.roles }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.truong }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.email }}</td>
+        <tr v-for="item in listGrade" :key="item.id">
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+            {{ item.id }}
+          </td>
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+            {{ item.name }}
+          </td>
           <td class="px-6 py-4 border-2 whitespace-no-wrap">
+            {{ item.slug }}
           </td>
-        </tr> -->
-        <!-- Nội dung của <tbody> -->
-        <tr class="hover:bg-gray-50 cursor-pointer custom-scrollbar">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editClass">
+            <button @click="editClass(item)">
               <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
             </button>
-            <button @click="deleteClass">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editClass">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteClass">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editClass">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteClass">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editClass">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteClass">
+            <button @click="deleteClass(item.id)">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
           </td>
@@ -91,14 +47,28 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'TableClasses',
+  computed: {
+    ...mapState('grade', ['listGrade']),
+    ...mapState('grade', ['detailGrade']),
+  },
+  mounted() {
+    this.getGrade()
+    // this.getDetailGrade()
+    // console.log(this.getDetailGrade)
+  },
   methods: {
-    editClass() {
-      this.$emit('edit-clicked')
+    ...mapActions('grade', ['getGrade']),
+    ...mapActions('grade', ['getDetailGrade']),
+    async editClass(gradeItem) {
+      await this.getDetailGrade(gradeItem.id)
+      this.$emit('edit-clicked', this.detailGrade)
+      // console.log('detail', this.detailGrade)
     },
-    deleteClass() {
-      this.$emit('delete-clicked')
+    deleteClass(gradeId) {
+      this.$emit('delete-clicked', gradeId)
     },
   },
 }

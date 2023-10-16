@@ -3,127 +3,7 @@
     <div class="flex flex-col items-center">
       <h1 class="text-color-auth text-4xl font-semibold mb-4">Register</h1>
       <form class="login-form mt-8 space-y-6" @submit.prevent="submitForm">
-        <!-- Hàng 1: Username và Số điện thoại -->
-        <div class="grid grid-cols-3 gap-4">
-          <div>
-            <label for="username" class="block text-color-default"
-              >Username</label
-            >
-            <input
-              id="username"
-              v-model.trim="ruleForm.username"
-              type="text"
-              name="username"
-              class="w-full border-b-2 focus:outline-none p-1"
-              autocomplete="username"
-              :class="[
-                !$v.ruleForm.username.$dirty
-                  ? ''
-                  : checkStatusClass($v.ruleForm.username)
-                  ? 'border-input-error'
-                  : '',
-              ]"
-              @blur="$v.ruleForm.username.$touch()"
-            />
-            <div
-              v-if="checkStatusClass($v.ruleForm.username)"
-              class="text-input-error text-sm"
-            >
-              <span :style="{ width: '90%' }">
-                {{
-                  !$v.ruleForm.username.required
-                    ? 'Vui lòng nhập dữ liệu!'
-                    : !$v.ruleForm.username.mustNotSymbol
-                    ? 'Vui lòng nhập đúng định dạng tên!'
-                    : ''
-                }}
-              </span>
-            </div>
-          </div>
-          <div>
-            <label for="phone" class="block text-color-default"
-              >Số điện thoại</label
-            >
-            <input
-              id="phone"
-              v-model.trim="ruleForm.phone"
-              type="tel"
-              name="phone"
-              class="w-full border-b-2 focus:outline-none p-1"
-              :class="[
-                !$v.ruleForm.phone.$dirty
-                  ? ''
-                  : checkStatusClass($v.ruleForm.phone)
-                  ? 'border-input-error'
-                  : '',
-              ]"
-              @blur="$v.ruleForm.phone.$touch()"
-            />
-            <div
-              v-if="checkStatusClass($v.ruleForm.phone)"
-              class="text-input-error text-sm"
-            >
-              <span :style="{ width: '90%' }">
-                {{
-                  !$v.ruleForm.phone.required
-                    ? 'Vui lòng nhập dữ liệu!'
-                    : !$v.ruleForm.phone.mustPhomeNumber
-                    ? 'Vui lòng nhập đúng định dạng sodienthoai!'
-                    : ''
-                }}
-              </span>
-            </div>
-          </div>
-
-          <!-- <div>
-            <label for="birthdate" class="block text-color-default"
-              >Ngày Sinh</label
-            >
-            <datepicker
-              id="birthdate"
-              v-model="birthdate"
-              :format="datePickerFormat"
-            ></datepicker>
-          </div> -->
-
-          <div>
-            <label for="address" class="block text-color-default"
-              >Địa Chỉ</label
-            >
-            <input
-              id="address"
-              v-model.trim="ruleForm.address"
-              type="text"
-              name="address"
-              class="w-full border-b-2 focus:outline-none p-1"
-              :class="[
-                !$v.ruleForm.address.$dirty
-                  ? ''
-                  : checkStatusClass($v.ruleForm.address)
-                  ? 'border-input-error'
-                  : '',
-              ]"
-              @blur="$v.ruleForm.address.$touch()"
-            />
-            <div
-              v-if="checkStatusClass($v.ruleForm.address)"
-              class="text-input-error text-sm"
-            >
-              <span :style="{ width: '90%' }">
-                {{
-                  !$v.ruleForm.address.required
-                    ? 'Vui lòng nhập dữ liệu!'
-                    : !$v.ruleForm.address.mustNotSymbol
-                    ? 'Vui lòng nhập đúng định dạng!'
-                    : ''
-                }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hàng 2: Email, Password và Confirm Password -->
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 gap-4">
           <div>
             <label for="email" class="block text-color-default">Email</label>
             <input
@@ -245,77 +125,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Hàng 3: roles, Trường, Địa Chỉ -->
-        <div class="grid grid-cols-3 gap-4">
-          <div>
-            <label for="roles" class="block text-color-default">Roles</label>
-            <!-- <input
-              type="text"
-              id="roles"
-              name="roles"
-              class="w-full border-b-2 focus:outline-none p-1"
-            /> -->
-            <select
-              id=""
-              v-model="ruleForm.roles"
-              name="roles"
-              class="w-full border-b-2 focus:outline-none p-1"
-              required
-            >
-              <option value="1">Hoc sinh</option>
-              <option value="2">Giáo viên</option>
-            </select>
-          </div>
-          <div v-if="ruleForm.roles === '1'">
-            <label for="class" class="block text-color-default">Lớp</label>
-            <select
-              id="class"
-              v-model="ruleForm.class"
-              name="class"
-              class="w-full border-b-2 focus:outline-none p-1"
-              required
-            >
-              <option value="6">Lớp 6</option>
-              <option value="7">Lớp 7</option>
-              <option value="8">Lớp 8</option>
-              <option value="9">Lớp 9</option>
-            </select>
-          </div>
-          <div>
-            <label for="school" class="block text-color-default">Trường</label>
-            <input
-              id="school"
-              v-model.trim="ruleForm.school"
-              type="text"
-              name="school"
-              class="w-full border-b-2 focus:outline-none p-1"
-              :class="[
-                !$v.ruleForm.school.$dirty
-                  ? ''
-                  : checkStatusClass($v.ruleForm.school)
-                  ? 'border-input-error'
-                  : '',
-              ]"
-              @blur="$v.ruleForm.school.$touch()"
-            />
-            <div
-              v-if="checkStatusClass($v.ruleForm.school)"
-              class="text-input-error text-sm"
-            >
-              <span :style="{ width: '90%' }">
-                {{
-                  !$v.ruleForm.school.required
-                    ? 'Vui lòng nhập dữ liệu!'
-                    : !$v.ruleForm.school.mustNotSymbol
-                    ? 'Vui lòng nhập đúng định dạng!'
-                    : ''
-                }}
-              </span>
-            </div>
-          </div>
-        </div>
-
         <!-- Nút Sign Up -->
         <div class="flex justify-center">
           <button
@@ -351,8 +160,8 @@ import {
 // import Datepicker from 'vue2-datepicker'
 import {
   checkStatusClass,
-  mustNotSymbol,
-  mustPhomeNumber,
+  // mustNotSymbol,
+  // mustPhomeNumber,
 } from '~/mixins/ruleValidator'
 export default {
   name: 'RegisterForm',
@@ -365,31 +174,16 @@ export default {
   data() {
     return {
       ruleForm: {
-        username: '',
-        phone: '',
-        // birthdate: null,
         email: '',
         password: '',
         confirmpassword: '',
-        roles: null,
-        school: '',
-        address: '',
-        class: null,
       },
       // datePickerFormat: 'yyyy-MM-dd', // Định dạng ngày: YYYY-MM-DD
-      isPasswordVisible: false,
+      // isPasswordVisible: false,
     }
   },
   validations: {
     ruleForm: {
-      username: {
-        required,
-        mustNotSymbol,
-      },
-      phone: {
-        required,
-        mustPhomeNumber,
-      },
       email: {
         required,
         email,
@@ -402,14 +196,6 @@ export default {
       confirmpassword: {
         required,
         sameAsPassword: sameAs('password'),
-      },
-      school: {
-        required,
-        mustNotSymbol,
-      },
-      address: {
-        required,
-        mustNotSymbol,
       },
     },
   },

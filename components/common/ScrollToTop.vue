@@ -2,7 +2,7 @@
   <div>
     <button
       v-if="isScrolling"
-      class="fixed bottom-4 right-4 rounded-full bg-[#c7bf22] p-2 text-white"
+      class="fixed bottom-4 right-5 rounded-full bg-[#c7bf22] px-4 py-3 text-white"
       @click="scrollToTop"
     >
       <i class="fas fa-arrow-up"></i>
@@ -23,8 +23,6 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
-
-
     scrollToTop() {
       window.scrollTo({
         top: 0,

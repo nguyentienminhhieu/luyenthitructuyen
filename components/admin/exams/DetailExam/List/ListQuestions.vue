@@ -1,8 +1,9 @@
 <template>
-  <div border-2>
-    <div v-for="item in list" :key="item.id">
-      <Question :question="item" />
+  <div>
+    <div v-for="item in questionsExtends" :key="item.id">
+      <Question :question="item" @delete="deleteQuestion(question)" />
     </div>
+    <!-- <button @click="savedata">Luu</button> -->
   </div>
 </template>
 <script>
@@ -14,12 +15,20 @@ export default {
   },
   props: {
     // eslint-disable-next-line vue/require-default-prop
-    list: Array,
+    questionsExtends: Array,
   },
   data() {
     return {}
   },
-  methods: {},
+  methods: {
+    deleteQuestion(question) {
+      const index = this.question.indexOf(question)
+      if (index !== -1) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.question.splice(index, 1)
+      }
+    },
+  },
 }
 </script>
 <style></style>

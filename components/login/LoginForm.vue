@@ -43,6 +43,7 @@
           <div class="flex items-center">
             <input
               id="password"
+              ref="passwordInput"
               v-model.trim="ruleForm.password"
               type="password"
               name="password"
@@ -101,7 +102,7 @@
           <nuxt-link to="/forgot-password">Quên mật khẩu?</nuxt-link>
         </div>
       </div>
-      <div class="mt-5">
+      <!-- <div class="mt-5">
         <p class="text-sm mt-6 text-color-default">
           Bạn chưa có tài khoản?
           <nuxt-link
@@ -110,8 +111,10 @@
             >Đăng ký</nuxt-link
           >
         </p>
-      </div>
+      </div> -->
     </div>
+    <ToastSuccess v-if="showSuccessToast" :message="successMessage" />
+    <ToastError v-if="showErrorToast" :message="errorMessage" />
   </div>
 </template>
 <script>
@@ -119,9 +122,16 @@ import { validationMixin } from 'vuelidate'
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 import { checkStatusClass } from '~/mixins/ruleValidator'
+import ToastSuccess from '~/components/common/ToastSuccess.vue'
+import ToastError from '~/components/common/ToastError.vue'
 
 export default {
   name: 'LoginForm',
+  components: {
+    ToastSuccess,
+    ToastError,
+  },
+
   mixins: [validationMixin],
   layout: 'authLayout',
 
@@ -132,8 +142,13 @@ export default {
         password: '',
       },
       isPasswordVisible: false,
+      showSuccessToast: false,
+      showErrorToast: false,
+      successMessage: 'Đăng nhập thành công!.',
+      errorMessage: 'Lỗi! Sai email hoặc mật khẩu.',
     }
   },
+
   validations: {
     ruleForm: {
       email: {
@@ -147,6 +162,7 @@ export default {
       },
     },
   },
+
   computed: {
     // ...mapFields({
     // data: "fileStore.state"
@@ -158,9 +174,10 @@ export default {
     checkStatusClass,
     togglePassword() {
       this.isPasswordVisible = !this.isPasswordVisible
-      const passwordInput = document.getElementById('password')
-      if (passwordInput) {
-        passwordInput.type = this.isPasswordVisible ? 'text' : 'password'
+      if (this.$refs.passwordInput) {
+        this.$refs.passwordInput.type = this.isPasswordVisible
+          ? 'text'
+          : 'password'
       }
     },
     async submitForm() {
@@ -176,8 +193,18 @@ export default {
           const response = await this.login(payload)
           if (response) {
             this.$router.push('/admin')
+            // this.$nextTick(() => {
+            this.showSuccessToast = true
+            setTimeout(() => {
+              this.showSuccessToast = false
+            }, 3000)
+            // })
           } else {
-            alert('sai mat khau hoặc số điện thoại')
+            // alert('sai mat khau hoặc số điện thoại')
+            this.showErrorToast = true
+            setTimeout(() => {
+              this.showErrorToast = false
+            }, 3000)
           }
         } catch (error) {
           console.log('Submit Failed', error)

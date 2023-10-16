@@ -22,6 +22,14 @@
                 Dashboard
               </nuxt-link>
             </li>
+            <li class="mb-4">
+              <nuxt-link
+                to="/admin/admin-management"
+                class="block p-3 hover:bg-gray-700 rounded transition duration-300"
+              >
+                Quản lý Admin
+              </nuxt-link>
+            </li>
             <li class="mb-4 relative group">
               <div
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
@@ -131,28 +139,15 @@
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
               >
                 Quản lý bài viết
-                <!-- <i
-                  class="fas fa-plus cursor-pointer"
-                  :class="{ 'rotate-45': isMenuOpen.posts }"
-                ></i> -->
               </nuxt-link>
-              <!-- <div
-                v-if="isMenuOpen.posts"
-                class="ml-4 bg-[#181F35] text-[#181F35] border border-[#181F35] rounded-lg shadow-lg"
+            </li>
+            <li class="mb-4 relative group">
+              <nuxt-link
+                to="/admin/categories"
+                class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
               >
-                <nuxt-link
-                  to="/admin"
-                  class="block p-2 hover:bg-gray-700 text-white rounded"
-                >
-                  Tạo bài viết
-                </nuxt-link>
-                <nuxt-link
-                  to="/admin"
-                  class="block p-2 hover:bg-gray-700 text-white rounded"
-                >
-                  Duyệt bài viết
-                </nuxt-link>
-              </div> -->
+                Category
+              </nuxt-link>
             </li>
           </ul>
         </nav>
@@ -161,9 +156,9 @@
     <!-- Header -->
     <div class="w-full">
       <header
-        class="bg-white py-8 px-10 h-16 border-b-2 flex justify-between items-center sticky top-0 z-50"
+        class="bg-white py-4 px-10 h-14 border-b-2 flex justify-end items-center sticky top-0 z-50"
       >
-        <div class="relative">
+        <!-- <div class="relative">
           <input
             type="text"
             placeholder="Search..."
@@ -174,7 +169,7 @@
           >
             <i class="fas fa-search"></i>
           </button>
-        </div>
+        </div> -->
         <div class="flex items-center space-x-4">
           <button
             class="text-color-custom text-color-custom hover:text-color-custom"
@@ -195,13 +190,17 @@
         </div>
       </header>
       <ScrollToTop />
-      <nuxt />
+      <div>
+        <nuxt />
+      </div>
     </div>
   </div>
 </template>
 <script>
 import AccountMenuAdmin from '~/components/common/AccountMenu'
 import ScrollToTop from '~/components/common/ScrollToTop.vue'
+// import Cookies from '@/services/cookies.service'
+
 export default {
   name: 'DefaultAdmin',
   components: {
@@ -216,9 +215,16 @@ export default {
         // exercise: false,
         // posts: false,
       },
+      // checkToken: null,
       isMenuAccount: false,
     }
   },
+  // mounted() {
+  //   this.checkToken = Cookies.getToken()
+  //   if (!this.checkToken) {
+  //     window.location.href = '/login'
+  //   }
+  // },
   methods: {
     toggleUserMenu() {
       this.isMenuOpen.users = !this.isMenuOpen.users

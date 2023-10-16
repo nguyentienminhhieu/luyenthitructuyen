@@ -1,15 +1,16 @@
 <template>
   <div>
-    <Login />
+    <Dashboard />
   </div>
 </template>
 
 <script>
-import Login from './login'
+import Dashboard from './admin'
 export default {
   name: 'IndexPage',
   components: {
-    Login,
+    Dashboard,
   },
+  layout: 'defaultAdmin',
 }
 </script>

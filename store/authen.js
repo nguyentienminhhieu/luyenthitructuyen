@@ -1,7 +1,7 @@
 import Cookies from '~/services/cookies.service.js'
 
 export const state = () => ({
-  user: [],
+  users: [],
   // authentication: false,
   isLoggedIn: false,
 })
@@ -17,9 +17,8 @@ export const actions = {
         Cookies.saveData('authentication', true)
         // commit('setAuthentication', true)
         commit('setUserLogin', data)
+        commit('setLoggedIn', true)
         return data
-      } else {
-        alert('Dang nhap khong thanh cong')
       }
     } catch (error) {
       // return error
@@ -35,6 +34,7 @@ export const actions = {
       commit('setUserLogout', response)
       // commit('setAuthentication', false)
       commit('setUserLogout', response)
+      commit('setLoggedIn', false)
       return response
     } catch (error) {
       return error.response
@@ -44,7 +44,7 @@ export const actions = {
 
 export const mutations = {
   setUserLogin(state, user) {
-    state.user = user
+    state.users = user
   },
   // setAuthentication(state, data) {
   //   state.authentication = data
@@ -53,13 +53,13 @@ export const mutations = {
     state.isLoggedIn = isLoggedIn
   },
   setUserLogout(state) {
-    state.user = null
+    state.users = null
   },
 }
 
 export const getters = {
   getUser(state) {
-    return state.user
+    return state.users
   },
   // getLoggedIn(state) {
   //   return state.isLoggedIn === true

@@ -24,6 +24,9 @@
 <script>
 export default {
   name: 'AuthLayout',
+  data() {
+    return {}
+  },
 }
 </script>
 <style scoped>

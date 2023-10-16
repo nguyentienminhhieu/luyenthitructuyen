@@ -45,6 +45,8 @@ export default {
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
+    // '@nuxtjs/auth-next',
+    // 'ckeditor',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -66,39 +68,14 @@ export default {
   // Layout
   layout: ['authLayout', 'defaultAdmin', 'error'],
 
-  // components: [
-  //   '~/components/TestExam.vue', // Đường dẫn đến component global
-
-  // ],
-
   // Content module configuration: https://go.nuxtjs.dev/config-content
   content: {},
-  // auth: {
-  //   strategies: {
-  //     local: {
-  //       token: {
-  //         property: 'token',
-  //         required: true,
-  //         type: 'Bearer',
-  //       },
-  //       user: {
-  //         property: 'user',
-  //         autoFetch: true,
-  //       },
-  //       endpoints: {
-  //         login: { url: '/admin/login', method: 'post' },
-  //         logout: { url: '/admin/logout', method: 'post' },
-  //         // user: { url: '/auth/user', method: 'get' }
-  //       },
-  //     },
-  //   },
-  //   redirect: {
-  //     login: '/login',
-  //     logout: '/',
-  //     callback: '/login',
-  //     home: '/',
-  //   },
-  // },
+  // nuxt.config.js
+
+  router: {
+    middleware: 'authentication',
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 

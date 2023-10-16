@@ -63,8 +63,8 @@
             />
             <label for="toggle" class="flex items-center cursor-pointer">
               <div
-                :class="{ 'bg-[#253d90]': isActive }"
-                class="w-12 h-6 bg-gray-300 rounded-full p-1"
+                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
+                class="w-12 h-6 rounded-full p-1"
               >
                 <div
                   :class="{ 'translate-x-6': isActive }"
@@ -74,10 +74,10 @@
             </label>
           </td>
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <button @click="editStudent">
+            <button @click="editExam">
               <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
             </button>
-            <button @click="deleteStudent">
+            <button @click="deleteExam">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
           </td>
@@ -95,10 +95,10 @@ export default {
     }
   },
   methods: {
-    editStudent() {
+    editExam() {
       this.$router.push(`/admin/exams/${this.$route.params.id}`)
     },
-    deleteStudent() {
+    deleteExam() {
       this.$emit('delete-clicked')
     },
     goToDetailExam() {

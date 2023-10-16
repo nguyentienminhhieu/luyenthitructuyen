@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     handleAddClick() {
-      this.$router.push('/admin/exercise/add-exercise')
+      this.$emit('add-clicked')
     },
   },
 }

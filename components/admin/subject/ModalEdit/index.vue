@@ -7,217 +7,72 @@
     <div
       class="bg-white p-6 rounded-lg shadow-lg z-50 max-w-screen-md max-h-screen-md"
     >
-      <h2 class="text-center text-xl font-semibold mb-10">Thêm giáo viên</h2>
+      <h2 class="text-center text-xl font-semibold mb-10">Sửa môn học</h2>
 
-      <!-- Form để thêm giáo viên -->
       <form
-        class="grid grid-cols-1 md:grid-cols-3 gap-4"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4"
         @submit.prevent="editSubject"
       >
-        <!-- Username -->
         <div class="mb-4 md:mb-0">
-          <label for="username" class="block text-color-default"
-            >Username</label
+          <label for="nameSubject" class="block text-color-default"
+            >Name Class</label
           >
           <input
-            id="username"
-            v-model.trim="ruleForm.username"
+            id="nameSubject"
+            v-model.trim="ruleForm.nameSubject"
             type="text"
-            name="username"
+            name="nameSubject"
             class="w-full border-b-2 focus:outline-none p-1"
             :class="[
-              !$v.ruleForm.username.$dirty
+              !$v.ruleForm.nameSubject.$dirty
                 ? ''
-                : checkStatusClass($v.ruleForm.username)
+                : checkStatusClass($v.ruleForm.nameSubject)
                 ? 'border-input-error'
                 : '',
             ]"
-            @blur="$v.ruleForm.username.$touch()"
+            @blur="$v.ruleForm.nameSubject.$touch()"
           />
           <div
-            v-if="checkStatusClass($v.ruleForm.username)"
+            v-if="checkStatusClass($v.ruleForm.nameSubject)"
             class="text-input-error text-sm"
           >
             <span :style="{ width: '90%' }">
               {{
-                !$v.ruleForm.username.required
+                !$v.ruleForm.nameSubject.required
                   ? 'Vui lòng nhập dữ liệu!'
-                  : !$v.ruleForm.username.mustNotSymbol
-                  ? 'Vui lòng nhập đúng định dạng tên!'
                   : ''
               }}
             </span>
           </div>
         </div>
-
-        <!-- Số điện thoại -->
         <div class="mb-4 md:mb-0">
-          <label for="phone" class="block text-color-default"
-            >Số điện thoại</label
-          >
+          <label for="slug" class="block text-color-default">Slug</label>
           <input
             id="phone"
-            v-model.trim="ruleForm.phone"
+            v-model.trim="ruleForm.slug"
             type="text"
             name="phone"
             class="w-full border-b-2 focus:outline-none p-1"
             :class="[
-              !$v.ruleForm.phone.$dirty
+              !$v.ruleForm.slug.$dirty
                 ? ''
-                : checkStatusClass($v.ruleForm.phone)
+                : checkStatusClass($v.ruleForm.slug)
                 ? 'border-input-error'
                 : '',
             ]"
-            @blur="$v.ruleForm.phone.$touch()"
+            @blur="$v.ruleForm.slug.$touch()"
           />
           <div
-            v-if="checkStatusClass($v.ruleForm.phone)"
+            v-if="checkStatusClass($v.ruleForm.slug)"
             class="text-input-error text-sm"
           >
             <span :style="{ width: '90%' }">
-              {{
-                !$v.ruleForm.phone.required
-                  ? 'Vui lòng nhập dữ liệu!'
-                  : !$v.ruleForm.phone.mustPhomeNumber
-                  ? 'Vui lòng nhập đúng định dạng sodienthoai!'
-                  : ''
-              }}
+              {{ !$v.ruleForm.slug.required ? 'Vui lòng nhập dữ liệu!' : '' }}
             </span>
           </div>
         </div>
 
-        <!-- Địa chỉ -->
-        <div class="mb-4 md:mb-0">
-          <label for="address" class="block text-color-default">Địa chỉ</label>
-          <input
-            id="address"
-            v-model.trim="ruleForm.address"
-            type="text"
-            name="address"
-            class="w-full border-b-2 focus:outline-none p-1"
-            :class="[
-              !$v.ruleForm.address.$dirty
-                ? ''
-                : checkStatusClass($v.ruleForm.address)
-                ? 'border-input-error'
-                : '',
-            ]"
-            @blur="$v.ruleForm.address.$touch()"
-          />
-          <div
-            v-if="checkStatusClass($v.ruleForm.address)"
-            class="text-input-error text-sm"
-          >
-            <span :style="{ width: '90%' }">
-              {{
-                !$v.ruleForm.address.required
-                  ? 'Vui lòng nhập dữ liệu!'
-                  : !$v.ruleForm.address.mustNotSymbol
-                  ? 'Vui lòng nhập đúng định dạng!'
-                  : ''
-              }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Email -->
-        <div class="mb-4 md:mb-0">
-          <label for="email" class="block text-color-default">Email</label>
-          <input
-            id="email"
-            v-model.trim="ruleForm.email"
-            type="email"
-            name="email"
-            class="w-full border-b-2 focus:outline-none p-1"
-            :class="[
-              !$v.ruleForm.email.$dirty
-                ? ''
-                : checkStatusClass($v.ruleForm.email)
-                ? 'border-input-error'
-                : '',
-            ]"
-            @blur="$v.ruleForm.email.$touch()"
-          />
-          <div
-            v-if="checkStatusClass($v.ruleForm.email)"
-            class="text-input-error text-sm"
-          >
-            <span :style="{ width: '90%' }">
-              {{
-                !$v.ruleForm.email.required
-                  ? 'Vui lòng nhập dữ liệu!'
-                  : !$v.ruleForm.email.email
-                  ? 'Vui lòng nhập đúng định dạng email!'
-                  : ''
-              }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Roles (mặc định là Giáo viên và không được sửa) -->
-        <div class="mb-4 md:mb-0">
-          <label for="roles" class="block text-color-default">Roles</label>
-          <select
-            id="roles"
-            v-model="ruleForm.roles"
-            type="text"
-            name="roles"
-            class="w-full border-b-2 focus:outline-none p-1"
-          >
-            <option value="1">Giáo Viên</option>
-            <option value="2">Học Sinh</option>
-          </select>
-        </div>
-        <div>
-          <label for="class" class="block text-color-default">Lớp</label>
-          <select
-            id="class"
-            v-model="ruleForm.class"
-            name="class"
-            class="w-full border-b-2 focus:outline-none p-1"
-            required
-          >
-            <option value="6">Lớp 6</option>
-            <option value="7">Lớp 7</option>
-            <option value="8">Lớp 8</option>
-            <option value="9">Lớp 9</option>
-          </select>
-        </div>
-        <!-- Trường học -->
-        <div class="mb-4 md:mb-0">
-          <label for="school" class="block text-color-default">Trường</label>
-          <input
-            id="school"
-            v-model.trim="ruleForm.school"
-            type="text"
-            name="school"
-            class="w-full border-b-2 focus:outline-none p-1"
-            :class="[
-              !$v.ruleForm.school.$dirty
-                ? ''
-                : checkStatusClass($v.ruleForm.school)
-                ? 'border-input-error'
-                : '',
-            ]"
-            @blur="$v.ruleForm.school.$touch()"
-          />
-          <div
-            v-if="checkStatusClass($v.ruleForm.school)"
-            class="text-input-error text-sm"
-          >
-            <span :style="{ width: '90%' }">
-              {{
-                !$v.ruleForm.school.required
-                  ? 'Vui lòng nhập dữ liệu!'
-                  : !$v.ruleForm.school.mustNotSymbol
-                  ? 'Vui lòng nhập đúng định dạng!'
-                  : ''
-              }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Footer với nút Thoát và Thêm -->
+        <!-- Thoát và Thêm -->
         <div class="col-span-3 flex justify-between mt-4">
           <button
             type="button"
@@ -240,53 +95,41 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, email } from 'vuelidate/lib/validators'
-import {
-  checkStatusClass,
-  mustNotSymbol,
-  mustPhomeNumber,
-} from '~/mixins/ruleValidator'
+import { required } from 'vuelidate/lib/validators'
+import { checkStatusClass } from '~/mixins/ruleValidator'
 export default {
   name: 'ModalEditSubject',
   mixins: [validationMixin],
   props: {
     showModal: Boolean,
+    subjectItem: Object,
   },
   data() {
     return {
       ruleForm: {
-        username: '',
-        phone: '',
-        address: '',
-        email: '',
-        roles: null,
-        school: '',
-        class: '',
+        nameSubject: '',
+        slug: '',
       },
-      isPasswordVisible: false,
     }
   },
   validations: {
     ruleForm: {
-      username: {
+      nameSubject: {
         required,
-        mustNotSymbol,
       },
-      phone: {
+      slug: {
         required,
-        mustPhomeNumber,
       },
-      email: {
-        required,
-        email,
-      },
-      school: {
-        required,
-        mustNotSymbol,
-      },
-      address: {
-        required,
-        mustNotSymbol,
+    },
+  },
+  watch: {
+    showModal: {
+      immediate: true,
+      handler(newShowModal) {
+        if (newShowModal && this.subjectItem) {
+          this.ruleForm.nameSubject = this.subjectItem.name
+          this.ruleForm.slug = this.subjectItem.slug
+        }
       },
     },
   },
@@ -300,7 +143,21 @@ export default {
       if (invalid) {
         this.$v.ruleForm.$touch()
       } else {
-        this.$emit('close')
+        const payload = {
+          id: this.subjectItem.id,
+          name: this.ruleForm.nameSubject,
+          slug: this.ruleForm.slug,
+        }
+        this.$store
+          .dispatch('subject/updateSubject', payload)
+          .then(() => {
+            // Sau khi gọi API updateSubject hoàn thành, tải lại trang.
+            this.$router.go(0)
+          })
+          .catch((error) => {
+            console.error('Lỗi khi cập nhật môn học:', error)
+          })
+        this.closeModal()
       }
     },
   },

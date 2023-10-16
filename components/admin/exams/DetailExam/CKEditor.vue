@@ -1,0 +1,88 @@
+<template>
+  <div>
+    <ckeditor v-model="content" :editor="editor" :config="editorConfig" />
+  </div>
+</template>
+
+<script>
+import CKEditor from 'vue-ckeditor2'
+
+export default {
+  components: {
+    ckeditor: CKEditor,
+  },
+  data() {
+    return {
+      content: '',
+      editorConfig: {
+        toolbar: [
+          {
+            name: 'document',
+            items: ['Source', '-', 'NewPage', 'Preview', '-', 'Templates'],
+          },
+          {
+            name: 'clipboard',
+            items: [
+              'Cut',
+              'Copy',
+              'Paste',
+              'PasteText',
+              'PasteFromWord',
+              '-',
+              'Undo',
+              'Redo',
+            ],
+          },
+          {
+            name: 'editing',
+            items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'],
+          },
+          '/',
+          {
+            name: 'basicstyles',
+            items: [
+              'Bold',
+              'Italic',
+              'Underline',
+              'Strike',
+              'Subscript',
+              'Superscript',
+              '-',
+              'RemoveFormat',
+            ],
+          },
+          {
+            name: 'paragraph',
+            items: [
+              'NumberedList',
+              'BulletedList',
+              '-',
+              'Outdent',
+              'Indent',
+              '-',
+              'Blockquote',
+              'CreateDiv',
+              '-',
+              'JustifyLeft',
+              'JustifyCenter',
+              'JustifyRight',
+              'JustifyBlock',
+            ],
+          },
+          { name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+          {
+            name: 'insert',
+            items: ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
+          },
+          '/',
+          { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+          { name: 'colors', items: ['TextColor', 'BGColor'] },
+          { name: 'tools', items: ['Maximize', 'ShowBlocks'] },
+        ],
+        width: '100%',
+      },
+      editor: null, // Định nghĩa thuộc tính editor
+    }
+  },
+}
+</script>
