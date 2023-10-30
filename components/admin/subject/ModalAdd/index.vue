@@ -12,7 +12,7 @@
       <!-- Form để thêm giáo viên -->
       <form
         class="grid grid-cols-1 md:grid-cols-2 gap-4"
-        @submit.prevent="addSubject"
+        @submit.prevent="submitForm"
       >
         <!-- Username -->
         <div class="mb-4 md:mb-0">
@@ -145,8 +145,9 @@ export default {
     checkStatusClass,
     closeModal() {
       this.$emit('close')
+      this.reset()
     },
-    addSubject() {
+    submitForm() {
       const invalid = this.$v.ruleForm.$invalid
       if (invalid) {
         this.$v.ruleForm.$touch()
@@ -158,8 +159,7 @@ export default {
           }
           // const response = await this.addSubjects(payload)
           if (this.addSubjects(payload)) {
-            this.ruleForm.nameSubject = ''
-            this.ruleForm.slug = ''
+            this.reset()
             // Sử dụng $nextTick để đảm bảo rằng DOM đã được cập nhật trước khi focus
             this.$nextTick(() => {
               this.$refs.nameSubjectInput.focus()
@@ -178,6 +178,10 @@ export default {
           console.log('Submit Failed', error)
         }
       }
+    },
+    reset() {
+      this.ruleForm.nameSubject = ''
+      this.ruleForm.slug = ''
     },
   },
 }

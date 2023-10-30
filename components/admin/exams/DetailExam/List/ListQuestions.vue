@@ -1,32 +1,57 @@
 <template>
   <div>
+    <!-- <div v-for="idetend in idExtends" :key="idetend.id">
+      <button @click="showChildQuestionId(idetend.id)">
+        Id cau hoi con {{ idetend.id }}
+      </button>
+    </div> -->
     <div v-for="item in questionsExtends" :key="item.id">
-      <Question :question="item" @delete="deleteQuestion(question)" />
+      <div class="bg-[#576574] p-2 rounded mb-4">
+        <Question
+          :question="item"
+          @delete="deleteQuestion(item)"
+          @clear-image="clearImage(item)"
+        />
+        <!-- @id-questions-extends="idQuestionsExtends" -->
+        <!-- @saveQuestionStorage="saveQuestionStorage" -->
+      </div>
     </div>
-    <!-- <button @click="savedata">Luu</button> -->
   </div>
 </template>
 <script>
 import Question from '~/components/admin/exams/DetailExam/Question.vue'
 export default {
-  name: 'ListQuestionsExam',
+  name: 'ListQuestions',
   components: {
     Question,
   },
   props: {
-    // eslint-disable-next-line vue/require-default-prop
+    // eslint-disable-next-line vue/require-default-prop, vue/prop-name-casing
     questionsExtends: Array,
   },
   data() {
-    return {}
+    return {
+      idExtends: [],
+    }
   },
   methods: {
-    deleteQuestion(question) {
-      const index = this.question.indexOf(question)
+    // showChildQuestionId(item) {
+    //   console.log('idcon', item.id)
+    // },
+    // idQuestionsExtends(item) {
+    //   this.idExtends = item
+    //   console.log('id con', item.id)
+    // },
+    deleteQuestion(item) {
+      const index = this.questionsExtends.indexOf(item)
       if (index !== -1) {
         // eslint-disable-next-line vue/no-mutating-props
-        this.question.splice(index, 1)
+        this.questionsExtends.splice(index, 1)
       }
+    },
+    clearImage(question) {
+      // Đặt file của câu hỏi hiện tại thành null
+      question.file = null
     },
   },
 }

@@ -38,10 +38,18 @@
         </tr>
       </thead>
       <tbody class="max-h-400 overflow-y-auto" @click="goToDetailUser">
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
+        <tr
+          v-for="exam in listExam"
+          :key="exam.id"
+          class="hover:bg-gray-50 cursor-pointer"
+        >
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">{{ exam.id }}</td>
+          <td class="px-6 py-4 border-2 whitespace-no-wrap">
+            {{ exam.user_id }}
+          </td>
+          <td class="px-6 py-4 border-2 whitespace-no-wrap">
+            {{ exam.category_id }}
+          </td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">lớp</td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">truong</td>
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
@@ -51,6 +59,13 @@
               type="checkbox"
               class="hidden"
             />
+            <!-- <input
+              :id="`toggle-${exam.id}`"
+              :checked="exam.is_active"
+              type="checkbox"
+              class="hidden"
+              @change="toggleActive(exam)"
+            /> -->
             <label for="toggle" class="flex items-center cursor-pointer">
               <div
                 :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
@@ -77,6 +92,7 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'TableExercise',
   data() {
@@ -84,7 +100,14 @@ export default {
       isActive: false,
     }
   },
+  computed: {
+    ...mapState('exam', ['listExam']),
+  },
+  mounted() {
+    this.getListExam()
+  },
   methods: {
+    ...mapActions('exam', ['getListExam']),
     editExercise() {
       this.$router.push(`/admin/exercise/${this.$route.params.id}`)
     },

@@ -24,7 +24,7 @@
       </div>
     </div>
     <ModalEditExam :show-modal="showEditModal" @close="showEditModal = false" />
-    <SaveBtn :list-questions="listQuestions" />
+    <!-- <SaveBtn :list-questions="listQuestions" /> -->
   </div>
 </template>
 <script>
@@ -33,7 +33,7 @@ import ListQuestions from '~/components/admin/exercise/DetailExam/List/ListQuest
 import RedirectQuestion from '~/components/admin/exercise/DetailExam/redirectQuestion.vue'
 // import DescriptionsExam from '~/components/admin/exercise/DetailExam/DescriptionsExam.vue'
 import ModalEditExam from '~/components/admin/exercise/ModalEdit'
-import SaveBtn from '~/components/common/SaveBtn.vue'
+// import SaveBtn from '~/components/common/SaveBtn.vue'
 export default {
   name: 'DetailExam',
   components: {
@@ -42,7 +42,7 @@ export default {
     ListQuestions,
     // DescriptionsExam,
     ModalEditExam,
-    SaveBtn,
+    // SaveBtn,
   },
   layout: 'defaultAdmin',
   data() {

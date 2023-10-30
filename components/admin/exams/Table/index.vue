@@ -23,11 +23,11 @@
           >
             Lớp
           </th>
-          <th
+          <!-- <th
             class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
           >
             Môn học
-          </th>
+          </th> -->
           <th
             class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
           >
@@ -48,36 +48,53 @@
           </td>
         </tr> -->
         <!-- Nội dung của <tbody> -->
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">lớp</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">truong</td>
+        <tr
+          v-for="exam in listExam"
+          :key="exam.id"
+          class="hover:bg-gray-50 cursor-pointer"
+        >
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">{{ exam.id }}</td>
+          <td class="px-6 py-4 border-2 whitespace-no-wrap">
+            {{ exam.title }}
+          </td>
+          <td class="px-6 py-4 border-2 whitespace-no-wrap">
+            {{ exam.user_id }}
+          </td>
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+            {{ exam.category_id }}
+          </td>
+          <!-- <td class="px-1 py-4 border-2 whitespace-no-wrap"></td> -->
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
             <input
-              id="toggle"
-              v-model="isActive"
+              :id="`toggle-${exam.id}`"
+              :checked="exam.is_active"
               type="checkbox"
               class="hidden"
+              @change="toggleActive(exam)"
             />
-            <label for="toggle" class="flex items-center cursor-pointer">
+            <label
+              :for="`toggle-${exam.id}`"
+              class="flex items-center cursor-pointer"
+            >
               <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
+                :class="{
+                  'bg-[#253d90]': exam.is_active === 1,
+                  'bg-gray-300': exam.is_active === 0,
+                }"
                 class="w-12 h-6 rounded-full p-1"
               >
                 <div
-                  :class="{ 'translate-x-6': isActive }"
+                  :class="{ 'translate-x-6': exam.is_active === 0 }"
                   class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
                 ></div>
               </div>
             </label>
           </td>
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <button @click="editExam">
+            <button @click="editExam(exam)">
               <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
             </button>
-            <button @click="deleteExam">
+            <button @click="deleteExam(exam.id)">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
           </td>
@@ -87,6 +104,8 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'TableExams',
   data() {
@@ -94,12 +113,38 @@ export default {
       isActive: false,
     }
   },
+  computed: {
+    ...mapState('exam', ['listExam']),
+    ...mapState('exam', ['detailExam']),
+  },
+  mounted() {
+    this.getListExam()
+  },
   methods: {
-    editExam() {
-      this.$router.push(`/admin/exams/${this.$route.params.id}`)
+    ...mapActions('exam', ['getListExam']),
+    ...mapActions('exam', ['activeExam']),
+    ...mapActions('exam', ['getDetailExam']),
+
+    async toggleActive(item) {
+      // console.log(123, item)
+      try {
+        const payload = {
+          id: item.id,
+        }
+        await this.activeExam(payload)
+        this.$router.go(0)
+      } catch (error) {
+        console.log('Lỗi server: ', error)
+      }
     },
-    deleteExam() {
-      this.$emit('delete-clicked')
+    async editExam(examItem) {
+      this.$router.push(`/admin/exams/${examItem.slug}`)
+      await this.getDetailExam(examItem.id)
+      // this.$emit('edit-clicked', this.detailExam)
+      console.log('examID', this.detailExam)
+    },
+    deleteExam(examId) {
+      this.$emit('delete-clicked', examId)
     },
     goToDetailExam() {
       // this.$router.push(`/admin/exams/${this.$route.params.id}`)

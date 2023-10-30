@@ -2,10 +2,11 @@
   <div class="p-10">
     <HeadingExam />
     <SearchAddOptionExam @add-clicked="showAddModal = true" />
-    <TableExams @delete-clicked="showDeleteModal = true" />
+    <TableExams @delete-clicked="handleDeleteClicked" />
     <ModalAddExam :show-modal="showAddModal" @close="showAddModal = false" />
     <ModalDelete
       :show-modal="showDeleteModal"
+      :exam-id="examIdToDelete"
       @close="showDeleteModal = false"
     />
   </div>
@@ -30,7 +31,14 @@ export default {
     return {
       showAddModal: false,
       showDeleteModal: false,
+      examIdToDelete: null,
     }
+  },
+  methods: {
+    handleDeleteClicked(examId) {
+      this.examIdToDelete = examId
+      this.showDeleteModal = true
+    },
   },
 }
 </script>

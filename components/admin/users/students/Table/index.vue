@@ -351,6 +351,11 @@
 <script>
 export default {
   name: 'TableStudents',
+  data() {
+    return {
+      isActive: false,
+    }
+  },
   methods: {
     editStudent() {
       this.$emit('edit-clicked')
@@ -359,7 +364,7 @@ export default {
       this.$emit('delete-clicked')
     },
     goToDetailUser() {
-      this.$router.push(`/admin/users/students/${this.$route.params.id}`)
+      // this.$router.push(`/admin/users/students/${this.$route.params.id}`)
     },
   },
 }

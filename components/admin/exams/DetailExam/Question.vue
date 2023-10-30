@@ -1,107 +1,124 @@
 <template>
   <div class="">
-    <div class="flex flex-col rounded-md p-3 bg-gray-200 pl-2">
-      <div class="flex justify-between m-2 border-b-[1px] border-[#555]">
-        <div class="flex m-2">
+    <div class="flex flex-col rounded-md p-2 bg-gray-200">
+      <div class="flex justify-between">
+        <div class="flex">
           <!-- Input để nhập tiêu đề cho câu hỏi -->
-          <div class="flex flex-col">
-            <textarea
+          <div class="">
+            <!-- {{ question.id }} -->
+            <div class="flex flex-row w-[70%]">
+              <textarea
+                v-if="inputTitle"
+                v-model="newTitle"
+                placeholder="Nhập câu hỏi..."
+                class="border w-[700px] rounded p-2 m-4 outline-none"
+                required
+              ></textarea>
+              <!-- <CKEditor /> -->
+              <!-- <TinyMCE
               v-if="inputTitle"
-              v-model="newTitle"
-              placeholder="Nhập tiêu đề..."
-              class="border w-[600px] rounded p-2 m-4 outline-none resize-none"
-            ></textarea>
-            <!-- <CKEditor /> -->
-            <!-- <TinyMCE
-          v-if="inputTitle"
-          :new-title="newTitle"
-          @update-content="newContent"
-        /> -->
-            <div v-if="questionTitle" class="titleQuestion m-4 w-[600px]">
-              {{ newTitle }}
-            </div>
-            <div class="my-5">
-              <label
-                for="avatar"
-                class="bg-[#273c75] hover:bg-[#31447b] text-white px-4 py-2 rounded-full font-medium cursor-pointer"
-              >
-                Tải ảnh câu hỏi
-                <input
-                  type="file"
-                  id="avatar"
-                  accept="image/*"
-                  @change="handleFileChange"
-                  class="hidden"
-                />
-              </label>
-              <div class="my-4">
-                <button v-if="question.img" @click="clearImage">
-                  <i class="fa-solid fa-x"></i>
-                </button>
-                <img
-                  v-if="question.img"
-                  :src="question.img"
-                  alt="Ảnh đại diện"
-                  class="w-40 h-40 rounded-xl mx-auto"
-                />
+              :new-title="newTitle"
+              @update-content="newContent"
+            /> -->
+              <div v-if="questionTitle" class="m-4 w-[600px] break-words">
+                {{ newTitle }}
               </div>
             </div>
+
+            <div v-if="question.file" class="my-4">
+              <button @click="clearImage">
+                <i class="fa-solid fa-x"></i>
+              </button>
+              <img
+                :src="question.file"
+                alt="Ảnh đại diện"
+                class="w-50 h-40 rounded-xl mx-auto"
+              />
+            </div>
           </div>
+        </div>
+        <!-- <div v-for="item in question.questions_extends" :key="item.id">
+          <button @click="showChildQuestionId(item.id)">
+            Câu hỏi con {{ item.id }}
+          </button>
+        </div> -->
+        <div
+          class="flex flex-col items-center bg-[#ffff] w-[40px] h-[180px] p-2 rounded-xl"
+        >
+          <button
+            v-if="!hasAnswers"
+            class="m-[2px] hover:bg-gray-400 rounded-full p-[2px]"
+            @click="pushArrayQuestion"
+          >
+            Q+
+          </button>
+          <button
+            class="m-[2px] hover:bg-gray-400 rounded-full p-[2px]"
+            @click="pushArrayAnswer"
+          >
+            A+
+          </button>
+          <button for="avatar" class="border-b-[1px] border-[#000] mb-1">
+            <label
+              :for="`toggle-${question.id}`"
+              class="text-black rounded-full font-medium cursor-pointer"
+            >
+              <i
+                class="fa-regular fa-image m-[3px] hover:bg-gray-400 rounded-full p-[5px]"
+              ></i>
+              <input
+                :id="`toggle-${question.id}`"
+                type="file"
+                class="hidden"
+                accept="image/*"
+                @change="handleFileChange(question.id, $event)"
+              />
+            </label>
+          </button>
           <button v-if="inputTitle" @click="saveQuestions">
             <i
-              class="fa-solid fa-bookmark mx-6 text-gray-500 hover:text-gray-700"
+              class="fa-regular fa-floppy-disk m-[3px] hover:bg-blue-500 rounded-full p-[6px]"
             ></i>
           </button>
           <button v-if="questionTitle" @click="editQuestions">
-            <i class="fas fa-edit text-gray-500 hover:text-gray-700"></i>
-          </button>
-        </div>
-
-        <div class="">
-          <button
-            v-if="!hasAnswers"
-            class="rounded-full bg-[#3F861E] p-2 mx-1 text-white"
-            @click="pushArrayQuestion"
-          >
-            <i class="fas fa-plus">Q</i>
+            <i
+              class="fa-regular fa-pen-to-square m-[3px] hover:bg-blue-300 rounded-full p-[5px]"
+            ></i>
           </button>
 
-          <button
-            class="rounded-full bg-[#738e30] p-2 text-white"
-            @click="pushArrayAnswer"
-          >
-            <i class="fas fa-plus">A</i>
+          <button @click="deleteQuestion">
+            <i
+              class="fa-regular fa-trash-can m-[2px] hover:bg-red-400 rounded-full p-[5px]"
+            ></i>
           </button>
         </div>
-        <!-- <div class="text-center">
-          <button
-            class="rounded-full p-2 bg-gray-400 hover:bg-gray-500"
-            @click="deleteQuestion"
-          >
-            <i class="fa fa-trash text-white"></i>
-          </button>
-        </div> -->
       </div>
       <div v-for="answer in question.answers" :key="answer.id">
-        <h1 class="ml-4 font-normal p-2 bg-[#ffff] rounded-lg">
-          THÊM CÂU TRẢ LỜI
-        </h1>
-        <AnswerQuestion
-          :answer="answer"
-          @update-answer="updateAnswer"
-          @delete="deleteAnswer(answer)"
-        />
+        <div class="p-2 rounded mb-1">
+          <AnswerQuestion
+            :answer="answer"
+            @update-answer="updateAnswer"
+            @delete="deleteAnswer(answer)"
+          />
+        </div>
       </div>
     </div>
 
-    <div class="ml-3 mt-3">
-      <ListQuestions :list="question.listQuestions" />
+    <div class="mt-2 ml-20">
+      <ListQuestions :questions-extends="question.questions_extends" />
     </div>
+    <ToastError v-if="showErrorToast" class="z-50" :message="errorMessage" />
   </div>
 </template>
 <script>
 // import ListQuestions from '~/components/admin/exams/DetailExam/List/ListQuestions.vue'
 import AnswerQuestion from './Answer.vue'
+import ToastError from '~/components/common/ToastError.vue'
+
+// import {
+//   saveDataToLocalStorage,
+//   getDataFromLocalStorage,
+// } from '~/mixins/localStorage'
 // import TinyMCE from '@/components/admin/exams/DetailExam/TinyMCE.vue'
 // import CKEditor from '@/components/admin/exams/DetailExam/CKEditor.vue'
 export default {
@@ -111,23 +128,28 @@ export default {
     AnswerQuestion,
     // TinyMCE,
     // CKEditor,
+    ToastError,
   },
   props: {
     // eslint-disable-next-line vue/require-default-prop
     question: Object,
+    // eslint-disable-next-line vue/require-default-prop
+    // file: String,
   },
   data() {
     return {
       isEditing: false,
       inputTitle: true,
       questionTitle: false,
-      newTitle: '',
+      newTitle: this.question.content,
       newAnswerData: {
         content: '',
         isCorrect: false,
       },
       answerData: null,
-      selectedImage: null,
+      showErrorToast: false,
+      errorMessage: 'Lỗi! Dữ liệu trống không lưu được.',
+      localFile: this.file,
     }
   },
   computed: {
@@ -135,6 +157,7 @@ export default {
       return this.question.answers.length > 0
     },
   },
+
   methods: {
     pushArrayQuestion() {
       const randomId = Math.floor(Math.random(10) * 1000)
@@ -151,50 +174,44 @@ export default {
       if (this.question.questions_extends.length > 0) {
         this.question.questions_extends.forEach((e) => {
           if (e.id === randomId) {
-            newQuestion.id = Math.floor(Math.random(10) * 1000)
+            newQuestion.id = Math.floor(Math.random(10) * 10000)
           }
         })
       } else {
-        console.log('error array null')
+        console.log('mang rong')
       }
       // eslint-disable-next-line vue/no-mutating-props
       this.question.questions_extends.push(newQuestion)
-      // console.log(this.question.listQuestions)
+      // eslint-disable-next-line no-unused-expressions
     },
 
-    handleFileChange(event) {
+    handleFileChange(id, event) {
+      // this.$emit('id-questions-extends', this.question.questions_extends)
       const file = event.target.files[0]
       if (file) {
         const reader = new FileReader()
+        // eslint-disable-next-line no-self-compare
         reader.onload = (e) => {
           // eslint-disable-next-line vue/no-mutating-props
-          this.question.img = e.target.result
+          this.question.file = e.target.result
         }
         reader.readAsDataURL(file)
+        console.log('id: ', id)
+        console.log('id: ', event.target)
       }
     },
     clearImage() {
-      // this.selectedImage = null
-      // eslint-disable-next-line vue/no-mutating-props
-      this.question.img = null
+      this.$emit('clear-image', this.question)
     },
-
-    // newContent(data) {
-    //   console.log(data)
-    //   this.newTitle = this.stripHTML(data)
-    // },
-    // stripHTML(html) {
-    //   // Sử dụng một biểu thức chính quy để loại bỏ các tag HTML và lấy văn bản thuần.
-    //   // const tempElement = document.createElement('div')
-    //   // tempElement.innerHTML = html
-    //   // return tempElement.textContent || tempElement.innerText || ''
-    //   return html.replace(/<[^>]*>/g, '')
-    // },
     saveQuestions() {
-      if (this.selectedImage) {
-        // eslint-disable-next-line vue/no-mutating-props
-        // this.question.img = this.selectedImage
+      if (this.newTitle.trim() === '') {
+        this.showErrorToast = true
+        setTimeout(() => {
+          this.showErrorToast = false
+        }, 3000)
+        return
       }
+
       // eslint-disable-next-line vue/no-mutating-props
       this.question.content = this.newTitle
       this.questionTitle = true
@@ -205,7 +222,6 @@ export default {
       this.questionTitle = false
       // this.newTitle = this.question.title
     },
-
     deleteQuestion() {
       this.$emit('delete')
     },
@@ -214,12 +230,11 @@ export default {
         id: Math.floor(Math.random() * 1000),
         content: '',
         explanation: '',
-        is_correct: true,
+        is_correct: false,
       }
       // eslint-disable-next-line vue/no-mutating-props
       this.question.answers.push(newAnswer)
     },
-
     updateAnswer(editedAnswer) {
       // Tìm vị trí của câu trả lời trong danh sách
       const index = this.question.answers.findIndex(
@@ -230,9 +245,10 @@ export default {
         this.question.answers[index].content = editedAnswer.content
         // eslint-disable-next-line vue/no-mutating-props
         this.question.answers[index].is_correct = editedAnswer.isCorrect
+        // eslint-disable-next-line vue/no-mutating-props
+        this.question.answers[index].explanation = editedAnswer.explanation
       }
     },
-
     deleteAnswer(answers) {
       const index = this.question.answers.indexOf(answers)
       if (index !== -1) {

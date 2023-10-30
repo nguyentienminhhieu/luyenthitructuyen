@@ -49,6 +49,7 @@ export default {
     gradeId: Number,
     adminId: Number,
     categoryId: Number,
+    examId: Number,
   },
   data() {
     return {
@@ -72,6 +73,8 @@ export default {
           this.$store.dispatch('account/deleteAdmin', this.adminId)
         } else if (this.categoryId) {
           this.$store.dispatch('category/deleteCategory', this.categoryId)
+        }  else if (this.examId) {
+          this.$store.dispatch('exam/deleteExam', this.examId)
         }
         this.closeModal()
         // this.$store.dispatch('subject/deleteSubject', this.subjectId)

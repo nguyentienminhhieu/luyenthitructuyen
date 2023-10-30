@@ -11,30 +11,31 @@
 <script>
 export default {
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     listQuestions: Array,
   },
   data() {
     return {
+      saveExam: null,
       isScrolling: false,
     }
   },
-  //   mounted() {
-  //     window.addEventListener('scroll', this.handleScroll)
-  //   },
-  //   beforeDestroy() {
-  //     window.removeEventListener('scroll', this.handleScroll)
-  //   },
+
   methods: {
     Savedata() {
-      console.log(this.listQuestions)
+      let payload = {
+        title: '',
+        slug: '',
+        description: '',
+        max_score: 100,
+        duration: 60,
+        category_id: 1,
+        questions: this.listQuestions,
+      }
+      this.saveExam = payload
+      console.log(payload)
+      this.$emit('send-data', this.saveExam)
     },
-    // handleScroll() {
-    //   if (window.scrollY > 200) {
-    //     this.isScrolling = true
-    //   } else {
-    //     this.isScrolling = false
-    //   }
-    // },
   },
 }
 </script>

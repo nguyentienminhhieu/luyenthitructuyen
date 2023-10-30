@@ -107,9 +107,9 @@ export default {
         console.log('Lỗi server: ', error)
       }
     },
-    editAdmin() {
-      this.$emit('edit-clicked')
-    },
+    // editAdmin() {
+    //   this.$emit('edit-clicked')
+    // },
     deleteAdmin(adminId) {
       this.$emit('delete-clicked', adminId)
     },

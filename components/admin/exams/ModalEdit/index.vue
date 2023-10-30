@@ -8,17 +8,36 @@
       class="bg-white p-6 rounded-lg shadow-lg z-50 w-[400px] h-[500px] overflow-auto"
     >
       <h2 class="text-center text-xl font-semibold mb-10">Loại đề thi</h2>
-      <form class="flex flex-col" @submit.prevent="editExam">
+      <form class="flex flex-col" @submit.prevent="submitForm">
         <div class="mb-4">
           <label for="examName" class="block text-color-default"
             >Tên đề thi</label
           >
           <input
             id="examName"
+            ref="examNameInput"
             v-model="ruleForm.examName"
             type="text"
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+            :class="[
+              !$v.ruleForm.examName.$dirty
+                ? ''
+                : checkStatusClass($v.ruleForm.examName)
+                ? 'border-input-error'
+                : '',
+            ]"
+            @blur="$v.ruleForm.examName.$touch()"
           />
+          <div
+            v-if="checkStatusClass($v.ruleForm.examName)"
+            class="text-input-error text-sm"
+          >
+            <span :style="{ width: '90%' }">
+              {{
+                !$v.ruleForm.examName.required ? 'Vui lòng nhập dữ liệu!' : ''
+              }}
+            </span>
+          </div>
         </div>
 
         <div class="mb-4">
@@ -33,44 +52,48 @@
         </div>
 
         <div class="mb-4">
-          <label for="examSlug" class="block text-color-default"
-            >Slug đề thi</label
-          >
+          <label for="slug" class="block text-color-default">Slug đề thi</label>
           <input
-            id="examSlug"
-            v-model="ruleForm.examSlug"
+            id="slug"
+            v-model="ruleForm.slug"
             type="text"
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+            :class="[
+              !$v.ruleForm.slug.$dirty
+                ? ''
+                : checkStatusClass($v.ruleForm.slug)
+                ? 'border-input-error'
+                : '',
+            ]"
+            @blur="$v.ruleForm.slug.$touch()"
           />
+          <div
+            v-if="checkStatusClass($v.ruleForm.slug)"
+            class="text-input-error text-sm"
+          >
+            <span :style="{ width: '90%' }">
+              {{ !$v.ruleForm.slug.required ? 'Vui lòng nhập dữ liệu!' : '' }}
+            </span>
+          </div>
         </div>
         <div class="mb-4">
-          <label for="class" class="block text-color-default">Lớp</label>
+          <label for="category" class="block text-color-default"
+            >Category</label
+          >
           <select
-            id="class"
-            v-model="ruleForm.class"
-            name="class"
+            id="category"
+            v-model="ruleForm.category"
+            name="category"
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
             required
           >
-            <option value="6">Lớp 6</option>
-            <option value="7">Lớp 7</option>
-            <option value="8">Lớp 8</option>
-            <option value="9">Lớp 9</option>
-          </select>
-        </div>
-        <div class="mb-4">
-          <label for="class" class="block text-color-default">Môn Học</label>
-          <select
-            id="class"
-            v-model="ruleForm.subject"
-            name="class"
-            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
-            required
-          >
-            <option value="1">Toan</option>
-            <option value="2">Van</option>
-            <option value="3">Van</option>
-            <option value="4">Anh</option>
+            <option
+              v-for="item in listCategory"
+              :key="item.id"
+              :value="item.id"
+            >
+              {{ item.title }}
+            </option>
           </select>
         </div>
         <div class="mb-4">
@@ -86,17 +109,18 @@
           />
         </div>
         <div class="mb-4">
-          <label for="totalQuestions" class="block text-color-default"
-            >Tổng câu hỏi</label
+          <label for="examScore" class="block text-color-default"
+            >Điểm Số tối đa</label
           >
           <input
-            id="totalQuestions"
-            v-model="ruleForm.totalQuestions"
+            id="examScore"
+            v-model="ruleForm.examScore"
             type="number"
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
             min="1"
           />
         </div>
+
         <div class="col-span-3 flex justify-between mt-4">
           <button
             type="button"
@@ -117,8 +141,13 @@
   </div>
 </template>
 <script>
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
+import { mapState, mapActions } from 'vuex'
+import { checkStatusClass } from '~/mixins/ruleValidator'
 export default {
   name: 'ModalEditExam',
+  mixins: [validationMixin],
   props: {
     showModal: Boolean,
   },
@@ -127,19 +156,38 @@ export default {
       ruleForm: {
         examName: '',
         examDescription: '',
-        examSlug: '',
-        class: null,
-        subject: null,
+        slug: '',
+        category: null,
+
         examTime: '50',
-        totalQuestions: '40',
+        examScore: '100',
       },
     }
   },
+  validations: {
+    ruleForm: {
+      examName: {
+        required,
+      },
+      slug: {
+        required,
+      },
+    },
+  },
+  computed: {
+    ...mapState('category', ['listCategory']),
+  },
+  mounted() {
+    this.getCategory()
+  },
   methods: {
+    ...mapActions('category', ['getCategory']),
+    // ...mapActions('exam', ['addExam']),
+    checkStatusClass,
     closeModal() {
       this.$emit('close')
     },
-    editExam() {
+    submitForm() {
       // Đưa dữ liệu giáo viên vào hàm hoặc gửi đến API ở đây
       // Sau khi thêm xong, đóng modal
       //   const invalid = this.$v.ruleForm.$invalid

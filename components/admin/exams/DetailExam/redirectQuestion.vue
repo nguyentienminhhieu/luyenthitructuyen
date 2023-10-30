@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col break-words rounded-lg bg-gray-200 fixed max-w-[230px] h-[500px] overflow-y-auto"
+    class="flex flex-col break-words rounded-lg bg-[#ffff] fixed max-w-[230px] h-[300px] overflow-y-auto"
   >
     <div class="p-2">
       <div class="flex justify-between">
@@ -10,10 +10,10 @@
         </button>
       </div>
       <h3>Lop: ...........</h3>
-      <h3>Số câu hỏi: ...........</h3>
+      <h3>Điểm tối đa: ...........</h3>
       <h3>Thời gian: ..................................</h3>
     </div>
-    <div class="p-2">
+    <!-- <div class="p-2">
       <h3>Danh sách câu hỏi:</h3>
       <div class="flex flex-row flex-wrap">
         <button
@@ -25,7 +25,7 @@
           {{ index }}
         </button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -34,42 +34,42 @@ export default {
   name: 'RedirectQuestion',
   data() {
     return {
-      questions: [
-        'Câu hỏi 1',
-        'Câu hỏi 2',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-        'Câu hỏi 3',
-      ], // Thay thế bằng danh sách câu hỏi của bạn
+      // questions: [
+      //   'Câu hỏi 1',
+      //   'Câu hỏi 2',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      //   'Câu hỏi 3',
+      // ], // Thay thế bằng danh sách câu hỏi của bạn
     }
   },
   methods: {

@@ -3,15 +3,15 @@
     <HeadingUserTeacher />
     <SearchAddOptionTeachers
       :show-add-modal="showAddModal"
-      @add-clicked="showAddModal = true"
+      @add-clicked="addClicked"
     />
     <TableTeachers
-      @edit-clicked="showEditModal = true"
+      @edit-clicked="editClicked"
       @delete-clicked="showDeleteModal = true"
     />
 
-    <ModalAddTeacher :show-modal="showAddModal" @close="showAddModal = false" />
-    <ModalEditUser :show-modal="showEditModal" @close="showEditModal = false" />
+    <ModalAddTeacher :show-modal="showAddModal" @close="closeModal" />
+    <ModalEditUser :show-modal="showEditModal" @close="closeModal" />
     <ModalDelete
       :show-modal="showDeleteModal"
       @close="showDeleteModal = false"
@@ -43,10 +43,34 @@ export default {
       showDeleteModal: false,
     }
   },
+  mounted() {
+    const savedAddModalState = localStorage.getItem('addModalState')
+    if (savedAddModalState !== null) {
+      this.showAddModal = savedAddModalState === 'true'
+    }
+
+    const savedEditModalState = localStorage.getItem('editModalState')
+    if (savedEditModalState !== null) {
+      this.showEditModal = savedEditModalState === 'true'
+    }
+  },
+
   methods: {
-    // handleAddClick() {
-    //   this.showModalAdd = true
-    // },
+    addClicked() {
+      this.showAddModal = true
+      localStorage.setItem('addModalState', this.showAddModal.toString())
+    },
+    editClicked() {
+      this.showEditModal = true
+      localStorage.setItem('editModalState', this.showEditModal.toString())
+    },
+    closeModal() {
+      this.showAddModal = false
+      localStorage.removeItem('addModalState')
+
+      this.showEditModal = false
+      localStorage.removeItem('editModalState')
+    },
   },
 }
 </script>

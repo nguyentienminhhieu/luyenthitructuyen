@@ -21,6 +21,12 @@
 <script>
 export default {
   name: 'HeadingDetailExam',
+  methods: {
+    validate({ params }) {
+      // Must be a string of letters
+      return /^[A-Za-z]+$/.test(params.id)
+    },
+  },
 }
 </script>
 <style></style>

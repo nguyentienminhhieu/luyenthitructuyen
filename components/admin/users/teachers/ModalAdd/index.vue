@@ -274,11 +274,13 @@ export default {
       },
     },
   },
+  mounted() {},
   methods: {
     checkStatusClass,
 
     closeModal() {
       this.$emit('close')
+      // localStorage.setItem('modalState', this.showModal.toString())
     },
     addTeacher() {
       // Đưa dữ liệu giáo viên vào hàm hoặc gửi đến API ở đây

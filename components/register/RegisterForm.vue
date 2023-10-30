@@ -179,7 +179,7 @@ export default {
         confirmpassword: '',
       },
       // datePickerFormat: 'yyyy-MM-dd', // Định dạng ngày: YYYY-MM-DD
-      // isPasswordVisible: false,
+      isPasswordVisible: false,
     }
   },
   validations: {

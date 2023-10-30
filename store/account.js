@@ -35,9 +35,9 @@ export const actions = {
   },
 
   async deleteAdmin({ commit }, adminId) {
-    try {
-      const config = getAuthorizationConfig()
-
+  try {
+    const config = getAuthorizationConfig()
+    
       await this.$axios.delete(`/delete-admin/${adminId}`, config)
       commit('DELETE_ADMIN', adminId)
     } catch (error) {
