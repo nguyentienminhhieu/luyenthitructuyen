@@ -3,14 +3,14 @@
     <!-- <div class="flex justify-between">
       <h1 class="font-normal p-2">Thêm câu trả lời mới</h1>
     </div> -->
-
+    <!-- {{ answer.id }} -->
     <div class="flex justify-between items-center">
       <div class="flex flex-col">
         <div class="">
           <div class="w-[400px]">
             <input
               v-if="inputTitle"
-              v-model.trim="answerContent"
+              v-model="answerContent"
               type="text"
               placeholder="Nhập câu trả lời..."
               class="w-full rounded p-2 m-4 outline-none"
@@ -141,15 +141,19 @@ export default {
   mixins: [validationMixin],
   props: {
     answer: Object,
+    detailExam: Object,
   },
   data() {
     return {
       isEditing: false,
       inputTitle: true,
       answerTitle: false,
+      // answerContent: '',
       answerContent: this.answer.content,
+      // explanation: '',
       explanation: this.answer.explanation,
       handleExplanation: false,
+      // isCorrect: '',
       isCorrect: this.answer.is_correct,
       selectedImage: null,
     }
@@ -159,39 +163,56 @@ export default {
       required,
     },
   },
+  // watch: {
+  //   immediate: true,
+  //   handler(newShowModal) {
+  //     if (newShowModal && this.detailExam) {
+  //       this.answerContent = this.detailExam.questions.answers.content
+  //       this.explanation = this.detailExam.questions.answers.explanation
+  //       this.isCorrect = this.detailExam.questions.answers.is_correct
+  //     }
+  //   },
+  // },
   methods: {
     checkStatusClass,
-    handleFileChange(event) {
-      const file = event.target.files[0]
-      if (file) {
-        // Đọc tệp hình ảnh và hiển thị nó trên giao diện
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.selectedImage = e.target.result
-          // eslint-disable-next-line vue/no-mutating-props
-          this.answer.img = e.target.result
-        }
-        reader.readAsDataURL(file)
-      }
-    },
-    clearImage() {
-      this.selectedImage = null
-    },
+    // handleFileChange(event) {
+    //   const file = event.target.files[0]
+    //   if (file) {
+    //     // Đọc tệp hình ảnh và hiển thị nó trên giao diện
+    //     const reader = new FileReader()
+    //     reader.onload = (e) => {
+    //       this.selectedImage = e.target.result
+    //       // eslint-disable-next-line vue/no-mutating-props
+    //       this.answer.img = e.target.result
+    //     }
+    //     reader.readAsDataURL(file)
+    //   }
+    // },
+    // clearImage() {
+    //   this.selectedImage = null
+    // },
     saveAnswer() {
       const invalid = this.$v.answerContent.$invalid
       if (invalid) {
         this.$v.answerContent.$touch()
       } else {
         // this.answer.content = this.answerContent
+        // eslint-disable-next-line vue/no-mutating-props
+        this.answer.content = this.answerContent
+        // eslint-disable-next-line vue/no-mutating-props
+        this.answer.is_correct = this.isCorrect
+        // eslint-disable-next-line vue/no-mutating-props
+        this.answer.explanation = this.explanation
         this.inputTitle = false
         this.answerTitle = true
         const editedAnswer = {
-          id: this.answer.id, // ID của câu trả lời
+          random_Id: this.answer.random_Id, // ID của câu trả lời
           content: this.answerContent, // Dữ liệu đã chỉnh sửa
           isCorrect: this.isCorrect, // Trạng thái isCorrect
           explanation: this.explanation, // Trạng thái isCorrect
         }
         this.$emit('update-answer', editedAnswer)
+        console.log('123', editedAnswer)
       }
     },
     editTitleAnswer() {

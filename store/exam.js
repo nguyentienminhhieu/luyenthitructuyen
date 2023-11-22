@@ -3,7 +3,8 @@ import { getAuthorizationConfig } from '~/plugins/configToken'
 
 export const state = () => ({
   listExam: [],
-  detailExam: [],
+  detailExam: {},
+  questions: [],
 })
 
 export const actions = {
@@ -27,6 +28,20 @@ export const actions = {
       console.log('Loi sever, ', error)
     }
   },
+  async updateExam({ commit }, examItem) {
+    try {
+      const config = getAuthorizationConfig()
+      const response = await this.$axios.put(
+        `/update-exam/${examItem.id}`,
+        examItem,
+        config
+      )
+      const data = response
+      commit('UPDATE_EXAM', data.data)
+    } catch (error) {
+      console.log('Error123:', error)
+    }
+  },
   async deleteExam({ commit }, examId) {
     try {
       const config = getAuthorizationConfig()
@@ -43,7 +58,9 @@ export const actions = {
 
       const response = await this.$axios.get(`/exam/${examId}`, config)
       const data = response.data
+      commit('setDetailExam', data.data)
       commit('SET_DETAIL_EXAM', data.data)
+      return data.data
     } catch (error) {
       console.error('Error:', error)
     }
@@ -67,6 +84,9 @@ export const actions = {
 
 export const mutations = {
   updateField,
+  SET_QUESTIONS(state, newQuestions) {
+    state.questions = newQuestions
+  },
   SET_EXAM(state, data) {
     state.listExam = data
   },
@@ -75,6 +95,9 @@ export const mutations = {
   },
   ADD_EXAM(state, data) {
     state.listExam.push(data)
+  },
+  UPDATE_EXAM(state, data) {
+    state.detailExam = data
   },
   DELETE_EXAM(state, examId) {
     state.listExam = state.listExam.filter((exam) => exam.id !== examId)
@@ -85,6 +108,9 @@ export const mutations = {
     if (item) {
       item.is_active = active
     }
+  },
+  setDetailExam(state, data) {
+    state.detailExam = data
   },
 }
 

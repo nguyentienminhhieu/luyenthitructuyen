@@ -4,22 +4,22 @@
       <thead class="bg-gray-100 sticky top-0 z-10">
         <tr>
           <th
-            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             ID
           </th>
           <th
-            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             Name
           </th>
           <th
-            class="px-6 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-6 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             Roles
           </th>
           <th
-            class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             isActive
           </th>
@@ -37,7 +37,9 @@
             <span v-if="item.id">{{ item.id }}</span>
           </td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">{{ item.name }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ item.role }}</td>
+          <td class="px-6 py-4 border-2 whitespace-no-wrap">
+            {{ item.role === 0 ? 'Admin' : 'Staff' }}
+          </td>
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
             <input
               :id="`toggle-${item.id}`"
@@ -113,6 +115,7 @@ export default {
     deleteAdmin(adminId) {
       this.$emit('delete-clicked', adminId)
     },
+    roleDetail() {},
   },
 }
 </script>

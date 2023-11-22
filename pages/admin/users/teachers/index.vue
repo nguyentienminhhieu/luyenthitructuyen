@@ -7,13 +7,14 @@
     />
     <TableTeachers
       @edit-clicked="editClicked"
-      @delete-clicked="showDeleteModal = true"
+      @delete-clicked="handleDelete"
     />
 
     <ModalAddTeacher :show-modal="showAddModal" @close="closeModal" />
     <ModalEditUser :show-modal="showEditModal" @close="closeModal" />
     <ModalDelete
       :show-modal="showDeleteModal"
+      :teacher-id="teacherId"
       @close="showDeleteModal = false"
     />
   </div>
@@ -41,6 +42,8 @@ export default {
       showAddModal: false,
       showEditModal: false,
       showDeleteModal: false,
+      teacherId: null,
+
     }
   },
   mounted() {
@@ -56,6 +59,10 @@ export default {
   },
 
   methods: {
+     handleDelete(id) {
+      this.showDeleteModal = true
+      this.teacherId = id
+    },
     addClicked() {
       this.showAddModal = true
       localStorage.setItem('addModalState', this.showAddModal.toString())

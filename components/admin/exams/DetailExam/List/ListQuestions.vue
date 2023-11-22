@@ -9,6 +9,7 @@
       <div class="bg-[#576574] p-2 rounded mb-4">
         <Question
           :question="item"
+          :detail-exam="detailExam"
           @delete="deleteQuestion(item)"
           @clear-image="clearImage(item)"
         />
@@ -28,6 +29,7 @@ export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop, vue/prop-name-casing
     questionsExtends: Array,
+    detailExam: Object,
   },
   data() {
     return {

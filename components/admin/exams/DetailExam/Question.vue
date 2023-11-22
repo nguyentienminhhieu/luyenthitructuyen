@@ -3,7 +3,8 @@
     <div class="flex flex-col rounded-md p-2 bg-gray-200">
       <div class="flex justify-between">
         <div class="flex">
-          <!-- Input để nhập tiêu đề cho câu hỏi -->
+          <!-- {{ question.id }} -->
+          <!-- Câu hỏi {{ order + 1 }} -->
           <div class="">
             <!-- {{ question.id }} -->
             <div class="flex flex-row w-[70%]">
@@ -11,7 +12,7 @@
                 v-if="inputTitle"
                 v-model="newTitle"
                 placeholder="Nhập câu hỏi..."
-                class="border w-[700px] rounded p-2 m-4 outline-none"
+                class="border w-[700px] min-h-[100px] rounded p-2 m-4 outline-none"
                 required
               ></textarea>
               <!-- <CKEditor /> -->
@@ -25,12 +26,12 @@
               </div>
             </div>
 
-            <div v-if="question.file" class="my-4">
+            <div v-if="selectedImage" class="my-4">
               <button @click="clearImage">
                 <i class="fa-solid fa-x"></i>
               </button>
               <img
-                :src="question.file"
+                :src="selectedImage"
                 alt="Ảnh đại diện"
                 class="w-50 h-40 rounded-xl mx-auto"
               />
@@ -60,18 +61,18 @@
           </button>
           <button for="avatar" class="border-b-[1px] border-[#000] mb-1">
             <label
-              :for="`toggle-${question.id}`"
+              :for="`toggle-${question.random_Id}`"
               class="text-black rounded-full font-medium cursor-pointer"
             >
               <i
                 class="fa-regular fa-image m-[3px] hover:bg-gray-400 rounded-full p-[5px]"
               ></i>
               <input
-                :id="`toggle-${question.id}`"
+                :id="`toggle-${question.random_Id}`"
                 type="file"
                 class="hidden"
                 accept="image/*"
-                @change="handleFileChange(question.id, $event)"
+                @change="handleFileChange(question.random_Id, $event)"
               />
             </label>
           </button>
@@ -97,6 +98,7 @@
         <div class="p-2 rounded mb-1">
           <AnswerQuestion
             :answer="answer"
+            :detail-exam="detailExam"
             @update-answer="updateAnswer"
             @delete="deleteAnswer(answer)"
           />
@@ -112,9 +114,9 @@
 </template>
 <script>
 // import ListQuestions from '~/components/admin/exams/DetailExam/List/ListQuestions.vue'
+import { mapActions, mapState } from 'vuex'
 import AnswerQuestion from './Answer.vue'
 import ToastError from '~/components/common/ToastError.vue'
-
 // import {
 //   saveDataToLocalStorage,
 //   getDataFromLocalStorage,
@@ -134,7 +136,7 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     question: Object,
     // eslint-disable-next-line vue/require-default-prop
-    // file: String,
+    detailExam: Object,
   },
   data() {
     return {
@@ -142,27 +144,26 @@ export default {
       inputTitle: true,
       questionTitle: false,
       newTitle: this.question.content,
-      newAnswerData: {
-        content: '',
-        isCorrect: false,
-      },
-      answerData: null,
+      selectedImage: this.question.file,
       showErrorToast: false,
       errorMessage: 'Lỗi! Dữ liệu trống không lưu được.',
-      localFile: this.file,
     }
   },
   computed: {
+    ...mapState('upload', ['fileUpload']),
     hasAnswers() {
       return this.question.answers.length > 0
     },
   },
-
+  mounted() {
+    // console.log('///', this.fileUpload)
+  },
   methods: {
+    ...mapActions('upload', ['uploadFile']),
     pushArrayQuestion() {
       const randomId = Math.floor(Math.random(10) * 1000)
       let newQuestion = {
-        id: randomId,
+        random_Id: randomId,
         content: '',
         slug: '',
         description: '',
@@ -173,8 +174,8 @@ export default {
       }
       if (this.question.questions_extends.length > 0) {
         this.question.questions_extends.forEach((e) => {
-          if (e.id === randomId) {
-            newQuestion.id = Math.floor(Math.random(10) * 10000)
+          if (e.random_Id === randomId) {
+            newQuestion.random_Id = Math.floor(Math.random(10) * 1000000)
           }
         })
       } else {
@@ -182,22 +183,51 @@ export default {
       }
       // eslint-disable-next-line vue/no-mutating-props
       this.question.questions_extends.push(newQuestion)
+      // this.questions.questions_extends = [...this.questions.questions_extends, newQuestion]
+
+      // this.questions.questions_extends = [
+      //   ...this.questionsquestions_extends,
+      //   newQuestion,
+      // ]
+
       // eslint-disable-next-line no-unused-expressions
     },
 
     handleFileChange(id, event) {
-      // this.$emit('id-questions-extends', this.question.questions_extends)
-      const file = event.target.files[0]
+      const file = event.target.files[0] // sử dụng FormData
       if (file) {
         const reader = new FileReader()
         // eslint-disable-next-line no-self-compare
-        reader.onload = (e) => {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.question.file = e.target.result
+        reader.onload = async (e) => {
+          const formData = new FormData()
+          formData.append('image', file)
+          await this.uploadFile(formData)
+
+          // console.log('id: ', this.fileUpload)
+          if (this.fileUpload) {
+            try {
+              // Sử dụng biểu thức chính quy để trích xuất giá trị "url"
+              const match = /"url":\s*"([^"]+)"/.exec(this.fileUpload)
+
+              // Kiểm tra xem có sự trùng khớp và lấy giá trị "url"
+              if (match && match[1]) {
+                const url = match[1]
+                console.log(url.replaceAll('\\', ''))
+                // eslint-disable-next-line vue/no-mutating-props
+                this.selectedImage = url.replaceAll('\\', '')
+                // eslint-disable-next-line vue/no-mutating-props
+                this.question.file = this.selectedImage
+              } else {
+                console.log('Không tìm thấy giá trị URL.')
+              }
+            } catch (error) {
+              console.error('Lỗi khi chuyển đổi dữ liệu JSON:', error)
+            }
+          } else {
+            console.error('FileData không có giá trị.')
+          }
         }
         reader.readAsDataURL(file)
-        console.log('id: ', id)
-        console.log('id: ', event.target)
       }
     },
     clearImage() {
@@ -227,18 +257,21 @@ export default {
     },
     pushArrayAnswer() {
       let newAnswer = {
-        id: Math.floor(Math.random() * 1000),
+        random_Id: Math.floor(Math.random() * 100000),
         content: '',
         explanation: '',
         is_correct: false,
       }
       // eslint-disable-next-line vue/no-mutating-props
       this.question.answers.push(newAnswer)
+      // this.questions.answers = [...this.questions.answers, newAnswer]
+
+      // this.questions.answers = [...this.questions.answers, newAnswer]
     },
     updateAnswer(editedAnswer) {
       // Tìm vị trí của câu trả lời trong danh sách
       const index = this.question.answers.findIndex(
-        (a) => a.id === editedAnswer.id
+        (a) => a.id === editedAnswer.random_Id
       )
       if (index !== -1) {
         // eslint-disable-next-line vue/no-mutating-props
@@ -248,6 +281,7 @@ export default {
         // eslint-disable-next-line vue/no-mutating-props
         this.question.answers[index].explanation = editedAnswer.explanation
       }
+      //  localStorage.setItem('questionData', JSON.stringify(this.question));
     },
     deleteAnswer(answers) {
       const index = this.question.answers.indexOf(answers)

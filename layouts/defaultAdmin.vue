@@ -19,6 +19,7 @@
                 to="/admin"
                 class="block p-3 hover:bg-gray-700 rounded transition duration-300"
               >
+                <i class="fa-solid fa-chart-line mr-2"></i>
                 Dashboard
               </nuxt-link>
             </li>
@@ -27,7 +28,8 @@
                 to="/admin/admin-management"
                 class="block p-3 hover:bg-gray-700 rounded transition duration-300"
               >
-                Quản lý Admin
+                <i class="fa-solid fa-circle-user mr-2"></i>
+                Admin
               </nuxt-link>
             </li>
             <li class="mb-4 relative group">
@@ -35,7 +37,11 @@
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
                 @click="toggleUserMenu"
               >
-                Quản lý users
+                <div>
+                  <!-- <i class="fa-solid fa-user-group "></i> -->
+                  <i class="fa-solid fa-address-book mr-2"></i>
+                  Users
+                </div>
                 <i
                   class="fas fa-plus cursor-pointer"
                   :class="{ 'rotate-45': isMenuOpen.users }"
@@ -49,22 +55,23 @@
                   to="/admin/users/teachers"
                   class="block p-2 hover:bg-gray-700 text-white rounded"
                 >
-                  Giáo viên
+                  Teachers
                 </nuxt-link>
                 <nuxt-link
                   to="/admin/users/students"
                   class="block p-2 hover:bg-gray-700 text-white rounded"
                 >
-                  Học sinh
+                  Students
                 </nuxt-link>
               </div>
             </li>
             <li class="mb-4 relative group">
               <nuxt-link
                 to="/admin/exams"
-                class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
+                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
               >
-                Quản lý đề thi
+                <i class="fa-solid fa-pen-clip mr-2"></i>
+                Exams
                 <!-- <i
                   class="fas fa-plus cursor-pointer"
                   :class="{ 'rotate-45': isMenuOpen.exams }"
@@ -91,9 +98,10 @@
             <li class="mb-4 relative group">
               <nuxt-link
                 to="/admin/exercise"
-                class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
+                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
               >
-                Quản lý bài tập
+                <i class="fa-solid fa-pen-ruler mr-2"></i>
+                Exercise
                 <!-- <i
                   class="fas fa-plus cursor-pointer"
                   :class="{ 'rotate-45': isMenuOpen.exercise }"
@@ -122,7 +130,8 @@
                 to="/admin/classes"
                 class="block p-3 hover:bg-gray-700 rounded transition duration-300"
               >
-                Quản lý lớp
+                <i class="fa-solid fa-graduation-cap mr-2"></i>
+                Grade
               </nuxt-link>
             </li>
             <li class="mb-4">
@@ -130,7 +139,17 @@
                 to="/admin/subject"
                 class="block p-3 hover:bg-gray-700 rounded transition duration-300"
               >
-                Quản lý môn học
+                <i class="fa-solid fa-book mr-2"></i>
+                Subjects
+              </nuxt-link>
+            </li>
+            <li class="mb-4 relative group">
+              <nuxt-link
+                to="/admin/categories"
+                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
+              >
+                <i class="fa-solid fa-sliders mr-2"></i>
+                Category
               </nuxt-link>
             </li>
             <li class="mb-4 relative group">
@@ -139,14 +158,6 @@
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
               >
                 Quản lý bài viết
-              </nuxt-link>
-            </li>
-            <li class="mb-4 relative group">
-              <nuxt-link
-                to="/admin/categories"
-                class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
-              >
-                Category
               </nuxt-link>
             </li>
           </ul>

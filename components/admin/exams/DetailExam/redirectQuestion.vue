@@ -4,14 +4,17 @@
   >
     <div class="p-2">
       <div class="flex justify-between">
-        <h3>Mon thi: ...........</h3>
+        <h3>
+          Mon thi:
+          {{ detailExam.category_id }}
+        </h3>
         <button @click="editExam">
           <i class="fas fa-edit text-gray-500 hover:text-gray-700"></i>
         </button>
       </div>
       <h3>Lop: ...........</h3>
-      <h3>Điểm tối đa: ...........</h3>
-      <h3>Thời gian: ..................................</h3>
+      <h3>Điểm tối đa: {{ detailExam.max_score }}</h3>
+      <h3>Thời gian: {{ detailExam.duration }}</h3>
     </div>
     <!-- <div class="p-2">
       <h3>Danh sách câu hỏi:</h3>
@@ -32,6 +35,9 @@
 <script>
 export default {
   name: 'RedirectQuestion',
+  props: {
+    detailExam: Object,
+  },
   data() {
     return {
       // questions: [
@@ -72,6 +78,9 @@ export default {
       // ], // Thay thế bằng danh sách câu hỏi của bạn
     }
   },
+  // mounted() {
+  //   console.log('connn: ', this.detailExam)
+  // },
   methods: {
     editExam() {
       this.$emit('edit-clicked')

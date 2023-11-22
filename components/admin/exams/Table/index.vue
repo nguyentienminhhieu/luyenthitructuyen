@@ -1,35 +1,40 @@
 <template>
-  <div class="mt-5 max-h-[450px] overflow-x-auto">
+  <div class="mt-5 max-h-[480px] overflow-x-auto">
     <table class="min-w-full">
       <thead class="bg-gray-100 sticky top-0 z-10">
         <tr>
           <th
-            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             ID
           </th>
           <th
-            class="px-6 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-6 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             Title
           </th>
           <th
-            class="px-6 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-3 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             Người đăng
           </th>
           <th
-            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-3 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
-            Lớp
+            Loại Đề
+          </th>
+          <th
+            class="px-3 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
+          >
+            Ngày đăng/Ngày sửa
           </th>
           <!-- <th
-            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             Môn học
           </th> -->
           <th
-            class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             isActive
           </th>
@@ -38,16 +43,6 @@
         </tr>
       </thead>
       <tbody class="max-h-400 overflow-y-auto" @click="goToDetailExam">
-        <!-- <tr v-for="student in students" :key="student.id">
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.id }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.username }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.roles }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.truong }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">{{ student.email }}</td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">
-          </td>
-        </tr> -->
-        <!-- Nội dung của <tbody> -->
         <tr
           v-for="exam in listExam"
           :key="exam.id"
@@ -57,11 +52,17 @@
           <td class="px-6 py-4 border-2 whitespace-no-wrap">
             {{ exam.title }}
           </td>
-          <td class="px-6 py-4 border-2 whitespace-no-wrap">
-            {{ exam.user_id }}
+          <td class="px-3 py-4 border-2 whitespace-no-wrap">
+            {{ exam.user_id === null ? 'Admin' : 'Giáo viên' }}
           </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+          <td class="px-3 py-4 border-2 whitespace-no-wrap">
             {{ exam.category_id }}
+          </td>
+          <td class="px-3 py-4 border-2 whitespace-no-wrap">
+            {{ getFirstTenChars(exam.created_at) }}
+            /
+            <!-- <br /> -->
+            {{ getFirstTenChars(exam.updated_at) }}
           </td>
           <!-- <td class="px-1 py-4 border-2 whitespace-no-wrap"></td> -->
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
@@ -116,14 +117,19 @@ export default {
   computed: {
     ...mapState('exam', ['listExam']),
     ...mapState('exam', ['detailExam']),
+    ...mapState('category', ['listCategory']),
   },
   mounted() {
     this.getListExam()
+    // this.getDetailExam()
+    this.getCategory()
+    localStorage.removeItem('questionData')
   },
   methods: {
     ...mapActions('exam', ['getListExam']),
     ...mapActions('exam', ['activeExam']),
     ...mapActions('exam', ['getDetailExam']),
+    ...mapActions('category', ['getCategory']),
 
     async toggleActive(item) {
       // console.log(123, item)
@@ -138,16 +144,27 @@ export default {
       }
     },
     async editExam(examItem) {
-      this.$router.push(`/admin/exams/${examItem.slug}`)
       await this.getDetailExam(examItem.id)
+      // console.log('detailExam', typeof this.detailExam)
+      this.$router.push({
+        path: `/admin/exams/${examItem.slug}`,
+        query: { examID: examItem.id },
+      })
+      // query: { detailExam: JSON.stringify(this.detailExam) },
       // this.$emit('edit-clicked', this.detailExam)
-      console.log('examID', this.detailExam)
+      // console.log('examID', this.detailExam)
     },
     deleteExam(examId) {
       this.$emit('delete-clicked', examId)
     },
     goToDetailExam() {
       // this.$router.push(`/admin/exams/${this.$route.params.id}`)
+    },
+    // userCreateExam() {
+
+    // },
+    getFirstTenChars(text) {
+      return text ? text.slice(0, 10) : ''
     },
   },
 }

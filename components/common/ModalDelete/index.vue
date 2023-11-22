@@ -50,6 +50,8 @@ export default {
     adminId: Number,
     categoryId: Number,
     examId: Number,
+    studentId: Number,
+    teacherId: Number,
   },
   data() {
     return {
@@ -73,8 +75,12 @@ export default {
           this.$store.dispatch('account/deleteAdmin', this.adminId)
         } else if (this.categoryId) {
           this.$store.dispatch('category/deleteCategory', this.categoryId)
-        }  else if (this.examId) {
+        } else if (this.examId) {
           this.$store.dispatch('exam/deleteExam', this.examId)
+        } else if (this.studentId) {
+          this.$store.dispatch('users/deleteUsers', this.studentId)
+        } else if (this.teacherId) {
+          this.$store.dispatch('users/deleteUsers', this.teacherId)
         }
         this.closeModal()
         // this.$store.dispatch('subject/deleteSubject', this.subjectId)

@@ -7,7 +7,7 @@
     <div
       class="bg-white p-6 rounded-lg shadow-lg z-50 w-[400px] h-[500px] overflow-auto"
     >
-      <h2 class="text-center text-xl font-semibold mb-10">Loại đề thi</h2>
+      <h2 class="text-center text-xl font-semibold mb-10">Thêm đề thi</h2>
       <form class="flex flex-col" @submit.prevent="submitForm">
         <div class="mb-4">
           <label for="examName" class="block text-color-default"
@@ -84,13 +84,14 @@
             id="category"
             v-model="ruleForm.category"
             name="category"
-            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300 overflow-auto origin-bottom"
             required
           >
             <option
               v-for="item in listCategory"
               :key="item.id"
               :value="item.id"
+              class="h-[5rem]"
             >
               {{ item.title }}
             </option>
@@ -120,6 +121,32 @@
             class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
             min="1"
           />
+        </div>
+        <div class="mb-4">
+          <label
+            for="avatar"
+            class="bg-[#273c75] hover:bg-[#31447b] text-white px-4 py-2 rounded-full font-medium cursor-pointer"
+          >
+            Tải ảnh đề thi
+            <input
+              type="file"
+              id="avatar"
+              accept="image/*"
+              @change="handleFileChange($event)"
+              class="hidden"
+            />
+          </label>
+          <div class="my-4">
+            <button v-if="selectedImage" @click="clearImage">
+              <i class="fa-solid fa-x"></i>
+            </button>
+            <img
+              v-if="selectedImage"
+              :src="selectedImage"
+              alt="Ảnh đại diện"
+              class="w-32 h-32 rounded-md mx-auto"
+            />
+          </div>
         </div>
 
         <div class="col-span-3 flex justify-between mt-4">
@@ -167,11 +194,10 @@ export default {
         examDescription: '',
         slug: '',
         category: null,
-        // grade: null,
-        // subject: null,
-        examTime: '50',
+        examTime: '60',
         examScore: '100',
       },
+      selectedImage: null,
       showSuccessToast: false,
       showErrorToast: false,
       successMessage: 'Thêm đề thi thành công!.',
@@ -192,6 +218,7 @@ export default {
     ...mapState('grade', ['listGrade']),
     ...mapState('subject', ['listSubject']),
     ...mapState('category', ['listCategory']),
+    ...mapState('upload', ['fileUpload']),
   },
   mounted() {
     this.getGrade()
@@ -203,6 +230,8 @@ export default {
     ...mapActions('subject', ['getSubjects']),
     ...mapActions('category', ['getCategory']),
     ...mapActions('exam', ['addExam']),
+    ...mapActions('upload', ['uploadFile']),
+
     checkStatusClass,
     closeModal() {
       this.$emit('close')
@@ -221,6 +250,7 @@ export default {
             max_score: this.ruleForm.examScore,
             duration: this.ruleForm.examTime,
             category_id: this.ruleForm.category,
+            url_img: this.selectedImage,
           }
           // const response = await this.addExam(payload)
           if (this.addExam(payload)) {
@@ -244,6 +274,48 @@ export default {
           console.log('Submit Failed', error)
         }
       }
+    },
+    changeAvatar() {
+      this.$emit('close')
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0]
+      if (file) {
+        // Đọc tệp hình ảnh và hiển thị nó trên giao diện
+        const reader = new FileReader()
+
+        reader.onload = async (e) => {
+          const formData = new FormData()
+          formData.append('image', file)
+          await this.uploadFile(formData)
+
+          // console.log('id: ', this.fileUpload)
+          if (this.fileUpload) {
+            try {
+              // Sử dụng biểu thức chính quy để trích xuất giá trị "url"
+              const match = /"url":\s*"([^"]+)"/.exec(this.fileUpload)
+
+              // Kiểm tra xem có sự trùng khớp và lấy giá trị "url"
+              if (match && match[1]) {
+                const url = match[1]
+                // eslint-disable-next-line vue/no-mutating-props
+                this.selectedImage = url.replaceAll('\\', '')
+                // eslint-disable-next-line vue/no-mutating-props
+              } else {
+                console.log('Không tìm thấy giá trị URL.')
+              }
+            } catch (error) {
+              console.error('Lỗi khi chuyển đổi dữ liệu JSON:', error)
+            }
+          } else {
+            console.error('FileData không có giá trị.')
+          }
+        }
+        reader.readAsDataURL(file)
+      }
+    },
+    clearImage() {
+      this.selectedImage = null
     },
     reset() {
       this.ruleForm.examName = ''

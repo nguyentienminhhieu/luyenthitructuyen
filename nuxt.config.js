@@ -55,7 +55,8 @@ export default {
     baseURL: process.env.BASE_URL || 'http://127.0.0.1:8000/api/admin',
   },
   env: {
-    baseURL: process.env.BASE_URL,
+    BASE_URL: process.env.BASE_URL,
+    BASE_URL_UPLOAD: process.env.BASE_URL_UPLOAD,
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

@@ -4,12 +4,13 @@
     <SearchAddOptionStudents @add-clicked="addClicked" />
     <TableStudents
       @edit-clicked="showEditModal = true"
-      @delete-clicked="showDeleteModal = true"
+      @delete-clicked="handleDelete"
     />
     <ModalAddStudent :show-modal="showAddModal" @close="closeModal" />
     <ModalEditUser :show-modal="showEditModal" @close="closeModal" />
     <ModalDelete
       :show-modal="showDeleteModal"
+      :student-id="studentId"
       @close="showDeleteModal = false"
     />
   </div>
@@ -37,6 +38,7 @@ export default {
       showAddModal: false,
       showEditModal: false,
       showDeleteModal: false,
+      studentId: null,
     }
   },
   mounted() {
@@ -50,8 +52,11 @@ export default {
       this.showEditModal = savedEditModalState === 'true'
     }
   },
-
   methods: {
+    handleDelete(id) {
+      this.showDeleteModal = true
+      this.studentId = id
+    },
     addClicked() {
       this.showAddModal = true
       localStorage.setItem('addModalState', this.showAddModal.toString())

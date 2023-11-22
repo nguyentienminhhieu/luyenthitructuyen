@@ -4,27 +4,27 @@
       <thead class="bg-gray-100 sticky top-0 z-10">
         <tr>
           <th
-            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             ID
           </th>
           <th
-            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             Tên người dùng
           </th>
           <th
-            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-2 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             Vai trò
           </th>
           <th
-            class="px-8 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-8 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             Email
           </th>
           <th
-            class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
             isActive
           </th>
@@ -36,299 +36,54 @@
         class="max-h-400 overflow-y-auto custom-scrollbar"
         @click="goToDetailUser"
       >
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
+        <tr
+          v-for="teacher in teacherUser"
+          :key="teacher.id"
+          class="hover:bg-gray-50 cursor-pointer"
+        >
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+            {{ teacher.id }}
+          </td>
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+            {{ teacher.name }}
+          </td>
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+            {{ teacher.role === 2 ? 'Giáo Viên' : 'Học Sinh' }}
+          </td>
+          <td class="px-8 py-4 border-2 whitespace-no-wrap">
+            {{ teacher.email }}
+          </td>
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
             <input
-              id="toggle"
-              v-model="isActive"
+              :id="`toggle-${teacher.id}`"
+              :checked="teacher.active"
               type="checkbox"
               class="hidden"
+              @change="toggleActive(teacher)"
             />
-            <label for="toggle" class="flex items-center cursor-pointer">
+            <label
+              :for="`toggle-${teacher.id}`"
+              class="flex items-center cursor-pointer"
+            >
               <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
+                :class="{
+                  'bg-[#253d90]': teacher.active === 1,
+                  'bg-gray-300': teacher.active === 0,
+                }"
                 class="w-12 h-6 rounded-full p-1"
               >
                 <div
-                  :class="{ 'translate-x-6': isActive }"
+                  :class="{ 'translate-x-6': teacher.active === 0 }"
                   class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
                 ></div>
               </div>
             </label>
           </td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
+            <button @click="editTeacher(teacher)">
               <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
             </button>
-            <button @click="deleteTeacher">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              v-model="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
-                class="w-12 h-6 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              v-model="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
-                class="w-12 h-6 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              v-model="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
-                class="w-12 h-6 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              v-model="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
-                class="w-12 h-6 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              v-model="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
-                class="w-12 h-6 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              v-model="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
-                class="w-12 h-6 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              v-model="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
-                class="w-12 h-6 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
-        </tr>
-        <tr class="hover:bg-gray-50 cursor-pointer">
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">id</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">username</td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">roles</td>
-          <td class="px-8 py-4 border-2 whitespace-no-wrap">email</td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
-            <input
-              id="toggle"
-              v-model="isActive"
-              type="checkbox"
-              class="hidden"
-            />
-            <label for="toggle" class="flex items-center cursor-pointer">
-              <div
-                :class="{ 'bg-[#253d90]': !isActive, 'bg-gray-300': isActive }"
-                class="w-12 h-6 rounded-full p-1"
-              >
-                <div
-                  :class="{ 'translate-x-6': isActive }"
-                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
-                ></div>
-              </div>
-            </label>
-          </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher">
+            <button @click="deleteTeacher(teacher.id)">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
           </td>
@@ -338,19 +93,41 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'TableTeachers',
   data() {
-    return {
-      isActive: false,
-    }
+    return {}
+  },
+  computed: {
+    ...mapState('users', ['listUser']),
+    teacherUser() {
+      return this.listUser.filter((user) => user.role === 2)
+    },
+  },
+  mounted() {
+    this.getListUser()
   },
   methods: {
+    ...mapActions('users', ['getListUser']),
+    ...mapActions('users', ['activeUsers']),
+    async toggleActive(item) {
+      // console.log(123, item)
+      try {
+        const payload = {
+          user_id: item.id,
+        }
+        await this.activeUsers(payload)
+        this.$router.go(0)
+      } catch (error) {
+        console.log('Lỗi server: ', error)
+      }
+    },
     editTeacher() {
       this.$emit('edit-clicked')
     },
-    deleteTeacher() {
-      this.$emit('delete-clicked')
+    deleteTeacher(teacherId) {
+      this.$emit('delete-clicked', teacherId)
     },
     goToDetailUser() {
       // this.$router.push(`/admin/users/teachers/${this.$route.params.id}`)

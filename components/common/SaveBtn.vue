@@ -9,10 +9,13 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop
     listQuestions: Array,
+    // eslint-disable-next-line vue/require-default-prop
+    detailExam: Object,
   },
   data() {
     return {
@@ -20,21 +23,55 @@ export default {
       isScrolling: false,
     }
   },
+  // watch: {
+  //   detailExam: {
+  //     handler(newQuestions) {
+  //       // eslint-disable-next-line vue/no-mutating-props
+  //       this.detailExam.questions = this.listQuestions
+  //     },
+  //     deep: true,
+  //     immediate: true,
+  //   },
+  // },
+  mounted() {
+    // this.updateExam()
+    // this.getListExam()
+  },
 
   methods: {
-    Savedata() {
-      let payload = {
-        title: '',
-        slug: '',
-        description: '',
-        max_score: 100,
-        duration: 60,
-        category_id: 1,
-        questions: this.listQuestions,
+    ...mapActions('exam', ['updateExam']),
+    // ...mapActions('exam', ['getDetailExam']),
+    // ...mapActions('exam', ['getListExam']),
+
+    //
+    async Savedata() {
+      try {
+        let payload = {
+          id: this.detailExam.id,
+          title: this.detailExam.title,
+          description: this.detailExam.description,
+          slug: this.detailExam.slug,
+          category_id: this.detailExam.category_id,
+          duration: this.detailExam.duration,
+          max_score: this.detailExam.max_score,
+          url_img: this.detailExam.url_img,
+          question_ids: this.detailExam.question_ids,
+          questions: this.listQuestions,
+        }
+        await this.updateExam(payload)
+        // this.$router.push('/admin/exams')
+        console.log('123', this.listQuestions)
+        // eslint-disable-next-line vue/no-mutating-props
+        // this.listQuestions = this.detailExam.questions
+        this.saveExam = payload
+        console.log('kkkk', this.detailExam.questions)
+        this.$emit('send-data', this.detailExam.questions)
+      } catch (error) {
+        console.log('Error:', error)
       }
-      this.saveExam = payload
-      console.log(payload)
-      this.$emit('send-data', this.saveExam)
+    },
+    saveDataToLocalStorage() {
+      localStorage.setItem('questionData', JSON.stringify(this.questions))
     },
   },
 }

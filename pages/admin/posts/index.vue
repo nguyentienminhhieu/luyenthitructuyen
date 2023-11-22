@@ -1,7 +1,5 @@
 <template>
   <div class="m-10">
-   
-
     <h1 class="text-3xl font-semibold mb-4">Tạo Đề Thi</h1>
     <form @submit.prevent="addQuestion">
       <div class="mb-4">

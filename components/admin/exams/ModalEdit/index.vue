@@ -7,7 +7,9 @@
     <div
       class="bg-white p-6 rounded-lg shadow-lg z-50 w-[400px] h-[500px] overflow-auto"
     >
-      <h2 class="text-center text-xl font-semibold mb-10">Loại đề thi</h2>
+      <h2 class="text-center text-xl font-semibold mb-10">
+        Sửa thông tin đề thi
+      </h2>
       <form class="flex flex-col" @submit.prevent="submitForm">
         <div class="mb-4">
           <label for="examName" class="block text-color-default"
@@ -120,7 +122,32 @@
             min="1"
           />
         </div>
-
+        <div class="mb-4">
+          <label
+            for="avatar"
+            class="bg-[#273c75] hover:bg-[#31447b] text-white px-4 py-2 rounded-full font-medium cursor-pointer"
+          >
+            Thay đổi ảnh đề thi
+            <input
+              type="file"
+              id="avatar"
+              accept="image/*"
+              @change="handleFileChange($event)"
+              class="hidden"
+            />
+          </label>
+          <div class="my-4">
+            <button v-if="ruleForm.selectedImage" @click="clearImage">
+              <i class="fa-solid fa-x"></i>
+            </button>
+            <img
+              v-if="ruleForm.selectedImage"
+              :src="ruleForm.selectedImage"
+              alt="Ảnh đại diện"
+              class="w-32 h-32 rounded-md mx-auto"
+            />
+          </div>
+        </div>
         <div class="col-span-3 flex justify-between mt-4">
           <button
             type="button"
@@ -138,6 +165,7 @@
         </div>
       </form>
     </div>
+    <ToastError v-if="showErrorToast" :message="errorMessage" />
   </div>
 </template>
 <script>
@@ -145,11 +173,17 @@ import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import { mapState, mapActions } from 'vuex'
 import { checkStatusClass } from '~/mixins/ruleValidator'
+import ToastError from '~/components/common/ToastError.vue'
+
 export default {
   name: 'ModalEditExam',
+  components: {
+    ToastError,
+  },
   mixins: [validationMixin],
   props: {
     showModal: Boolean,
+    examItem: Object,
   },
   data() {
     return {
@@ -158,10 +192,12 @@ export default {
         examDescription: '',
         slug: '',
         category: null,
-
-        examTime: '50',
-        examScore: '100',
+        examTime: null,
+        examScore: null,
+        selectedImage: null,
       },
+      showErrorToast: false,
+      errorMessage: 'Lỗi! Dữ liệu bị trùng.',
     }
   },
   validations: {
@@ -176,27 +212,110 @@ export default {
   },
   computed: {
     ...mapState('category', ['listCategory']),
+    ...mapState('upload', ['fileUpload']),
+  },
+  watch: {
+    showModal: {
+      immediate: true,
+      handler(newShowModal) {
+        if (newShowModal && this.examItem) {
+          this.ruleForm.examName = this.examItem.title
+          this.ruleForm.examDescription = this.examItem.description
+          this.ruleForm.slug = this.examItem.slug
+          this.ruleForm.category = this.examItem.category_id
+          this.ruleForm.examTime = this.examItem.duration
+          this.ruleForm.examScore = this.examItem.max_score
+          this.ruleForm.selectedImage = this.examItem.url_img
+        }
+      },
+    },
   },
   mounted() {
     this.getCategory()
+    this.updateExam()
+    this.getListExam()
   },
   methods: {
     ...mapActions('category', ['getCategory']),
-    // ...mapActions('exam', ['addExam']),
+    ...mapActions('exam', ['updateExam']),
+    ...mapActions('exam', ['getListExam']),
+    ...mapActions('upload', ['uploadFile']),
     checkStatusClass,
     closeModal() {
       this.$emit('close')
     },
     submitForm() {
-      // Đưa dữ liệu giáo viên vào hàm hoặc gửi đến API ở đây
-      // Sau khi thêm xong, đóng modal
-      //   const invalid = this.$v.ruleForm.$invalid
-      //   if (invalid) {
-      //     this.$v.ruleForm.$touch()
-      //   } else {
-      console.log('Dung')
+      const invalid = this.$v.ruleForm.$invalid
+      if (invalid) {
+        this.$v.ruleForm.$touch()
+      } else {
+        const payload = {
+          id: this.examItem.id,
+          title: this.ruleForm.examName,
+          description: this.ruleForm.examDescription,
+          slug: this.ruleForm.slug,
+          category_id: this.ruleForm.category,
+          duration: this.ruleForm.examTime,
+          max_score: this.ruleForm.examScore,
+          url_img: this.ruleForm.selectedImage,
+        }
+        this.updateExam(payload)
+          .then(() => {
+            this.$router.push('/admin/exams')
+          })
+          .catch((error) => {
+            this.showErrorToast = true
+            setTimeout(() => {
+              this.showErrorToast = false
+            }, 3000)
+            console.error('Lỗi khi cập nhật môn học:', error)
+          })
+        // this.update()
+        // console.log(this.examItem.id)
+        this.closeModal()
+      }
+    },
+    changeAvatar() {
       this.$emit('close')
-      //   }
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0]
+      if (file) {
+        // Đọc tệp hình ảnh và hiển thị nó trên giao diện
+        const reader = new FileReader()
+
+        reader.onload = async (e) => {
+          const formData = new FormData()
+          formData.append('image', file)
+          await this.uploadFile(formData)
+
+          // console.log('id: ', this.fileUpload)
+          if (this.fileUpload) {
+            try {
+              // Sử dụng biểu thức chính quy để trích xuất giá trị "url"
+              const match = /"url":\s*"([^"]+)"/.exec(this.fileUpload)
+
+              // Kiểm tra xem có sự trùng khớp và lấy giá trị "url"
+              if (match && match[1]) {
+                const url = match[1]
+                // eslint-disable-next-line vue/no-mutating-props
+                this.ruleForm.selectedImage = url.replaceAll('\\', '')
+                // eslint-disable-next-line vue/no-mutating-props
+              } else {
+                console.log('Không tìm thấy giá trị URL.')
+              }
+            } catch (error) {
+              console.error('Lỗi khi chuyển đổi dữ liệu JSON:', error)
+            }
+          } else {
+            console.error('FileData không có giá trị.')
+          }
+        }
+        reader.readAsDataURL(file)
+      }
+    },
+    clearImage() {
+      this.ruleForm.selectedImage = null
     },
   },
 }
