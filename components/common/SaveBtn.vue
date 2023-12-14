@@ -1,73 +1,97 @@
 <template>
   <div>
     <button
-      class="fixed bottom-16 right-5 rounded-full bg-[#2743cf] px-4 py-3 mb-2 text-white"
+      class="fixed w-14 h-14 bottom-16 right-4 rounded-full bg-[#2743cf] hover:bg-[#1733bd] my-3 text-white z-50"
       @click="Savedata"
     >
-      <i class="fa-regular fa-floppy-disk"></i>
+      <!-- <i class="fa-regular fa-floppy-disk"></i> -->
+      SAVE
     </button>
+    <ToastSuccess
+      v-if="showSuccessToast"
+      class="z-50"
+      :message="successMessage"
+    />
+    <ToastError v-if="showErrorToast" class="z-50" :message="errorMessage" />
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
+import ToastSuccess from '~/components/common/ToastSuccess.vue'
+import ToastError from '~/components/common/ToastError.vue'
 export default {
+  components: {
+    ToastSuccess,
+    ToastError,
+  },
   props: {
     // eslint-disable-next-line vue/require-default-prop
     listQuestions: Array,
     // eslint-disable-next-line vue/require-default-prop
     detailExam: Object,
+    // eslint-disable-next-line vue/require-default-prop
+    detailExercise: Object,
   },
   data() {
     return {
       saveExam: null,
       isScrolling: false,
+      showSuccessToast: false,
+      showErrorToast: false,
+      successMessage: 'Lưu thành công!.',
+      errorMessage: 'Lỗi!',
     }
   },
-  // watch: {
-  //   detailExam: {
-  //     handler(newQuestions) {
-  //       // eslint-disable-next-line vue/no-mutating-props
-  //       this.detailExam.questions = this.listQuestions
-  //     },
-  //     deep: true,
-  //     immediate: true,
-  //   },
-  // },
-  mounted() {
-    // this.updateExam()
-    // this.getListExam()
-  },
+  mounted() {},
 
   methods: {
     ...mapActions('exam', ['updateExam']),
-    // ...mapActions('exam', ['getDetailExam']),
-    // ...mapActions('exam', ['getListExam']),
+    ...mapActions('exam', ['getDetailExam']),
+    ...mapActions('exercise', ['updateExercise']),
+    ...mapActions('exercise', ['getDetailExercise']),
 
-    //
     async Savedata() {
       try {
-        let payload = {
-          id: this.detailExam.id,
-          title: this.detailExam.title,
-          description: this.detailExam.description,
-          slug: this.detailExam.slug,
-          category_id: this.detailExam.category_id,
-          duration: this.detailExam.duration,
-          max_score: this.detailExam.max_score,
-          url_img: this.detailExam.url_img,
-          question_ids: this.detailExam.question_ids,
-          questions: this.listQuestions,
+        if (this.detailExam) {
+          const payload = {
+            id: this.detailExam.id,
+            title: this.detailExam.title,
+            description: this.detailExam.description,
+            slug: this.detailExam.slug,
+            category_id: this.detailExam.category_id,
+            duration: this.detailExam.duration,
+            max_score: this.detailExam.max_score,
+            url_img: this.detailExam.url_img,
+            question_ids: this.detailExam.question_ids,
+            questions: this.detailExam.questions,
+          }
+          await this.updateExam(payload)
+          this.saveExam = payload
+          this.$emit('send-data', this.detailExam.questions)
+        } else if (this.detailExercise) {
+          const payload = {
+            id: this.detailExercise.id,
+            title: this.detailExercise.title,
+            description: this.detailExercise.description,
+            slug: this.detailExercise.slug,
+            category_id: this.detailExercise.category_id,
+            duration: this.detailExercise.duration,
+            max_score: this.detailExercise.max_score,
+            url_img: this.detailExercise.url_img,
+            question_ids: this.detailExercise.question_ids,
+            questions: this.detailExercise.questions,
+          }
+          await this.updateExercise(payload)
         }
-        await this.updateExam(payload)
-        // this.$router.push('/admin/exams')
-        console.log('123', this.listQuestions)
-        // eslint-disable-next-line vue/no-mutating-props
-        // this.listQuestions = this.detailExam.questions
-        this.saveExam = payload
-        console.log('kkkk', this.detailExam.questions)
-        this.$emit('send-data', this.detailExam.questions)
+        this.showSuccessToast = true
+        setTimeout(() => {
+          this.showSuccessToast = false
+        }, 2000)
       } catch (error) {
-        console.log('Error:', error)
+        this.showErrorToast = true
+        setTimeout(() => {
+          this.showErrorToast = false
+        }, 2000)
       }
     },
     saveDataToLocalStorage() {

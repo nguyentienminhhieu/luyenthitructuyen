@@ -28,8 +28,6 @@
           >
             isActive
           </th>
-          <th class="px-2 py-3 border-2"></th>
-          <!-- Ô trống cho nút Chỉnh sửa -->
         </tr>
       </thead>
       <tbody
@@ -79,14 +77,7 @@
               </div>
             </label>
           </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editTeacher(teacher)">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteTeacher(teacher.id)">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
+
         </tr>
       </tbody>
     </table>
@@ -112,13 +103,12 @@ export default {
     ...mapActions('users', ['getListUser']),
     ...mapActions('users', ['activeUsers']),
     async toggleActive(item) {
-      // console.log(123, item)
       try {
         const payload = {
           user_id: item.id,
         }
         await this.activeUsers(payload)
-        this.$router.go(0)
+        await this.getListUser()
       } catch (error) {
         console.log('Lỗi server: ', error)
       }

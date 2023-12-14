@@ -4,7 +4,6 @@ import { getAuthorizationConfig } from '~/plugins/configToken'
 
 export const state = () => ({
   listAdmin: [],
-  // activeAdminstate: true,
 })
 
 export const actions = {
@@ -14,7 +13,7 @@ export const actions = {
       const response = await this.$axios.get('/list-admin', config)
       const data = response.data
       commit('SET_ADMIN', data.data)
-      // console.log(data.data)
+
     } catch (error) {
       console.log('Loi sever, ', error)
     }
@@ -35,9 +34,9 @@ export const actions = {
   },
 
   async deleteAdmin({ commit }, adminId) {
-  try {
-    const config = getAuthorizationConfig()
-    
+    try {
+      const config = getAuthorizationConfig()
+
       await this.$axios.delete(`/delete-admin/${adminId}`, config)
       commit('DELETE_ADMIN', adminId)
     } catch (error) {

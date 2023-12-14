@@ -44,13 +44,13 @@
       </thead>
       <tbody class="max-h-400 overflow-y-auto" @click="goToDetailExam">
         <tr
-          v-for="exam in listExam"
+          v-for="exam in listExamByAdmin"
           :key="exam.id"
           class="hover:bg-gray-50 cursor-pointer"
         >
           <td class="px-2 py-4 border-2 whitespace-no-wrap">{{ exam.id }}</td>
           <td class="px-6 py-4 border-2 whitespace-no-wrap">
-            {{ exam.title }}
+            {{ exam.title ? truncateText(exam.title, 35) : '' }}
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
             {{ exam.user_id === null ? 'Admin' : 'Giáo viên' }}
@@ -58,7 +58,7 @@
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
             {{ exam.category_id }}
           </td>
-          <td class="px-3 py-4 border-2 whitespace-no-wrap">
+          <td class="px-2 py-4 border-2 whitespace-no-wrap">
             {{ getFirstTenChars(exam.created_at) }}
             /
             <!-- <br /> -->
@@ -98,6 +98,11 @@
             <button @click="deleteExam(exam.id)">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
+            <button @click="detailExam(exam)">
+              <i
+                class="fa-regular fa-eye text-yellow-600 hover:text-yellow-700 ml-2"
+              ></i>
+            </button>
           </td>
         </tr>
       </tbody>
@@ -116,43 +121,40 @@ export default {
   },
   computed: {
     ...mapState('exam', ['listExam']),
-    ...mapState('exam', ['detailExam']),
     ...mapState('category', ['listCategory']),
+    listExamByAdmin() {
+      return this.listExam.filter((exam) => exam.user_id === null)
+    },
   },
   mounted() {
     this.getListExam()
-    // this.getDetailExam()
     this.getCategory()
     localStorage.removeItem('questionData')
   },
   methods: {
     ...mapActions('exam', ['getListExam']),
     ...mapActions('exam', ['activeExam']),
-    ...mapActions('exam', ['getDetailExam']),
     ...mapActions('category', ['getCategory']),
 
     async toggleActive(item) {
-      // console.log(123, item)
       try {
         const payload = {
           id: item.id,
         }
         await this.activeExam(payload)
-        this.$router.go(0)
+        await this.getListExam()
       } catch (error) {
-        console.log('Lỗi server: ', error)
+        console.error('Lỗi server: ', error)
       }
     },
-    async editExam(examItem) {
-      await this.getDetailExam(examItem.id)
-      // console.log('detailExam', typeof this.detailExam)
+    detailExam(examItem) {
       this.$router.push({
-        path: `/admin/exams/${examItem.slug}`,
+        path: `/admin/exams/examAdmin/${examItem.slug}`,
         query: { examID: examItem.id },
       })
-      // query: { detailExam: JSON.stringify(this.detailExam) },
-      // this.$emit('edit-clicked', this.detailExam)
-      // console.log('examID', this.detailExam)
+    },
+    editExam(exam) {
+      this.$emit('edit-click', exam)
     },
     deleteExam(examId) {
       this.$emit('delete-clicked', examId)
@@ -160,11 +162,15 @@ export default {
     goToDetailExam() {
       // this.$router.push(`/admin/exams/${this.$route.params.id}`)
     },
-    // userCreateExam() {
-
-    // },
     getFirstTenChars(text) {
       return text ? text.slice(0, 10) : ''
+    },
+    truncateText(text, maxLength) {
+      return text && typeof text === 'string'
+        ? text.length > maxLength
+          ? text.substring(0, maxLength) + '...'
+          : text
+        : ''
     },
   },
 }

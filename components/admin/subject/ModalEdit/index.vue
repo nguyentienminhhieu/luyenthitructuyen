@@ -90,16 +90,26 @@
         </div>
       </form>
     </div>
+    <ToastSuccess v-if="showSuccessToast" :message="successMessage" />
+    <ToastError v-if="showErrorToast" :message="errorMessage" />
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import { checkStatusClass } from '~/mixins/ruleValidator'
+import ToastSuccess from '~/components/common/ToastSuccess.vue'
+import ToastError from '~/components/common/ToastError.vue'
 export default {
   name: 'ModalEditSubject',
+  components: {
+    ToastSuccess,
+    ToastError,
+  },
   mixins: [validationMixin],
+
   props: {
     showModal: Boolean,
     subjectItem: Object,
@@ -110,6 +120,10 @@ export default {
         nameSubject: '',
         slug: '',
       },
+      showSuccessToast: false,
+      showErrorToast: false,
+      successMessage: 'Sửa môn học thành công!.',
+      errorMessage: 'Lỗi! Dữ liệu bị trùng.',
     }
   },
   validations: {
@@ -134,6 +148,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions('subject', ['getSubjects']),
+
     checkStatusClass,
     closeModal() {
       this.$emit('close')
@@ -151,13 +167,19 @@ export default {
         this.$store
           .dispatch('subject/updateSubject', payload)
           .then(() => {
-            // Sau khi gọi API updateSubject hoàn thành, tải lại trang.
-            this.$router.go(0)
+            this.showSuccessToast = true
+            setTimeout(() => {
+              this.showSuccessToast = false
+              this.getSubjects()
+            }, 2000)
           })
-          .catch((error) => {
-            console.error('Lỗi khi cập nhật môn học:', error)
+          .catch(() => {
+            this.showErrorToast = true
+            setTimeout(() => {
+              this.showErrorToast = false
+            }, 2000)
           })
-        this.closeModal()
+        // this.closeModal()
       }
     },
   },

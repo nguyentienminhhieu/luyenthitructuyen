@@ -1,20 +1,11 @@
 <template>
-  <div>
-    <!-- <div v-for="idetend in idExtends" :key="idetend.id">
-      <button @click="showChildQuestionId(idetend.id)">
-        Id cau hoi con {{ idetend.id }}
-      </button>
-    </div> -->
-    <div v-for="item in questionsExtends" :key="item.id">
-      <div class="bg-[#576574] p-2 rounded mb-4">
-        <Question
-          :question="item"
-          :detail-exam="detailExam"
-          @delete="deleteQuestion(item)"
-          @clear-image="clearImage(item)"
-        />
-        <!-- @id-questions-extends="idQuestionsExtends" -->
-        <!-- @saveQuestionStorage="saveQuestionStorage" -->
+  <div
+    class="border-2 border-[#f2f2f2f2]"
+    style="box-shadow: 4px 1px 4px rgba(0, 0, 0, 0.1); border-radius: 8px"
+  >
+    <div v-for="(item, index) in questionsExtends" :key="index">
+      <div class="bg-[#fffff] p-2 rounded mb-4">
+        <Question :question="item" @delete="deleteQuestion(item)" />
       </div>
     </div>
   </div>
@@ -29,21 +20,12 @@ export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop, vue/prop-name-casing
     questionsExtends: Array,
-    detailExam: Object,
   },
   data() {
-    return {
-      idExtends: [],
-    }
+    return {}
   },
+
   methods: {
-    // showChildQuestionId(item) {
-    //   console.log('idcon', item.id)
-    // },
-    // idQuestionsExtends(item) {
-    //   this.idExtends = item
-    //   console.log('id con', item.id)
-    // },
     deleteQuestion(item) {
       const index = this.questionsExtends.indexOf(item)
       if (index !== -1) {
@@ -51,10 +33,9 @@ export default {
         this.questionsExtends.splice(index, 1)
       }
     },
-    clearImage(question) {
-      // Đặt file của câu hỏi hiện tại thành null
-      question.file = null
-    },
+    // clearImage(question) {
+    //   question.file = null
+    // },
   },
 }
 </script>

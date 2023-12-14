@@ -29,7 +29,7 @@
       </thead>
       <tbody class="max-h-400 overflow-y-auto">
         <tr
-          v-for="item in listAdmin"
+          v-for="item in listActiveAAA"
           :key="item.id"
           class="hover:bg-gray-50 cursor-pointer custom-scrollbar"
         >
@@ -43,7 +43,7 @@
           <td class="px-1 py-4 border-2 whitespace-no-wrap">
             <input
               :id="`toggle-${item.id}`"
-              :checked="item.active"
+              v-model="item.active"
               type="checkbox"
               class="hidden"
               @change="toggleActive(item)"
@@ -67,9 +67,6 @@
             </label>
           </td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <!-- <button @click="editAdmin">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button> -->
             <button @click="deleteAdmin(item.id)">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
@@ -86,10 +83,15 @@ export default {
   data() {
     return {
       // isActive: false,
+      isActive: false,
+      listActive: null,
     }
   },
   computed: {
     ...mapState('account', ['listAdmin']),
+    listActiveAAA() {
+      return JSON.parse(JSON.stringify(this.listAdmin))
+    },
   },
   mounted() {
     this.getAdmin()
@@ -98,20 +100,18 @@ export default {
     ...mapActions('account', ['getAdmin']),
     ...mapActions('account', ['activeAdmin']),
     async toggleActive(item) {
-      // console.log(123, item)
       try {
         const payload = {
           id: item.id,
         }
+        // console.log('Lỗi server123: ', payload)
         await this.activeAdmin(payload)
-        this.$router.go(0)
+        await this.getAdmin()
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log('Lỗi server: ', error)
       }
     },
-    // editAdmin() {
-    //   this.$emit('edit-clicked')
-    // },
     deleteAdmin(adminId) {
       this.$emit('delete-clicked', adminId)
     },

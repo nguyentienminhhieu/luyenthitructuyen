@@ -2,7 +2,7 @@
   <div>
     <button
       v-if="isScrolling"
-      class="fixed bottom-4 right-5 rounded-full bg-[#c7bf22] px-4 py-3 text-white"
+      class="fixed w-14 h-14 bottom-4 right-4 rounded-full bg-[#c7bf22] hover:bg-[#a0990f] text-white z-50"
       @click="scrollToTop"
     >
       <i class="fas fa-arrow-up"></i>
@@ -17,10 +17,10 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('scroll', this.handleScroll, { passive: true })
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll)
+    window.removeEventListener('scroll', this.handleScroll, { passive: true })
   },
   methods: {
     scrollToTop() {

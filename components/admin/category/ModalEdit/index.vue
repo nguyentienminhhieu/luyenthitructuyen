@@ -198,6 +198,7 @@ export default {
     ...mapActions('subject', ['getSubjects']),
     ...mapActions('grade', ['getGrade']),
     ...mapActions('category', ['updateCategory']),
+    ...mapActions('category', ['getCategory']),
     checkStatusClass,
 
     closeModal() {
@@ -218,19 +219,17 @@ export default {
           }
           // const response = await this.upadeGrade(payload)
           await this.updateCategory(payload)
-          this.$nextTick(() => {
-            this.$router.go(0)
-          })
+
           this.showSuccessToast = true
           setTimeout(() => {
             this.showSuccessToast = false
-          }, 3000)
+            this.getCategory()
+          }, 2000)
         } catch (error) {
           this.showErrorToast = true
           setTimeout(() => {
             this.showErrorToast = false
-          }, 3000)
-          console.log('Submit Failed', error)
+          }, 2000)
         }
       }
     },

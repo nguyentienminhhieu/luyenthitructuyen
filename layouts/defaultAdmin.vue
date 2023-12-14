@@ -4,32 +4,36 @@
     <div class="flex">
       <!-- Sidebar -->
       <aside
-        class="bg-[#181F35] text-white border-r-2 w-56 h-screen overflow-y-auto sticky top-0"
+        class="bg-[#181F35] text-white border-r-2 w-56 h-screen overflow-y-auto sticky top-0 sidebar"
+        style="box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1)"
       >
         <div class="flex flex-col items-center mt-8 space-x-4">
-          <nuxt-link to="/admin" class="text-white text-4xl font-bold"
-            >LOGO</nuxt-link
+          <nuxt-link
+            to="/admin"
+            class="text-white text-2xl font-bold logo-container"
           >
-          <!-- <p class="ml-none text-sm">Administrator</p> -->
+            Admin
+          </nuxt-link>
         </div>
         <nav class="mt-12">
           <ul>
             <li class="mb-4">
               <nuxt-link
                 to="/admin"
-                class="block p-3 hover:bg-gray-700 rounded transition duration-300"
+                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300"
               >
                 <i class="fa-solid fa-chart-line mr-2"></i>
-                Dashboard
+                <h1 class="menu-container">Dashboard</h1>
               </nuxt-link>
             </li>
+
             <li class="mb-4">
               <nuxt-link
                 to="/admin/admin-management"
-                class="block p-3 hover:bg-gray-700 rounded transition duration-300"
+                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300"
               >
                 <i class="fa-solid fa-circle-user mr-2"></i>
-                Admin
+                <h1 class="menu-container">Admin</h1>
               </nuxt-link>
             </li>
             <li class="mb-4 relative group">
@@ -37,19 +41,19 @@
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
                 @click="toggleUserMenu"
               >
-                <div>
+                <div class="flex items-center">
                   <!-- <i class="fa-solid fa-user-group "></i> -->
                   <i class="fa-solid fa-address-book mr-2"></i>
-                  Users
+                  <h1 class="menu-container">Users</h1>
                 </div>
                 <i
                   class="fas fa-plus cursor-pointer"
-                  :class="{ 'rotate-45': isMenuOpen.users }"
+                  :class="{ 'rotate-45': isMenuOpen.user }"
                 ></i>
               </div>
               <div
-                v-if="isMenuOpen.users"
-                class="ml-4 bg-[#181F35] text-[#181F35] border border-[#181F35] rounded-lg shadow-lg"
+                v-if="isMenuOpen.user"
+                class="ml-4 bg-[#181F35] text-[#181F35] border-t-2 shadow-lg"
               >
                 <nuxt-link
                   to="/admin/users/teachers"
@@ -66,81 +70,86 @@
               </div>
             </li>
             <li class="mb-4 relative group">
-              <nuxt-link
-                to="/admin/exams"
-                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
+              <div
+                class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
+                @click="toggleExamMenu"
               >
-                <i class="fa-solid fa-pen-clip mr-2"></i>
-                Exams
-                <!-- <i
+                <div class="flex items-center">
+                  <!-- <i class="fa-solid fa-user-group "></i> -->
+                  <i class="fa-solid fa-pen-clip mr-2"></i>
+                  <h1 class="menu-container">Exams</h1>
+                </div>
+                <i
                   class="fas fa-plus cursor-pointer"
-                  :class="{ 'rotate-45': isMenuOpen.exams }"
-                ></i> -->
-              </nuxt-link>
-              <!-- <div
-                v-if="isMenuOpen.exams"
-                class="ml-4 bg-[#181F35] text-[#181F35] border border-[#181F35] rounded-lg shadow-lg"
+                  :class="{ 'rotate-45': isExamMenu }"
+                ></i>
+              </div>
+              <div
+                v-if="isExamMenu"
+                class="ml-4 bg-[#181F35] text-[#181F35] border-t-2 shadow-lg"
               >
                 <nuxt-link
-                  to="/admin"
+                  to="/admin/exams/examAdmin"
                   class="block p-2 hover:bg-gray-700 text-white rounded"
                 >
-                  Tạo đề
+                  Admin
                 </nuxt-link>
                 <nuxt-link
-                  to="/admin"
+                  to="/admin/exams/examTeacher"
                   class="block p-2 hover:bg-gray-700 text-white rounded"
                 >
-                  Duyệt đề
+                  Teacher
                 </nuxt-link>
-              </div> -->
+              </div>
             </li>
             <li class="mb-4 relative group">
-              <nuxt-link
-                to="/admin/exercise"
-                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
+              <div
+                class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
+                @click="toggleExerciseMenu"
               >
-                <i class="fa-solid fa-pen-ruler mr-2"></i>
-                Exercise
-                <!-- <i
+                <div class="flex items-center">
+                  <i class="fa-solid fa-pen-ruler mr-2"></i>
+                  <h1 class="menu-container">Exercise</h1>
+                </div>
+                <i
                   class="fas fa-plus cursor-pointer"
-                  :class="{ 'rotate-45': isMenuOpen.exercise }"
-                ></i> -->
-              </nuxt-link>
-              <!-- <div
-                v-if="isMenuOpen.exercise"
-                class="ml-4 bg-[#181F35] text-[#181F35] border border-[#181F35] rounded-lg shadow-lg"
+                  :class="{ 'rotate-45': isExerciseMenu }"
+                ></i>
+              </div>
+              <div
+                v-if="isExerciseMenu"
+                class="ml-4 bg-[#181F35] text-[#181F35] border-t-2 shadow-lg"
               >
                 <nuxt-link
-                  to="/admin"
+                  to="/admin/exercise/exerciseAdmin"
                   class="block p-2 hover:bg-gray-700 text-white rounded"
                 >
-                  Tạo bài tập
+                  Admin
                 </nuxt-link>
                 <nuxt-link
-                  to="/admin"
+                  to="/admin/exercise/exerciseTeacher"
                   class="block p-2 hover:bg-gray-700 text-white rounded"
                 >
-                  Duyệt bài tập
+                  Teacher
                 </nuxt-link>
-              </div> -->
+              </div>
             </li>
             <li class="mb-4">
               <nuxt-link
                 to="/admin/classes"
-                class="block p-3 hover:bg-gray-700 rounded transition duration-300"
+                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300"
               >
                 <i class="fa-solid fa-graduation-cap mr-2"></i>
-                Grade
+                <h1 class="menu-container">Grade</h1>
               </nuxt-link>
             </li>
             <li class="mb-4">
               <nuxt-link
                 to="/admin/subject"
-                class="block p-3 hover:bg-gray-700 rounded transition duration-300"
+                class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300"
               >
                 <i class="fa-solid fa-book mr-2"></i>
-                Subjects
+                <h1 class="menu-container">Subjects</h1>
               </nuxt-link>
             </li>
             <li class="mb-4 relative group">
@@ -149,17 +158,17 @@
                 class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
               >
                 <i class="fa-solid fa-sliders mr-2"></i>
-                Category
+                <h1 class="menu-container">Category</h1>
               </nuxt-link>
             </li>
-            <li class="mb-4 relative group">
+            <!-- <li class="mb-4 relative group">
               <nuxt-link
                 to="/admin/posts"
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
               >
                 Quản lý bài viết
               </nuxt-link>
-            </li>
+            </li> -->
           </ul>
         </nav>
       </aside>
@@ -167,26 +176,29 @@
     <!-- Header -->
     <div class="w-full">
       <header
-        class="bg-white py-4 px-10 h-14 border-b-2 flex justify-end items-center sticky top-0 z-50"
+        class="flex justify-between items-center bg-white py-4 pr-10 h-14 border-b-2 sticky top-0 z-50"
+        style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)"
       >
-        <!-- <div class="relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            class="border-b-2 border-gray-300 rounded py-1 px-2 focus:outline-none"
-          />
-          <button
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 text-color-custom hover:text-gray-600 focus:outline-none"
-          >
-            <i class="fas fa-search"></i>
-          </button>
-        </div> -->
+        <div
+          class="pl-5 text-[#7e7e7e] hover:text-[#253d90] cursor-pointer"
+          @click="toggleAside"
+        >
+          <i
+            class="toggle-icon fa-solid"
+            :class="{ 'fa-angles-right': !isAsideOpen, 'fa-bars': isAsideOpen }"
+          ></i>
+        </div>
+        <nuxt-link
+          to="/admin"
+          class="text-[#253d90] text-xl font-bold logo-container"
+          >LuyenThiTracNghiem</nuxt-link
+        >
         <div class="flex items-center space-x-4">
-          <button
+          <!-- <button
             class="text-color-custom text-color-custom hover:text-color-custom"
           >
             <i class="fas fa-bell"></i>
-          </button>
+          </button> -->
           <div class="text-color-custom">
             <div
               class="relative cursor-pointer text-color-custom hover:text-color-custom"
@@ -208,9 +220,10 @@
   </div>
 </template>
 <script>
+// import { mapState } from 'vuex'
 import AccountMenuAdmin from '~/components/common/AccountMenu'
 import ScrollToTop from '~/components/common/ScrollToTop.vue'
-// import Cookies from '@/services/cookies.service'
+import Cookies from '~/services/cookies.service.js'
 
 export default {
   name: 'DefaultAdmin',
@@ -221,41 +234,58 @@ export default {
   data() {
     return {
       isMenuOpen: {
-        users: false,
-        // exams: false,
-        // exercise: false,
-        // posts: false,
+        user: false,
       },
-      // checkToken: null,
+      isExamMenu: false,
+      isExerciseMenu: false,
       isMenuAccount: false,
+      isAsideOpen: true,
+      adminAccount: null,
+      isQLAdmin: false,
     }
   },
-  // mounted() {
-  //   this.checkToken = Cookies.getToken()
-  //   if (!this.checkToken) {
-  //     window.location.href = '/login'
-  //   }
-  // },
+  computed: {},
+  mounted() {
+    this.adminAccount = Cookies.getUser()
+    console.log('user', Cookies.getUser())
+    console.log('adminAccount', this.adminAccount)
+    if (Cookies.getUser() === 1) {
+      // this.cookieExists = true;
+      this.isQLAdmin = true
+    }
+  },
   methods: {
     toggleUserMenu() {
-      this.isMenuOpen.users = !this.isMenuOpen.users
+      this.isMenuOpen.user = !this.isMenuOpen.user
+    },
+    toggleExamMenu() {
+      this.isExamMenu = !this.isExamMenu
+    },
+    toggleExerciseMenu() {
+      this.isExerciseMenu = !this.isExerciseMenu
+    },
+    toggleAside() {
+      this.isAsideOpen = !this.isAsideOpen
+      const sidebar = document.querySelector('.sidebar')
+      if (this.isAsideOpen) {
+        sidebar.style.width = '250px'
+        sidebar.classList.remove('closed')
+      } else {
+        sidebar.style.width = '56px'
+        sidebar.classList.add('closed')
+      }
     },
     toggleAccountMenu() {
       this.isMenuAccount = !this.isMenuAccount
     },
-    // toggleExamMenu() {
-    //   this.isMenuOpen.exams = !this.isMenuOpen.exams
-    // },
-    // toggleExerciseMenu() {
-    //   this.isMenuOpen.exercise = !this.isMenuOpen.exercise
-    // },
-    // togglePostMenu() {
-    //   this.isMenuOpen.posts = !this.isMenuOpen.posts
-    // },
   },
 }
 </script>
 <style scope>
+.sidebar.closed .logo-container,
+.sidebar.closed .menu-container {
+  visibility: hidden;
+}
 /* Thiết lập thanh cuộn */
 ::-webkit-scrollbar {
   width: 6px; /* Chiều rộng của thanh cuộn */

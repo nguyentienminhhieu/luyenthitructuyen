@@ -21,7 +21,7 @@ export const actions = {
         return data
       }
     } catch (error) {
-      // return error
+
       console.log('loi', error)
     }
   },

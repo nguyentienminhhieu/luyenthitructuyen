@@ -231,6 +231,7 @@ export default {
     ...mapActions('category', ['getCategory']),
     ...mapActions('exam', ['addExam']),
     ...mapActions('upload', ['uploadFile']),
+    ...mapActions('exam', ['getListExam']),
 
     checkStatusClass,
     closeModal() {
@@ -254,8 +255,8 @@ export default {
           }
           // const response = await this.addExam(payload)
           if (this.addExam(payload)) {
-            this.$router.go(0)
-            // this.reset()
+            // this.$router.go(0)
+            this.reset()
             // Sử dụng $nextTick để đảm bảo rằng DOM đã được cập nhật trước khi focus
             this.$nextTick(() => {
               this.$refs.examNameInput.focus()
@@ -263,15 +264,19 @@ export default {
             this.showSuccessToast = true
             setTimeout(() => {
               this.showSuccessToast = false
-            }, 3000)
+              this.getListExam()
+            }, 2000)
           } else {
             this.showErrorToast = true
             setTimeout(() => {
               this.showErrorToast = false
-            }, 3000)
+            }, 2000)
           }
         } catch (error) {
-          console.log('Submit Failed', error)
+          this.showErrorToast = true
+          setTimeout(() => {
+            this.showErrorToast = false
+          }, 2000)
         }
       }
     },

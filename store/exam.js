@@ -4,7 +4,6 @@ import { getAuthorizationConfig } from '~/plugins/configToken'
 export const state = () => ({
   listExam: [],
   detailExam: {},
-  questions: [],
 })
 
 export const actions = {
@@ -36,8 +35,9 @@ export const actions = {
         examItem,
         config
       )
-      const data = response
-      commit('UPDATE_EXAM', data.data)
+      // const data = response
+      return response
+      // commit('UPDATE_EXAM', data.data)
     } catch (error) {
       console.log('Error123:', error)
     }
@@ -84,9 +84,6 @@ export const actions = {
 
 export const mutations = {
   updateField,
-  SET_QUESTIONS(state, newQuestions) {
-    state.questions = newQuestions
-  },
   SET_EXAM(state, data) {
     state.listExam = data
   },

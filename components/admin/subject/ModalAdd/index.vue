@@ -167,12 +167,12 @@ export default {
             this.showSuccessToast = true
             setTimeout(() => {
               this.showSuccessToast = false
-            }, 3000)
+            }, 2000)
           } else {
             this.showErrorToast = true
             setTimeout(() => {
               this.showErrorToast = false
-            }, 3000)
+            }, 2000)
           }
         } catch (error) {
           console.log('Submit Failed', error)

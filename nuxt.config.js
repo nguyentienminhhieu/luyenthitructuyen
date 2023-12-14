@@ -27,6 +27,8 @@ export default {
   components: [
     '~/components/admin/exams/DetailExam/Question.vue',
     '~/components/admin/exams/DetailExam/List/ListQuestions.vue',
+    '~/components/admin/exercise/DetailExercise/Question.vue',
+    '~/components/admin/exercise/DetailExercise/List/ListQuestions.vue',
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

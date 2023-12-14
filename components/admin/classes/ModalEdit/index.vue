@@ -144,6 +144,7 @@ export default {
   },
   computed: {
     ...mapState('subject', ['listSubject']),
+    ...mapState('grade', ['listGrade']),
     filterSubjectID() {
       return this.listSubject.filter((item) => item.id > 1)
     },
@@ -177,6 +178,7 @@ export default {
   methods: {
     ...mapActions('subject', ['getSubjects']),
     ...mapActions('grade', ['updateGrade']),
+    ...mapActions('grade', ['getGrade']),
     checkStatusClass,
 
     closeModal() {
@@ -196,19 +198,23 @@ export default {
           }
           // const response = await this.upadeGrade(payload)
           await this.updateGrade(payload)
-          this.$nextTick(() => {
-            this.$router.go(0)
-          })
+          // this.$nextTick(() => {
+          //   // this.$router.go(0)
+          // })
           this.showSuccessToast = true
           setTimeout(() => {
             this.showSuccessToast = false
-          }, 3000)
+            this.getGrade()
+          }, 2000)
         } catch (error) {
           this.showErrorToast = true
           setTimeout(() => {
             this.showErrorToast = false
-          }, 3000)
-          console.log('Submit Failed', error)
+          }, 2000)
+          this.showErrorToast = true
+          setTimeout(() => {
+            this.showErrorToast = false
+          }, 2000)
         }
       }
     },

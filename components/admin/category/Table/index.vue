@@ -63,7 +63,6 @@ export default {
     async editCategory(categoryItem) {
       await this.getDetailCategory(categoryItem.id)
       this.$emit('edit-clicked', categoryItem)
-      console.log('detail', this.detailCategory)
     },
     deleteCategory(categoryId) {
       this.$emit('delete-clicked', categoryId)

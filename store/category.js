@@ -14,7 +14,7 @@ export const actions = {
       const response = await this.$axios.get('/list-category', config)
       const data = response.data
       commit('SET_CATEGORY', data.data)
-      // console.log(data.data)
+
     } catch (error) {
       console.log('Loi sever, ', error)
     }
@@ -25,7 +25,7 @@ export const actions = {
       const response = await this.$axios.get('/detail-category/' + id, config)
       const data = response.data
       commit('SET_DETAIL_CATEGORY', data.data)
-      // console.log(data.data)
+
     } catch (error) {
       console.log('Loi sever, ', error)
     }
@@ -54,7 +54,6 @@ export const actions = {
       )
       const data = response.data
       commit('UPDATE_CATEGORY', data.data)
-      // console.log(categoryItem)
     } catch (error) {
       console.log('Error', error)
     }

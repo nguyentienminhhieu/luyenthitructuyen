@@ -62,7 +62,6 @@ export default {
     async editSubject(subjectItem) {
       await this.getDetailSubjects(subjectItem.id)
       this.$emit('edit-clicked', this.detailSubject)
-      console.log('subject', this.detailSubject)
     },
     deleteSubject(subjectId) {
       this.$emit('delete-clicked', subjectId)

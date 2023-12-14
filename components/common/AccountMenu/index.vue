@@ -4,9 +4,9 @@
   >
     <button
       class="w-full block p-2 hover:bg-gray-200 text-color-custom hover:border-none"
-      @click="isLoggin ? changePassword() : register()"
+      @click="isLoggin ? profile() : register()"
     >
-      {{ isLoggin ? 'Thay đổi mật khẩu' : 'Đăng ký' }}
+      {{ isLoggin ? 'Profile' : 'Đăng ký' }}
     </button>
     <button
       class="w-full block p-2 hover:bg-gray-200 text-color-custom hover:border-none"
@@ -28,7 +28,7 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters('authen', ['getLoggedIn']),
+    // ...mapState('authen')
   },
   mounted() {
     if (Cookies.getToken() != null) {
@@ -46,7 +46,7 @@ export default {
       this.$router.push('/login')
     },
     register() {
-      this.$router.push('/register')
+      this.$router.push('/')
     },
     profile() {
       alert('Chức năng đang được cập nhật')
@@ -55,7 +55,7 @@ export default {
       alert('Chức năng đang được cập nhật')
     },
     changePassword() {
-      this.$router.push(`/chang-password`)
+      this.$router.push(`/`)
     },
   },
 }

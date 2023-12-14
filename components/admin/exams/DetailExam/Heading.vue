@@ -11,11 +11,9 @@
       >Exams</nuxt-link
     >
     <p>/</p>
-    <nuxt-link
-      :to="'/admin/exams/' + $route.params.id"
-      class="text-color-custom hover:text-color-custom"
-      >{{ $route.params.id }}</nuxt-link
-    >
+    <div class="text-color-custom hover:text-color-custom">
+      {{ $route.params.id }}
+    </div>
   </div>
 </template>
 <script>

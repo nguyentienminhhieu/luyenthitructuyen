@@ -56,8 +56,7 @@ export default {
   },
   mounted() {
     this.getGrade()
-    // this.getDetailGrade()
-    // console.log(this.getDetailGrade)
+
   },
   methods: {
     ...mapActions('grade', ['getGrade']),
@@ -65,7 +64,7 @@ export default {
     async editClass(gradeItem) {
       await this.getDetailGrade(gradeItem.id)
       this.$emit('edit-clicked', this.detailGrade)
-      // console.log('detail', this.detailGrade)
+
     },
     deleteClass(gradeId) {
       this.$emit('delete-clicked', gradeId)

@@ -2,18 +2,15 @@
   <div class="mr-12 ml-12">
     <header class="bg-white p-4 h-16 flex justify-between items-center">
       <div class="flex items-center space-x-4">
-        <h1 to="/admin" class="logo-color text-2xl font-bold">LOGO</h1>
+        <h1 to="/admin" class="logo-color text-2xl font-bold">
+          LuyenThiTracNghiem
+        </h1>
       </div>
       <div class="flex space-x-4">
         <nuxt-link
           to="/login"
           class="auth-text text-color-custom hover:text-color-custom"
           >Đăng nhập</nuxt-link
-        >
-        <nuxt-link
-          to="/register"
-          class="auth-text text-color-custom hover:text-color-custom"
-          >Đăng ký</nuxt-link
         >
       </div>
     </header>

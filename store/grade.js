@@ -14,7 +14,6 @@ export const actions = {
       const response = await this.$axios.get('/grade', config)
       const data = response.data
       commit('SET_GRADE', data.data)
-      // console.log(data.data)
     } catch (error) {
       console.log('Loi sever, ', error)
     }
@@ -25,7 +24,6 @@ export const actions = {
       const response = await this.$axios.get('/grade/' + id, config)
       const data = response.data
       commit('SET_DETAIL_GRADE', data.data)
-      // console.log(data.data)
     } catch (error) {
       console.log('Loi sever, ', error)
     }

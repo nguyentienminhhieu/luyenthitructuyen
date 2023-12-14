@@ -302,7 +302,6 @@ export default {
       if (invalid) {
         this.$v.ruleForm.$touch()
       } else {
-        console.log('Dung')
         this.$emit('close')
       }
     },

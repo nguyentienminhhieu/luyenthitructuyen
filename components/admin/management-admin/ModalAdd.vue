@@ -184,8 +184,13 @@ export default {
       },
     },
   },
+  mounted() {
+    // this.addAdmin()
+  },
   methods: {
     ...mapActions('account', ['addAdmin']),
+    ...mapActions('account', ['getAdmin']),
+
     checkStatusClass,
 
     closeModal() {
@@ -205,19 +210,19 @@ export default {
 
           if (this.addAdmin(payload)) {
             this.reset()
-            // Sử dụng $nextTick để đảm bảo rằng DOM đã được cập nhật trước khi focus
             this.$nextTick(() => {
               this.$refs.nameInput.focus()
             })
             this.showSuccessToast = true
             setTimeout(() => {
               this.showSuccessToast = false
-            }, 3000)
+              this.getAdmin()
+            }, 2000)
           } else {
             this.showErrorToast = true
             setTimeout(() => {
               this.showErrorToast = false
-            }, 3000)
+            }, 2000)
           }
         } catch (error) {
           console.log('Submit Failed', error)
@@ -226,9 +231,9 @@ export default {
     },
 
     reset() {
-      this.ruleForm.nameAdmin = '' // Sửa thành this.ruleForm.nameAdmin
-      this.ruleForm.email = '' // Sửa thành this.ruleForm.email
-      this.ruleForm.password = '' // Sửa thành this.ruleForm.password
+      this.ruleForm.nameAdmin = ''
+      this.ruleForm.email = ''
+      this.ruleForm.password = ''
     },
   },
 }

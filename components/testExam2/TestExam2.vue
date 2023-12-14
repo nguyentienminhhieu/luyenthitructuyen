@@ -52,12 +52,8 @@ export default {
           if (e.id === randomId) {
             question.id = Math.random(10) * 1000
           }
-          // console.log(e)
         })
       }
-      // else {
-      //   console.log('error array null')
-      // }
       // eslint-disable-next-line vue/no-mutating-props
       this.question.listQuestions.push(question)
     },

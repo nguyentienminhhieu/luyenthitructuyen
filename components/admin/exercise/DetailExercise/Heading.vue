@@ -12,15 +12,21 @@
     >
     <p>/</p>
     <nuxt-link
-      to="/admin/exercise/add-exercise"
+      :to="'/admin/exercise/' + $route.params.id"
       class="text-color-custom hover:text-color-custom"
-      >Add</nuxt-link
+      >{{ $route.params.id }}</nuxt-link
     >
   </div>
 </template>
 <script>
 export default {
-  name: 'HeadingAddExercise',
+  name: 'HeadingDetailExercise',
+  methods: {
+    validate({ params }) {
+      // Must be a string of letters
+      return /^[A-Za-z]+$/.test(params.id)
+    },
+  },
 }
 </script>
 <style></style>

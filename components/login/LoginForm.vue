@@ -93,7 +93,7 @@
         </div>
       </form>
 
-      <div class="flex mt-10">
+      <!-- <div class="flex mt-10">
         <div class="text-color-default mr-5">
           <input type="checkbox" id="remember-password" class="mr-2" />
           <label for="remember-password">Ghi nhớ mật khẩu</label>
@@ -101,7 +101,7 @@
         <div class="text-color-custom hover:text-color-custom">
           <nuxt-link to="/forgot-password">Quên mật khẩu?</nuxt-link>
         </div>
-      </div>
+      </div> -->
       <!-- <div class="mt-5">
         <p class="text-sm mt-6 text-color-default">
           Bạn chưa có tài khoản?
@@ -163,11 +163,7 @@ export default {
     },
   },
 
-  computed: {
-    // ...mapFields({
-    // data: "fileStore.state"
-    // })
-  },
+  computed: {},
 
   methods: {
     ...mapActions('authen', ['login']),
@@ -197,17 +193,20 @@ export default {
             this.showSuccessToast = true
             setTimeout(() => {
               this.showSuccessToast = false
-            }, 3000)
+            }, 2000)
             // })
           } else {
             // alert('sai mat khau hoặc số điện thoại')
             this.showErrorToast = true
             setTimeout(() => {
               this.showErrorToast = false
-            }, 3000)
+            }, 2000)
           }
         } catch (error) {
-          console.log('Submit Failed', error)
+          this.showErrorToast = true
+          setTimeout(() => {
+            this.showErrorToast = false
+          }, 2000)
         }
       }
     },

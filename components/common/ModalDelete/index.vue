@@ -50,6 +50,7 @@ export default {
     adminId: Number,
     categoryId: Number,
     examId: Number,
+    exerciseId: Number,
     studentId: Number,
     teacherId: Number,
   },
@@ -77,6 +78,8 @@ export default {
           this.$store.dispatch('category/deleteCategory', this.categoryId)
         } else if (this.examId) {
           this.$store.dispatch('exam/deleteExam', this.examId)
+        } else if (this.exerciseId) {
+          this.$store.dispatch('exercise/deleteExercise', this.exerciseId)
         } else if (this.studentId) {
           this.$store.dispatch('users/deleteUsers', this.studentId)
         } else if (this.teacherId) {
@@ -88,7 +91,7 @@ export default {
         this.showErrorToast = true
         setTimeout(() => {
           this.showErrorToast = false
-        }, 3000)
+        }, 2000)
       }
     },
 
@@ -96,7 +99,7 @@ export default {
       this.showSuccessToast = true
       setTimeout(() => {
         this.showSuccessToast = false
-      }, 3000)
+      }, 2000)
     },
   },
 }

@@ -20,8 +20,20 @@
         v-model="selectedOption"
         class="border-b-2 border-gray-300 rounded py-1 px-2 focus:outline-none"
       >
-        <option value="1">1</option>
-        <option value="2">2</option>
+        <option v-for="item in listSubject" :key="item.id" :value="item.id">
+          {{ item.name }}
+        </option>
+        <!-- Thêm các option khác nếu cần -->
+      </select>
+    </div>
+    <div class="relative">
+      <select
+        v-model="selectedOption"
+        class="border-b-2 border-gray-300 rounded py-1 px-2 focus:outline-none"
+      >
+        <option v-for="item in listGrade" :key="item.id" :value="item.id">
+          {{ item.name }}
+        </option>
         <!-- Thêm các option khác nếu cần -->
       </select>
     </div>
@@ -36,6 +48,8 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'SearchAddOptionExercise',
   data() {
@@ -43,7 +57,17 @@ export default {
       selectedOption: null,
     }
   },
+  computed: {
+    ...mapState('subject', ['listSubject']),
+    ...mapState('grade', ['listGrade']),
+  },
+  mounted() {
+    this.getSubjects()
+    this.getGrade()
+  },
   methods: {
+    ...mapActions('subject', ['getSubjects']),
+    ...mapActions('grade', ['getGrade']),
     handleAddClick() {
       this.$emit('add-clicked')
     },

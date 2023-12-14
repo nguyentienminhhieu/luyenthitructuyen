@@ -33,8 +33,6 @@
           >
             isActive
           </th>
-          <th class="px-3 py-3 border-2"></th>
-          <!-- Ô trống cho nút Chỉnh sửa -->
         </tr>
       </thead>
       <tbody class="max-h-400 overflow-y-auto" @click="goToDetailUser">
@@ -84,14 +82,6 @@
               </div>
             </label>
           </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
-            <button @click="editStudent(student)">
-              <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-            </button>
-            <button @click="deleteStudent(student.id)">
-              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
-            </button>
-          </td>
         </tr>
       </tbody>
     </table>
@@ -115,9 +105,9 @@ export default {
       }))
     },
   },
-  async created() {
-    await this.getListUser()
-    await this.getGrade()
+  mounted() {
+    this.getListUser()
+    this.getGrade()
   },
 
   methods: {
@@ -131,7 +121,7 @@ export default {
           user_id: item.id,
         }
         await this.activeUsers(payload)
-        this.$router.go(0)
+        await this.getListUser()
       } catch (error) {
         console.log('Lỗi server: ', error)
       }
@@ -147,7 +137,6 @@ export default {
     },
     getGradeName(gradeId) {
       const grade = this.listGrade.find((g) => g.id === gradeId)
-      console.log('grade', grade)
       return grade ? grade.name : 'Unknown Grade'
     },
   },

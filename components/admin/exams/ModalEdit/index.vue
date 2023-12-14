@@ -165,6 +165,7 @@
         </div>
       </form>
     </div>
+    <ToastSuccess v-if="showSuccessToast" :message="successMessage" />
     <ToastError v-if="showErrorToast" :message="errorMessage" />
   </div>
 </template>
@@ -173,11 +174,13 @@ import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import { mapState, mapActions } from 'vuex'
 import { checkStatusClass } from '~/mixins/ruleValidator'
+import ToastSuccess from '~/components/common/ToastSuccess.vue'
 import ToastError from '~/components/common/ToastError.vue'
 
 export default {
   name: 'ModalEditExam',
   components: {
+    ToastSuccess,
     ToastError,
   },
   mixins: [validationMixin],
@@ -196,7 +199,9 @@ export default {
         examScore: null,
         selectedImage: null,
       },
+      showSuccessToast: false,
       showErrorToast: false,
+      successMessage: 'Sửa đề thành công!.',
       errorMessage: 'Lỗi! Dữ liệu bị trùng.',
     }
   },
@@ -233,7 +238,6 @@ export default {
   mounted() {
     this.getCategory()
     this.updateExam()
-    this.getListExam()
   },
   methods: {
     ...mapActions('category', ['getCategory']),
@@ -261,18 +265,19 @@ export default {
         }
         this.updateExam(payload)
           .then(() => {
-            this.$router.push('/admin/exams')
+            this.showSuccessToast = true
+            setTimeout(() => {
+              this.showSuccessToast = false
+              this.getListExam()
+            }, 2000)
           })
-          .catch((error) => {
+          .catch(() => {
             this.showErrorToast = true
             setTimeout(() => {
               this.showErrorToast = false
-            }, 3000)
-            console.error('Lỗi khi cập nhật môn học:', error)
+            }, 2000)
           })
-        // this.update()
-        // console.log(this.examItem.id)
-        this.closeModal()
+        // this.closeModal()
       }
     },
     changeAvatar() {
@@ -289,13 +294,10 @@ export default {
           formData.append('image', file)
           await this.uploadFile(formData)
 
-          // console.log('id: ', this.fileUpload)
           if (this.fileUpload) {
             try {
-              // Sử dụng biểu thức chính quy để trích xuất giá trị "url"
               const match = /"url":\s*"([^"]+)"/.exec(this.fileUpload)
 
-              // Kiểm tra xem có sự trùng khớp và lấy giá trị "url"
               if (match && match[1]) {
                 const url = match[1]
                 // eslint-disable-next-line vue/no-mutating-props
