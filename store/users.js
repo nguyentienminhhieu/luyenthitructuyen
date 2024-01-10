@@ -12,7 +12,7 @@ export const actions = {
     try {
       const config = getAuthorizationConfig()
       const response = await this.$axios.get('/list-user', config)
-      const data = response.data
+      const data = response.data?.data
       commit('SET_USER', data.data)
       // console.log(data.data)
     } catch (error) {

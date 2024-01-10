@@ -15,7 +15,7 @@
       >
         <div class="mb-4 md:mb-0">
           <label for="nameSubject" class="block text-color-default"
-            >Name Class</label
+            >Name Subject</label
           >
           <input
             id="nameSubject"
@@ -85,7 +85,7 @@
             type="submit"
             class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
-            Change
+            Sửa
           </button>
         </div>
       </form>

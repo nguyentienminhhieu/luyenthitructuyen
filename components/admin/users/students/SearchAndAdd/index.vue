@@ -16,13 +16,22 @@
 
     <!-- Dropdown Select Option -->
     <div class="relative">
-      <select
-        v-model="selectedOption"
-        class="border-b-2 border-gray-300 rounded py-1 px-2 focus:outline-none"
+      <label
+        for="gradeSelect"
+        class="absolute top-0 left-0 ml-2 mt-1 text-gray-500 transition-transform transform-origin-left"
+        :class="{ hidden: selectedOption }"
       >
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <!-- Thêm các option khác nếu cần -->
+        Grade
+      </label>
+      <select
+        id="gradeSelect"
+        v-model="selectedOption"
+        class="border-b-2 border-gray-300 rounded py-1 px-2 focus:outline-none shadow-xl"
+        @change="handleOptionGrade"
+      >
+        <option v-for="item in listGrade" :key="item.id" :value="item.id">
+          {{ item.name }}
+        </option>
       </select>
     </div>
 
@@ -36,6 +45,8 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'SearchAddOptionStudents',
   data() {
@@ -43,7 +54,16 @@ export default {
       selectedOption: null,
     }
   },
+  computed: {
+    ...mapState('grade', ['listGrade']),
+  },
   methods: {
+    ...mapActions('grade', ['getGrade']),
+    async handleOptionGrade() {
+      await this.$store.dispatch('exercise/getListExercise', {
+        grade_id: this.selectedOption,
+      })
+    },
     handleAddClick() {
       this.$emit('add-clicked')
     },

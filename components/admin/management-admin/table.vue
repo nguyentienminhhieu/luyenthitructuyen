@@ -21,7 +21,7 @@
           <th
             class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
-            isActive
+            Active
           </th>
           <th class="px-2 py-3 border-2"></th>
           <!-- Ô trống cho nút Chỉnh sửa -->
@@ -40,7 +40,39 @@
           <td class="px-6 py-4 border-2 whitespace-no-wrap">
             {{ item.role === 0 ? 'Admin' : 'Staff' }}
           </td>
-          <td class="px-1 py-4 border-2 whitespace-no-wrap">
+          <td
+            v-if="adminAccount != 1"
+            class="px-1 py-4 border-2 whitespace-no-wrap"
+          >
+            <input
+              :id="`toggle-${item.id}`"
+              v-model="item.active"
+              type="checkbox"
+              class="hidden"
+              @change="handleClickNotAdmin"
+            />
+            <label
+              :for="`toggle-${item.id}`"
+              class="flex items-center cursor-pointer"
+            >
+              <div
+                :class="{
+                  'bg-[#253d90]': item.active === 1,
+                  'bg-gray-300': item.active === 0,
+                }"
+                class="w-12 h-6 rounded-full p-1"
+              >
+                <div
+                  :class="{ 'translate-x-6': item.active === 0 }"
+                  class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out"
+                ></div>
+              </div>
+            </label>
+          </td>
+          <td
+            v-if="adminAccount == 1"
+            class="px-1 py-4 border-2 whitespace-no-wrap"
+          >
             <input
               :id="`toggle-${item.id}`"
               v-model="item.active"
@@ -66,8 +98,19 @@
               </div>
             </label>
           </td>
-          <td class="px-2 py-4 border-2 whitespace-no-wrap">
+          <td
+            v-if="adminAccount == 1"
+            class="px-2 py-4 border-2 whitespace-no-wrap"
+          >
             <button @click="deleteAdmin(item.id)">
+              <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
+            </button>
+          </td>
+          <td
+            v-if="adminAccount != 1"
+            class="px-2 py-4 border-2 whitespace-no-wrap"
+          >
+            <button @click="handleClickNotAdmin">
               <i class="fas fa-trash text-red-500 hover:text-red-700 ml-2"></i>
             </button>
           </td>
@@ -78,13 +121,15 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import Cookies from '~/services/cookies.service.js'
+
 export default {
   name: 'TableAdmin',
   data() {
     return {
-      // isActive: false,
       isActive: false,
       listActive: null,
+      adminAccount: null,
     }
   },
   computed: {
@@ -94,6 +139,8 @@ export default {
     },
   },
   mounted() {
+    this.adminAccount = Cookies.getUser()
+
     this.getAdmin()
   },
   methods: {
@@ -114,6 +161,9 @@ export default {
     },
     deleteAdmin(adminId) {
       this.$emit('delete-clicked', adminId)
+    },
+    handleClickNotAdmin() {
+      alert('Ban khong co quyen chinh sua')
     },
     roleDetail() {},
   },

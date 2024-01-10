@@ -58,7 +58,7 @@ export default {
     return {
       showSuccessToast: false,
       showErrorToast: false,
-      successMessage: 'Xoá môn học thành công!.',
+      successMessage: 'Xoá thành công!.',
       errorMessage: 'Lỗi! Không được xóa.',
     }
   },

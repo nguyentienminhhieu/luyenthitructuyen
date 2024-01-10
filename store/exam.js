@@ -4,13 +4,25 @@ import { getAuthorizationConfig } from '~/plugins/configToken'
 export const state = () => ({
   listExam: [],
   detailExam: {},
+  currentPage: 1,
+  totalPages: null,
+  itemsPerPage: null,
+  totalItems: null,
 })
 
 export const actions = {
-  async getListExam({ commit }) {
+  async getListExam({ commit }, payload) {
     try {
       const config = getAuthorizationConfig()
-      const response = await this.$axios.get('/list-exam', config)
+      const response = await this.$axios.get('/list-exam', {
+        ...config,
+        params: {
+          title: payload.title,
+          subject_id: payload.subject_id,
+          grade_id: payload.grade_id,
+          page: payload.page,
+        },
+      })
       const data = response.data
       commit('SET_EXAM', data.data)
     } catch (error) {
@@ -85,7 +97,11 @@ export const actions = {
 export const mutations = {
   updateField,
   SET_EXAM(state, data) {
-    state.listExam = data
+    state.listExam = data.data
+    state.currentPage = data.current_page
+    state.totalPages = data.last_page
+    state.itemsPerPage = data.per_page
+    state.totalItems = data.total
   },
   SET_DETAIL_EXAM(state, exam) {
     state.detailExam = exam

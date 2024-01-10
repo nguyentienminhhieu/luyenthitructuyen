@@ -5,9 +5,9 @@
   >
     <div class="fixed inset-0 bg-black opacity-60" @click="closeModal"></div>
     <div
-      class="bg-white p-6 rounded-lg shadow-lg z-50 w-[400px] h-[500px] overflow-auto"
+      class="bg-white p-6 rounded-lg shadow-lg z-50 w-[600px] h-[600px] overflow-auto"
     >
-      <h2 class="text-center text-xl font-semibold mb-10">
+      <h2 class="text-center text-xl font-semibold mb-8">
         Sửa thông tin đề thi
       </h2>
       <form class="flex flex-col" @submit.prevent="submitForm">
@@ -49,7 +49,7 @@
           <textarea
             id="examDescription"
             v-model="ruleForm.examDescription"
-            class="mt-1 p-2 block w-full h-40 rounded-md focus:outline-none border border-gray-300"
+            class="mt-1 p-2 block w-full h-20 rounded-md focus:outline-none border border-gray-300"
           ></textarea>
         </div>
 
@@ -98,29 +98,31 @@
             </option>
           </select>
         </div>
-        <div class="mb-4">
-          <label for="examTime" class="block text-color-default"
-            >Thời gian làm bài</label
-          >
-          <input
-            id="examTime"
-            v-model="ruleForm.examTime"
-            type="number"
-            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
-            min="1"
-          />
-        </div>
-        <div class="mb-4">
-          <label for="examScore" class="block text-color-default"
-            >Điểm Số tối đa</label
-          >
-          <input
-            id="examScore"
-            v-model="ruleForm.examScore"
-            type="number"
-            class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
-            min="1"
-          />
+        <div class="flex justify-between">
+          <div class="mb-4">
+            <label for="examTime" class="block text-color-default"
+              >Thời gian làm bài</label
+            >
+            <input
+              id="examTime"
+              v-model="ruleForm.examTime"
+              type="number"
+              class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+              min="1"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="examScore" class="block text-color-default"
+              >Điểm Số tối đa</label
+            >
+            <input
+              id="examScore"
+              v-model="ruleForm.examScore"
+              type="number"
+              class="mt-1 p-2 block w-full rounded-md focus:outline-none border border-gray-300"
+              min="1"
+            />
+          </div>
         </div>
         <div class="mb-4">
           <label
@@ -203,6 +205,7 @@ export default {
       showErrorToast: false,
       successMessage: 'Sửa đề thành công!.',
       errorMessage: 'Lỗi! Dữ liệu bị trùng.',
+      currentPageExam: null,
     }
   },
   validations: {
@@ -238,6 +241,8 @@ export default {
   mounted() {
     this.getCategory()
     this.updateExam()
+    const currentPageNumberExam = localStorage.getItem('currentPageNumberExam')
+    this.currentPageExam = currentPageNumberExam
   },
   methods: {
     ...mapActions('category', ['getCategory']),
@@ -268,7 +273,7 @@ export default {
             this.showSuccessToast = true
             setTimeout(() => {
               this.showSuccessToast = false
-              this.getListExam()
+              this.getListExam({ page: this.currentPageExam })
             }, 2000)
           })
           .catch(() => {
@@ -294,15 +299,10 @@ export default {
           formData.append('image', file)
           await this.uploadFile(formData)
 
-          if (this.fileUpload) {
+          if (typeof this.fileUpload === 'object') {
             try {
-              const match = /"url":\s*"([^"]+)"/.exec(this.fileUpload)
-
-              if (match && match[1]) {
-                const url = match[1]
-                // eslint-disable-next-line vue/no-mutating-props
-                this.ruleForm.selectedImage = url.replaceAll('\\', '')
-                // eslint-disable-next-line vue/no-mutating-props
+              if (this.fileUpload && this.fileUpload.url) {
+                this.ruleForm.selectedImage = this.fileUpload.url
               } else {
                 console.log('Không tìm thấy giá trị URL.')
               }

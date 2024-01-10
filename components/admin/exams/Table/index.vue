@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5 max-h-[480px] overflow-x-auto">
+  <div class="mt-5 overflow-x-auto">
     <table class="min-w-full">
       <thead class="bg-gray-100 sticky top-0 z-10">
         <tr>
@@ -36,7 +36,7 @@
           <th
             class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
-            isActive
+            Active
           </th>
           <th class="px-1 py-3 border-2"></th>
           <!-- Ô trống cho nút Chỉnh sửa -->
@@ -53,10 +53,11 @@
             {{ exam.title ? truncateText(exam.title, 35) : '' }}
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
-            {{ exam.user_id === null ? 'Admin' : 'Giáo viên' }}
+            <!-- {{ exam.user === null ? 'Admin' : 'Giáo viên' }} -->
+            Admin
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
-            {{ exam.category_id }}
+            {{ exam.category?.title }}
           </td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">
             {{ getFirstTenChars(exam.created_at) }}
@@ -107,6 +108,36 @@
         </tr>
       </tbody>
     </table>
+    <div class="flex items-center space-x-2 mt-8">
+      <button
+        class="bg-[#f4f4f5] text-[#7d7d7d] py-2 px-3 rounded-md"
+        :disabled="currentPageNumber === 1"
+        @click="goToPrevPage"
+      >
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+      <ul class="flex items-center space-x-2">
+        <li
+          v-for="page in totalPages"
+          :key="page"
+          :class="{
+            active:
+              currentPageNumber === page || (!currentPageNumber && page === 1),
+          }"
+          class="font-medium py-2 px-3 bg-[#f4f4f5] text-[#7d7d7d] hover:bg-[#3958ad] hover:text-[#fff] rounded-lg cursor-pointer"
+          @click="goToPage(page)"
+        >
+          {{ page }}
+        </li>
+      </ul>
+      <button
+        class="bg-[#f4f4f5] text-[#7d7d7d] py-2 px-3 rounded-md"
+        :disabled="currentPageNumber === totalPages"
+        @click="goToNextPage"
+      >
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -117,17 +148,30 @@ export default {
   data() {
     return {
       isActive: false,
+      currentPageNumber: this.currentPage,
     }
   },
   computed: {
     ...mapState('exam', ['listExam']),
+    ...mapState('exam', ['currentPage ']),
+    ...mapState('exam', ['totalPages']),
+    ...mapState('exam', ['itemsPerPage']),
+    ...mapState('exam', ['totalItems']),
     ...mapState('category', ['listCategory']),
     listExamByAdmin() {
       return this.listExam.filter((exam) => exam.user_id === null)
     },
   },
+  watch: {
+    currentPageNumber(newPageNumber) {
+      localStorage.setItem('currentPageNumberExam', newPageNumber)
+    },
+  },
   mounted() {
-    this.getListExam()
+    this.currentPageNumber =
+      parseInt(localStorage.getItem('currentPageNumberExam')) || 1
+
+    this.getListExamAdmin()
     this.getCategory()
     localStorage.removeItem('questionData')
   },
@@ -135,14 +179,22 @@ export default {
     ...mapActions('exam', ['getListExam']),
     ...mapActions('exam', ['activeExam']),
     ...mapActions('category', ['getCategory']),
-
+    async getListExamAdmin() {
+      try {
+        await this.$store.dispatch('exam/getListExam', {
+          page: this.currentPageNumber,
+        })
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error)
+      }
+    },
     async toggleActive(item) {
       try {
         const payload = {
           id: item.id,
         }
         await this.activeExam(payload)
-        await this.getListExam()
+        await this.getListExam({ page: this.currentPageNumber })
       } catch (error) {
         console.error('Lỗi server: ', error)
       }
@@ -172,7 +224,38 @@ export default {
           : text
         : ''
     },
+    async goToNextPage() {
+      if (this.currentPageNumber < this.totalPages) {
+        this.currentPageNumber++
+        await this.$store.dispatch('exam/getListExam', {
+          page: this.currentPageNumber,
+        })
+      }
+    },
+    async goToPrevPage() {
+      if (this.currentPageNumber > 1) {
+        this.currentPageNumber--
+        await this.$store.dispatch('exam/getListExam', {
+          page: this.currentPageNumber,
+        })
+      }
+    },
+    async goToPage(pageNumber) {
+      this.currentPageNumber = pageNumber
+      await this.$store.dispatch('exam/getListExam', {
+        page: this.currentPageNumber,
+      })
+    },
   },
 }
 </script>
-<style></style>
+<style scoped>
+.active {
+  background-color: #3958ad;
+  color: #ffff;
+}
+.disabled {
+  background-color: #e8e8e8;
+  cursor: not-allowed;
+}
+</style>

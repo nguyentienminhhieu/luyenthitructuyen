@@ -13,26 +13,6 @@
         <i class="fas fa-search"></i>
       </button>
     </div>
-
-    <!-- Dropdown Select Option -->
-    <div class="relative">
-      <select
-        v-model="selectedOption"
-        class="border-b-2 border-gray-300 rounded py-1 px-2 focus:outline-none"
-      >
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <!-- Thêm các option khác nếu cần -->
-      </select>
-    </div>
-
-    <!-- Nút "Add" -->
-    <!-- <button
-      class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
-      @click="handleAddClick"
-    >
-      Add
-    </button> -->
   </div>
 </template>
 <script>

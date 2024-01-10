@@ -4,13 +4,14 @@
     style="box-shadow: 4px 1px 4px rgba(0, 0, 0, 0.1); border-radius: 8px"
   >
     <div v-for="(item, index) in questionsExtends" :key="index">
-      <div class="bg-[#fffff] p-2 rounded mb-4">
+      <div :id="`question-${index + 1}`" class="bg-[#fffff] p-2 rounded mb-4">
         <Question :question="item" @delete="deleteQuestion(item)" />
       </div>
     </div>
   </div>
 </template>
 <script>
+import { EventBus } from '../RedirectQuestion.vue'
 import Question from '~/components/admin/exams/DetailExam/Question.vue'
 export default {
   name: 'ListQuestions',
@@ -24,7 +25,9 @@ export default {
   data() {
     return {}
   },
-
+  mounted() {
+    EventBus.$on('go-to-question-exam-create', this.handleGoToQuestion)
+  },
   methods: {
     deleteQuestion(item) {
       const index = this.questionsExtends.indexOf(item)
@@ -33,9 +36,16 @@ export default {
         this.questionsExtends.splice(index, 1)
       }
     },
-    // clearImage(question) {
-    //   question.file = null
-    // },
+    handleGoToQuestion(index) {
+      const questionElement = document.getElementById(`question-${index}`)
+      if (questionElement) {
+        questionElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest',
+        })
+      }
+    },
   },
 }
 </script>

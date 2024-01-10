@@ -4,13 +4,25 @@ import { getAuthorizationConfig } from '~/plugins/configToken'
 export const state = () => ({
   listExercise: [],
   detailExercise: {},
+  currentPage: 1,
+  totalPages: null,
+  itemsPerPage: null,
+  totalItems: null,
 })
 
 export const actions = {
-  async getListExercise({ commit }) {
+  async getListExercise({ commit }, payload) {
     try {
       const config = getAuthorizationConfig()
-      const response = await this.$axios.get('/list-exercise', config)
+      const response = await this.$axios.get('/list-exercise', {
+        ...config,
+        params: {
+          title: payload.title,
+          subject_id: payload.subject_id,
+          grade_id: payload.grade_id,
+          page: payload.page,
+        },
+      })
       const data = response.data
       commit('SET_EXEXRCISE', data.data)
     } catch (error) {
@@ -63,7 +75,7 @@ export const actions = {
       const response = await this.$axios.get(`/exercise/${exerciseId}`, config)
       const data = response.data
       commit('setDetailExercise', data.data)
-      commit('SET_DETAIL_EXEXRCISE', data.data)
+      commit('SET_DETAIL_EXERCISE', data.data)
       return data.data
     } catch (error) {
       console.error('Error:', error)
@@ -89,9 +101,13 @@ export const actions = {
 export const mutations = {
   updateField,
   SET_EXEXRCISE(state, data) {
-    state.listExercise = data
+    state.listExercise = data.data
+    state.currentPage = data.current_page
+    state.totalPages = data.last_page
+    state.itemsPerPage = data.per_page
+    state.totalItems = data.total
   },
-  SET_DETAIL_EXEXRCISE(state, exam) {
+  SET_DETAIL_EXERCISE(state, exam) {
     state.detailExercise = exam
   },
   ADD_EXEXRCISE(state, data) {

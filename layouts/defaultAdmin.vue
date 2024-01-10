@@ -27,7 +27,7 @@
               </nuxt-link>
             </li>
 
-            <li class="mb-4">
+            <li v-if="adminAccount == 1" class="mb-4">
               <nuxt-link
                 to="/admin/admin-management"
                 class="flex items-center p-3 hover:bg-gray-700 rounded transition duration-300"
@@ -247,8 +247,8 @@ export default {
   computed: {},
   mounted() {
     this.adminAccount = Cookies.getUser()
-    console.log('user', Cookies.getUser())
-    console.log('adminAccount', this.adminAccount)
+    // console.log('user', Cookies.getUser())
+    // console.log('adminAccount', this.adminAccount)
     if (Cookies.getUser() === 1) {
       // this.cookieExists = true;
       this.isQLAdmin = true

@@ -5,9 +5,9 @@
   >
     <div class="fixed inset-0 bg-black opacity-60" @click="closeModal"></div>
     <div
-      class="bg-white p-6 rounded-lg shadow-lg z-50 w-[400px] h-[500px] overflow-auto"
+      class="bg-white p-6 rounded-lg shadow-lg z-50 w-[600px] h-[600px] overflow-auto"
     >
-      <h2 class="text-center text-xl font-semibold mb-10">Thêm bài tập</h2>
+      <h2 class="text-center text-xl font-semibold mb-8">Thêm bài tập</h2>
       <form class="flex flex-col" @submit.prevent="submitForm">
         <div class="mb-4">
           <label for="exerciseName" class="block text-color-default"
@@ -49,7 +49,7 @@
           <textarea
             id="exerciseDescription"
             v-model="ruleForm.exerciseDescription"
-            class="mt-1 p-2 block w-full h-40 rounded-md focus:outline-none border border-gray-300"
+            class="mt-1 p-2 block w-full h-20 rounded-md focus:outline-none border border-gray-300"
           ></textarea>
         </div>
 
@@ -172,6 +172,8 @@ export default {
         exerciseName: '',
         exerciseDescription: '',
         slug: '',
+        max_score: '',
+        duration: '',
         category: null,
       },
       selectedImage: null,
@@ -179,6 +181,7 @@ export default {
       showErrorToast: false,
       successMessage: 'Thêm đề thi thành công!.',
       errorMessage: 'Lỗi! Dữ liệu bị trùng.',
+      currentPageExercise: null,
     }
   },
   validations: {
@@ -201,6 +204,10 @@ export default {
     this.getGrade()
     this.getSubjects()
     this.getCategory()
+    const currentPageNumberExercise = localStorage.getItem(
+      'currentPageNumberExercise'
+    )
+    this.currentPageExercise = currentPageNumberExercise
   },
   methods: {
     ...mapActions('grade', ['getGrade']),
@@ -226,8 +233,8 @@ export default {
             slug: this.ruleForm.slug,
             description: this.ruleForm.exerciseDescription,
             category_id: this.ruleForm.category,
-            max_score: '',
-            duration: '',
+            max_score: this.ruleForm.max_score,
+            duration: this.ruleForm.duration,
             url_img: this.selectedImage,
           }
           if (this.addExercise(payload)) {
@@ -238,7 +245,7 @@ export default {
             this.showSuccessToast = true
             setTimeout(() => {
               this.showSuccessToast = false
-              this.getListExercise()
+              this.getListExercise({ page: this.currentPageExercise })
             }, 2000)
           } else {
             this.showErrorToast = true
@@ -269,17 +276,11 @@ export default {
           await this.uploadFile(formData)
 
           // console.log('id: ', this.fileUpload)
-          if (this.fileUpload) {
+          if (typeof this.fileUpload === 'object') {
             try {
-              // Sử dụng biểu thức chính quy để trích xuất giá trị "url"
-              const match = /"url":\s*"([^"]+)"/.exec(this.fileUpload)
-
-              // Kiểm tra xem có sự trùng khớp và lấy giá trị "url"
-              if (match && match[1]) {
-                const url = match[1]
+              if (this.fileUpload && this.fileUpload.url) {
                 // eslint-disable-next-line vue/no-mutating-props
-                this.selectedImage = url.replaceAll('\\', '')
-                // eslint-disable-next-line vue/no-mutating-props
+                this.selectedImage = this.fileUpload.url
               } else {
                 console.log('Không tìm thấy giá trị URL.')
               }
@@ -301,6 +302,7 @@ export default {
       this.ruleForm.exerciseDescription = ''
       this.ruleForm.slug = ''
       this.ruleForm.category = null
+      this.selectedImage = null
     },
   },
 }

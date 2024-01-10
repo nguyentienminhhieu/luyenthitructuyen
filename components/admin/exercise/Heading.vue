@@ -5,11 +5,7 @@
       >Home</nuxt-link
     >
     <p>/</p>
-    <nuxt-link
-      to="/admin/exercise"
-      class="text-color-custom hover:text-color-custom"
-      >Exercise</nuxt-link
-    >
+    <p class="text-color-custom hover:text-color-custom">Exercise</p>
   </div>
 </template>
 <script>

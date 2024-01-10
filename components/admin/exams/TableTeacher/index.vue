@@ -36,7 +36,7 @@
           <th
             class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
-            isActive
+            Active
           </th>
           <th class="px-1 py-3 border-2"></th>
           <!-- Ô trống cho nút Chỉnh sửa -->
@@ -53,10 +53,11 @@
             {{ exam.title ? truncateText(exam.title, 35) : '' }}
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
-            {{ exam.user_id === null ? 'Admin' : 'Giáo viên' }}
+            <!-- {{ exam.user_id === null ? 'Admin' : 'Giáo viên' }} -->
+            Giáo viên
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
-            {{ exam.category_id }}
+            {{ exam.category?.title }}
           </td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">
             {{ getFirstTenChars(exam.created_at) }}
@@ -142,14 +143,14 @@ export default {
           id: item.id,
         }
         await this.activeExam(payload)
-        await this.getListExam()
+        await this.getListExam({ page: this.currentPageNumber })
       } catch (error) {
         console.error('Lỗi server: ', error)
       }
     },
     detailExam(examItem) {
       this.$router.push({
-        path: `/admin/exams/examTeacher${examItem.slug}`,
+        path: `/admin/exams/examTeacher/${examItem.slug}`,
         query: { examID: examItem.id },
       })
     },

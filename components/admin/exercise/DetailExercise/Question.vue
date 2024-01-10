@@ -70,7 +70,12 @@
       </div>
       <div v-for="answer in question.answers" :key="answer.id">
         <div class="p-2 rounded mb-1">
-          <AnswerQuestion :answer="answer" @delete="deleteAnswer(answer)" />
+          <AnswerQuestion
+            :question_id="question.random_Id || question.id"
+            :answer="answer"
+            @id-answer="handleIdAnswer"
+            @delete="deleteAnswer(answer)"
+          />
         </div>
       </div>
     </div>
@@ -167,14 +172,11 @@ export default {
           const formData = new FormData()
           formData.append('image', file)
           await this.uploadFile(formData)
-          if (this.fileUpload) {
+          if (typeof this.fileUpload === 'object') {
             try {
-              const match = /"url":\s*"([^"]+)"/.exec(this.fileUpload)
-              if (match && match[1]) {
-                const url = match[1]
+              if (this.fileUpload && this.fileUpload.url) {
                 // eslint-disable-next-line vue/no-mutating-props
-                this.question.file = url.replaceAll('\\', '')
-                console.log(this.question.id)
+                this.question.file = this.fileUpload.url
               } else {
                 console.log('Không tìm thấy giá trị URL.')
               }
@@ -211,6 +213,15 @@ export default {
         // eslint-disable-next-line vue/no-mutating-props
         this.question.answers.splice(index, 1)
       }
+    },
+    handleIdAnswer(idAnswer) {
+      this.question.answers.forEach((answer) => {
+        if (answer.random_Id === idAnswer || answer.id === idAnswer) {
+          answer.is_correct = true
+        } else {
+          answer.is_correct = false
+        }
+      })
     },
   },
 }

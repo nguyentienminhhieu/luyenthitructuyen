@@ -3,7 +3,7 @@
     <HeadingExercise />
     <SearchAddOptionExercise @add-clicked="showAddModal = true" />
     <TableExercise
-      @delete-clicked="showDeleteModal = true"
+      @delete-clicked="handleDeleteClicked"
       @edit-click="editExercise"
     />
     <ModalAddExercise

@@ -31,7 +31,7 @@
           <th
             class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
-            isActive
+            Active
           </th>
         </tr>
       </thead>

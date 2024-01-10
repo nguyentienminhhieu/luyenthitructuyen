@@ -1,9 +1,8 @@
 <template>
   <div class="p-3">
     <div>
-      <HeadingDetailExam />
+      <HeadingDetailExercise />
     </div>
-    <!-- {{ questions }} -->
     <div
       class="text-[#444444] bg-white flex justify-between border-b-2 mx-2 my-4 rounded-md py-3 pl-2 z-10"
     >
@@ -12,32 +11,22 @@
           <h1 class="flex text-xl font-medium">
             Title:
             <p class="ml-2 text-lg font-normal">
-              {{ detailExam.title }}
+              {{ detailExercise.title }}
             </p>
           </h1>
         </div>
         <div class="flex text-xl font-medium">
           Desciptions:
-          <p class="ml-2 text-lg font-normal">{{ detailExam.description }}</p>
-        </div>
-        <div class="">
-          <div class="flex text-xl font-medium">
-            Điểm:
-            <h3 class="ml-2 text-lg font-normal">{{ detailExam.max_score }}</h3>
-          </div>
-        </div>
-        <div class="flex text-xl font-medium">
-          Thời gian:
-          <h3 class="ml-2 text-lg font-normal">
-            {{ detailExam.duration }} Phút
-          </h3>
+          <p class="ml-2 text-lg font-normal">
+            {{ detailExercise.description }}
+          </p>
         </div>
       </div>
     </div>
     <div class="flex flex-row mt-4 mr-7 ml-3">
       <div class="redirect-question lg:w-1/5">
         <RedirectQuestion
-          :detail-exam="detailExamDeep"
+          :detail-exam="detailExerciseDeep"
           :questions="questions"
         />
       </div>
@@ -45,26 +34,25 @@
         <ListQuestions :questions-extends="questions" />
       </div>
     </div>
-    <BtnPushQ v-if="detailExam.user_id !== 1" @push-array="pushArray" />
+    <BtnPushQ v-if="detailExercise.user_id !== 1" @push-array="pushArray" />
     <SaveBtn
-      v-if="detailExam.user_id !== 1"
-      :detail-exam="detailExamDeep"
+      v-if="detailExercise.user_id !== 1"
+      :detail-exercise="detailExerciseDeep"
       :list-questions="questions"
-      @send-data="data"
     />
   </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import HeadingDetailExam from '~/components/admin/exams/DetailExam/Heading.vue'
-import ListQuestions from '~/components/admin/exams/DetailExam/List/ListQuestions.vue'
+import HeadingDetailExercise from '~/components/admin/exercise/DetailExercise/Heading.vue'
+import ListQuestions from '~/components/admin/exercise/DetailExercise/List/ListQuestions.vue'
+import RedirectQuestion from '~/components/admin/exercise/DetailExercise/RedirectQuestion.vue'
 import SaveBtn from '~/components/common/SaveBtn.vue'
 import BtnPushQ from '~/components/common/BtnPushQ.vue'
-import RedirectQuestion from '~/components/admin/exams/DetailExam/RedirectQuestion.vue'
 export default {
-  name: 'DetailExam',
+  name: 'DetailExercise',
   components: {
-    HeadingDetailExam,
+    HeadingDetailExercise,
     ListQuestions,
     SaveBtn,
     BtnPushQ,
@@ -74,20 +62,21 @@ export default {
 
   data() {
     return {
-      saveExam: null,
       questions: [],
-      examID: null,
-      detailExamDeep: null,
+      exerciseID: null,
+      detailExerciseDeep: null,
     }
   },
   computed: {
-    ...mapState('exam', ['detailExam']),
+    ...mapState('exercise', ['detailExercise']),
   },
   watch: {
-    detailExam: {
-      handler(newDetailExam) {
-        if (this.detailExam !== null) {
-          this.detailExamDeep = JSON.parse(JSON.stringify(this.detailExam))
+    detailExercise: {
+      handler(newDetailExercise) {
+        if (this.detailExercise !== null) {
+          this.detailExerciseDeep = JSON.parse(
+            JSON.stringify(this.detailExercise)
+          )
         }
       },
       deep: true,
@@ -112,14 +101,14 @@ export default {
     } else {
       this.questions = []
     }
-    if (this.$route.query.examID) {
-      this.examID = this.$route.query.examID
+    if (this.$route.query.exerciseID) {
+      this.exerciseID = this.$route.query.exerciseID
     }
-    await this.getDetailExam(this.examID)
-    this.questions = this.detailExamDeep.questions
+    await this.getDetailExercise(this.exerciseID)
+    this.questions = this.detailExerciseDeep.questions
   },
   methods: {
-    ...mapActions('exam', ['getDetailExam']),
+    ...mapActions('exercise', ['getDetailExercise']),
     pushArray() {
       const randomId = Math.floor(Math.random(10) * 100000)
       const newQuestion = {
@@ -154,9 +143,6 @@ export default {
     saveDataToLocalStorage() {
       const clonedQuestions = JSON.parse(JSON.stringify(this.questions))
       localStorage.setItem('questionData', JSON.stringify(clonedQuestions))
-    },
-    data(item) {
-      this.saveExam = item
     },
   },
 }

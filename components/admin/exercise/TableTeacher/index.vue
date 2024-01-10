@@ -36,7 +36,7 @@
           <th
             class="px-1 py-3 border-2 text-left text-xs leading-4 font-medium text-black uppercase tracking-wider"
           >
-            isActive
+            Active
           </th>
           <th class="px-1 py-3 border-2"></th>
           <!-- Ô trống cho nút Chỉnh sửa -->
@@ -55,10 +55,12 @@
             {{ exercise.title ? truncateText(exercise.title, 35) : '' }}
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
-            {{ exercise.user_id === null ? 'Admin' : 'Giáo viên' }}
+            <!-- {{ exercise.user_id === null ? 'Admin' : 'Giáo viên' }} -->
+            Giáo viên
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
-            {{ exercise.category_id }}
+            <!-- {{ exercise.category_id }} -->
+            {{ exercise.category?.title }}
           </td>
           <td class="px-2 py-4 border-2 whitespace-no-wrap">
             {{ getFirstTenChars(exercise.created_at) }}
@@ -144,7 +146,7 @@ export default {
           id: item.id,
         }
         await this.activeExercise(payload)
-        await this.getListExercise()
+        await this.getListExercise({ page: this.currentPageNumber })
       } catch (error) {
         console.log('Lỗi server: ', error)
       }

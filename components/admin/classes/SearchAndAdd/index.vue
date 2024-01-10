@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-end space-x-8">
     <!-- Ô input search -->
-    <div class="relative">
+    <!-- <div class="relative">
       <input
         type="text"
         placeholder="Search..."
@@ -14,7 +14,6 @@
       </button>
     </div>
 
-    <!-- Dropdown Select Option -->
     <div class="relative">
       <select
         v-model="selectedOption"
@@ -22,9 +21,8 @@
       >
         <option value="1">1</option>
         <option value="2">2</option>
-        <!-- Thêm các option khác nếu cần -->
       </select>
-    </div>
+    </div> -->
 
     <!-- Nút "Add" -->
     <button

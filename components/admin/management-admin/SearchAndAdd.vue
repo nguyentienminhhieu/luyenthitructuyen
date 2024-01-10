@@ -1,7 +1,7 @@
 <template>
-  <div class="flex items-center justify-end my-5 mx-8    space-x-8">
+  <div class="flex items-center justify-end my-5 mx-8 space-x-8">
     <!-- Ô input search -->
-    <div class="relative">
+    <!-- <div class="relative">
       <input
         type="text"
         placeholder="Search..."
@@ -12,22 +12,29 @@
       >
         <i class="fas fa-search"></i>
       </button>
-    </div>
+    </div> -->
 
     <!-- Dropdown Select Option -->
-    <div class="relative">
+    <!-- <div class="relative">
       <select
         v-model="selectedOption"
         class="border-b-2 border-gray-300 rounded py-1 px-2 focus:outline-none"
       >
         <option value="1">1</option>
         <option value="2">2</option>
-        <!-- Thêm các option khác nếu cần -->
       </select>
-    </div>
+    </div> -->
 
     <!-- Nút "Add" -->
     <button
+      v-if="adminAccount != 1"
+      class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
+      @click="handleAddClickNotAdmin"
+    >
+      Add
+    </button>
+    <button
+      v-if="adminAccount == 1"
       class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
       @click="handleAddClick"
     >
@@ -36,16 +43,30 @@
   </div>
 </template>
 <script>
+import Cookies from '~/services/cookies.service.js'
+
+// import { mapActions, mapState } from 'vuex'
 export default {
   name: 'SearchAddOptionAdmin',
   data() {
     return {
       selectedOption: null,
+      adminAccount: null,
     }
   },
+  computed: {
+    // ...mapState('users', ['user']),
+  },
+  mounted() {
+    this.adminAccount = Cookies.getUser()
+  },
   methods: {
+    // ...mapActions('users', ['getInfoUser']),
     handleAddClick() {
       this.$emit('add-clicked')
+    },
+    handleAddClickNotAdmin() {
+      alert('Ban khong co quyen chinh sua')
     },
   },
 }
