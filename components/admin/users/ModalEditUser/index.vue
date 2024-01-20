@@ -295,6 +295,7 @@ export default {
     checkStatusClass,
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
     },
     editUser() {
       const invalid = this.$v.ruleForm.$invalid

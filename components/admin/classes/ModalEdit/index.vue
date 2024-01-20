@@ -183,6 +183,7 @@ export default {
 
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
     },
     async updateClass() {
       const invalid = this.$v.ruleForm.$invalid

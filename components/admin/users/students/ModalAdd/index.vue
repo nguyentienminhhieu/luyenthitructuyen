@@ -294,6 +294,7 @@ export default {
 
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
     },
     addStudent() {
       // Đưa dữ liệu giáo viên vào hàm hoặc gửi đến API ở đây

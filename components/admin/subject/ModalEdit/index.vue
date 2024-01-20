@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import { checkStatusClass } from '~/mixins/ruleValidator'
@@ -153,6 +153,7 @@ export default {
     checkStatusClass,
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
     },
     editSubject() {
       const invalid = this.$v.ruleForm.$invalid

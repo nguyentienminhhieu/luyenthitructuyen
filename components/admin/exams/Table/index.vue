@@ -111,14 +111,15 @@
     <div class="flex items-center space-x-2 mt-8">
       <button
         class="bg-[#f4f4f5] text-[#7d7d7d] py-2 px-3 rounded-md"
-        :disabled="currentPageNumber === 1"
+        :class="currentPageNumber === 1 ? 'disabled' : ''"
         @click="goToPrevPage"
       >
+        <!-- :disabled="currentPageNumber === 1" -->
         <i class="fa-solid fa-angle-left"></i>
       </button>
       <ul class="flex items-center space-x-2">
         <li
-          v-for="page in totalPages"
+          v-for="page in totalPagesToShow"
           :key="page"
           :class="{
             active:
@@ -129,10 +130,42 @@
         >
           {{ page }}
         </li>
+        <!-- Hiển thị ba dấu chấm (...) nếu totalPagesToShow.length > 7 và currentPageNumber < totalPages - 3 -->
+        <li
+          v-if="
+            totalPagesToShow.length < totalPages &&
+            currentPageNumber < totalPages - 3
+          "
+          class="font-medium py-2 px-3 bg-[#f4f4f5] text-[#7d7d7d] rounded-lg cursor-pointer disabled"
+        >
+          ...
+        </li>
+        <li
+          v-if="
+            totalPagesToShow.length < totalPages &&
+            currentPageNumber < totalPages - 3
+          "
+          class="font-medium py-2 px-3 bg-[#f4f4f5] text-[#7d7d7d] rounded-lg cursor-pointer"
+          @click="goToLastPages"
+        >
+          {{ totalPages - 1 }}
+        </li>
+        <!-- Hiển thị trang cuối cùng -->
+        <li
+          v-if="
+            totalPagesToShow.length < totalPages &&
+            currentPageNumber < totalPages - 3
+          "
+          class="font-medium py-2 px-3 bg-[#f4f4f5] text-[#7d7d7d] rounded-lg cursor-pointer"
+          @click="goToLastPages"
+        >
+          {{ totalPages }}
+        </li>
       </ul>
+      <!-- :disabled="currentPageNumber === totalPages" -->
       <button
         class="bg-[#f4f4f5] text-[#7d7d7d] py-2 px-3 rounded-md"
-        :disabled="currentPageNumber === totalPages"
+        :class="currentPageNumber === totalPages ? 'disabled' : ''"
         @click="goToNextPage"
       >
         <i class="fa-solid fa-angle-right"></i>
@@ -160,6 +193,17 @@ export default {
     ...mapState('category', ['listCategory']),
     listExamByAdmin() {
       return this.listExam.filter((exam) => exam.user_id === null)
+    },
+    totalPagesToShow() {
+      const pages = []
+      const startPage = Math.max(1, this.currentPageNumber - 3)
+      const endPage = Math.min(this.totalPages, startPage + 4)
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i)
+      }
+
+      return pages
     },
   },
   watch: {
@@ -245,6 +289,10 @@ export default {
       await this.$store.dispatch('exam/getListExam', {
         page: this.currentPageNumber,
       })
+    },
+    goToLastPages() {
+      this.currentPageNumber = this.totalPages - 1
+      this.$store.dispatch('exam/getListExam', { page: this.currentPageNumber })
     },
   },
 }

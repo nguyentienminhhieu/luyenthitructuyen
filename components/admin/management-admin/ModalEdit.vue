@@ -71,6 +71,7 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
     },
     editAdmin() {
       this.$emit('close')

@@ -58,6 +58,7 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
     },
     changeAvatar() {
       this.$emit('close')

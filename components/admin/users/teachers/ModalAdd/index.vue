@@ -280,6 +280,7 @@ export default {
 
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
       // localStorage.setItem('modalState', this.showModal.toString())
     },
     addTeacher() {

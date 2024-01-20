@@ -168,6 +168,8 @@ export default {
 
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
+      this.reset()
     },
     addClass() {
       const invalid = this.$v.ruleForm.$invalid

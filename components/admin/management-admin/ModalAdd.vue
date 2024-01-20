@@ -195,6 +195,8 @@ export default {
 
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
+      this.reset()
     },
     submitForm() {
       const invalid = this.$v.ruleForm.$invalid

@@ -145,6 +145,7 @@ export default {
     checkStatusClass,
     closeModal() {
       this.$emit('close')
+      this.$v.$reset()
       this.reset()
     },
     submitForm() {
