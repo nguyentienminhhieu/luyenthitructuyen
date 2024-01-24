@@ -92,7 +92,7 @@
                   to="/admin/exams/examAdmin"
                   class="block p-2 hover:bg-gray-700 text-white rounded"
                 >
-                  Admin
+                  All
                 </nuxt-link>
                 <nuxt-link
                   to="/admin/exams/examTeacher"
@@ -124,7 +124,7 @@
                   to="/admin/exercise/exerciseAdmin"
                   class="block p-2 hover:bg-gray-700 text-white rounded"
                 >
-                  Admin
+                  All
                 </nuxt-link>
                 <nuxt-link
                   to="/admin/exercise/exerciseTeacher"

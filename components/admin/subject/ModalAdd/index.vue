@@ -127,7 +127,7 @@ export default {
       showSuccessToast: false,
       showErrorToast: false,
       successMessage: 'Thêm môn học thành công!.',
-      errorMessage: 'Lỗi! Dữ liệu bị trùng.',
+      errorMessage: 'Lỗi! Vui lòng thử lại.',
     }
   },
   validations: {

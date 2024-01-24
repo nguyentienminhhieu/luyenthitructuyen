@@ -8,6 +8,10 @@ export const state = () => ({
   totalPages: null,
   itemsPerPage: null,
   totalItems: null,
+  title: '',
+  type: '',
+  subject_id: null,
+  grade_id: null,
 })
 
 export const actions = {
@@ -18,6 +22,7 @@ export const actions = {
         ...config,
         params: {
           title: payload.title,
+          type: payload.type,
           subject_id: payload.subject_id,
           grade_id: payload.grade_id,
           page: payload.page,
@@ -25,6 +30,7 @@ export const actions = {
       })
       const data = response.data
       commit('SET_EXEXRCISE', data.data)
+      commit('SET_EXEXRCISE_PARAMS', payload)
     } catch (error) {
       console.log('Loi sever, ', error)
     }
@@ -106,6 +112,12 @@ export const mutations = {
     state.totalPages = data.last_page
     state.itemsPerPage = data.per_page
     state.totalItems = data.total
+  },
+  SET_EXEXRCISE_PARAMS(state, payload) {
+    state.title = payload.title || ''
+    state.type = payload.type || ''
+    state.subject_id = payload.subject_id || null
+    state.grade_id = payload.grade_id || null
   },
   SET_DETAIL_EXERCISE(state, exam) {
     state.detailExercise = exam

@@ -41,6 +41,24 @@
       <label
         for="gradeSelect"
         class="absolute top-0 left-0 ml-2 mt-1 text-gray-500 transition-transform transform-origin-left"
+        :class="{ hidden: selectedOptionRole }"
+      >
+        Vai trò
+      </label>
+      <select
+        id="gradeSelect"
+        v-model="selectedOptionRole"
+        class="border-b-2 border-gray-300 rounded py-1 px-2 focus:outline-none shadow-xl"
+        @change="handleOptionRole"
+      >
+        <option value="admin">Admin</option>
+        <option value="teacher">Giáo viên</option>
+      </select>
+    </div>
+    <div class="relative">
+      <label
+        for="gradeSelect"
+        class="absolute top-0 left-0 ml-2 mt-1 text-gray-500 transition-transform transform-origin-left"
         :class="{ hidden: selectedOptionGrade }"
       >
         Grade
@@ -74,6 +92,7 @@ export default {
     return {
       selectedOptionSubject: null,
       selectedOptionGrade: null,
+      selectedOptionRole: null,
       searchQuery: '',
       searchResults: [],
     }
@@ -91,18 +110,40 @@ export default {
     ...mapActions('subject', ['getSubjects']),
     ...mapActions('grade', ['getGrade']),
     ...mapActions('exercise', ['getListExercise']),
+    ...mapState('exercise', ['currentPage']),
     async performSearch() {
       await this.$store.dispatch('exercise/getListExercise', {
         title: this.searchQuery,
+        type: this.selectedOptionRole,
+        page: this.currentPage,
+        subject_id: this.selectedOptionSubject,
+        grade_id: this.selectedOptionGrade,
+      })
+    },
+    async handleOptionRole() {
+      await this.$store.dispatch('exercise/getListExercise', {
+        title: this.searchQuery,
+        type: this.selectedOptionRole,
+        page: this.currentPage,
+        subject_id: this.selectedOptionSubject,
+        grade_id: this.selectedOptionGrade,
       })
     },
     async handleOptionSubject() {
       await this.$store.dispatch('exercise/getListExercise', {
+        title: this.searchQuery,
+        type: this.selectedOptionRole,
+        page: this.currentPage,
         subject_id: this.selectedOptionSubject,
+        grade_id: this.selectedOptionGrade,
       })
     },
     async handleOptionGrade() {
       await this.$store.dispatch('exercise/getListExercise', {
+        title: this.searchQuery,
+        type: this.selectedOptionRole,
+        page: this.currentPage,
+        subject_id: this.selectedOptionSubject,
         grade_id: this.selectedOptionGrade,
       })
     },

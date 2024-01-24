@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5 max-h-[480px] overflow-x-auto">
+  <div class="mt-5 overflow-x-auto">
     <table class="min-w-full">
       <thead class="bg-gray-100 sticky top-0 z-10">
         <tr>

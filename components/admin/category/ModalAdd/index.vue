@@ -154,7 +154,7 @@ export default {
       showSuccessToast: false,
       showErrorToast: false,
       successMessage: 'Thêm lớp học thành công!.',
-      errorMessage: 'Lỗi! Dữ liệu bị trùng.',
+      errorMessage: 'Lỗi! Vùi lòng thử lại.',
     }
   },
   computed: {

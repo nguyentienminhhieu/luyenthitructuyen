@@ -8,10 +8,17 @@ export const state = () => ({
 })
 
 export const actions = {
-  async getListUser({ commit }) {
+  async getListUser({ commit }, payload) {
     try {
       const config = getAuthorizationConfig()
-      const response = await this.$axios.get('/list-user', config)
+      const response = await this.$axios.get('/list-user', {
+        ...config,
+        params: {
+          username: payload,
+          limit: '20',
+        },
+        // grade_id: payload.grade_id,
+      })
       const data = response.data?.data
       commit('SET_USER', data.data)
       // console.log(data.data)

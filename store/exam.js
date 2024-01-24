@@ -8,6 +8,10 @@ export const state = () => ({
   totalPages: null,
   itemsPerPage: null,
   totalItems: null,
+  title: '',
+  type: '',
+  subject_id: null,
+  grade_id: null,
 })
 
 export const actions = {
@@ -18,6 +22,7 @@ export const actions = {
         ...config,
         params: {
           title: payload.title,
+          type: payload.type,
           subject_id: payload.subject_id,
           grade_id: payload.grade_id,
           page: payload.page,
@@ -25,10 +30,12 @@ export const actions = {
       })
       const data = response.data
       commit('SET_EXAM', data.data)
+      commit('SET_EXAM_PARAMS', payload)
     } catch (error) {
       console.log('Loi sever, ', error)
     }
   },
+  // eslint-disable-next-line require-await
   async addExam({ commit }, payload) {
     try {
       const config = getAuthorizationConfig()
@@ -102,6 +109,12 @@ export const mutations = {
     state.totalPages = data.last_page
     state.itemsPerPage = data.per_page
     state.totalItems = data.total
+  },
+  SET_EXAM_PARAMS(state, payload) {
+    state.title = payload.title || ''
+    state.type = payload.type || ''
+    state.subject_id = payload.subject_id || null
+    state.grade_id = payload.grade_id || null
   },
   SET_DETAIL_EXAM(state, exam) {
     state.detailExam = exam

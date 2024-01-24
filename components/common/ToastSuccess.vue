@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-[#0985e323] border-2 border-[#0984e3] text-[#0984e3] p-4 rounded-md shadow-lg"
+    class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-[#09e31b23] border-2 border-[#09db36] text-[#09e30d] p-4 rounded-md shadow-lg z-50"
   >
     <div class="flex items-center">
       <i class="fas fa-check-circle text-2xl mr-2"></i>

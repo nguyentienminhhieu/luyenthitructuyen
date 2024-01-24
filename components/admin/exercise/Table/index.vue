@@ -39,12 +39,11 @@
             Active
           </th>
           <th class="px-1 py-3 border-2"></th>
-          <!-- Ô trống cho nút Chỉnh sửa -->
         </tr>
       </thead>
       <tbody class="max-h-400 overflow-y-auto" @click="goToDetailExercise">
         <tr
-          v-for="exercise in listExerciseByAdmin"
+          v-for="exercise in listExercise"
           :key="exercise.id"
           class="hover:bg-gray-50 cursor-pointer"
         >
@@ -55,8 +54,8 @@
             {{ exercise.title ? truncateText(exercise.title, 35) : '' }}
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
-            <!-- {{ exercise.user_id === null ? 'Admin' : 'Giáo viên' }} -->
-            Admin
+            {{ exercise.user_id === null ? 'Admin' : 'Giáo viên' }}
+            <!-- Admin -->
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
             {{ exercise.category?.title }}
@@ -131,7 +130,6 @@
         >
           {{ page }}
         </li>
-        <!-- Hiển thị ba dấu chấm (...) nếu totalPagesToShow.length > 7 và currentPageNumber < totalPages - 3 -->
         <li
           v-if="
             totalPagesToShow.length < totalPages &&
@@ -151,7 +149,6 @@
         >
           {{ totalPages - 1 }}
         </li>
-        <!-- Hiển thị trang cuối cùng -->
         <li
           v-if="
             totalPagesToShow.length < totalPages &&
@@ -185,15 +182,22 @@ export default {
     }
   },
   computed: {
-    ...mapState('exercise', ['listExercise']),
-    ...mapState('exercise', ['currentPage ']),
-    ...mapState('exercise', ['totalPages']),
-    ...mapState('exercise', ['itemsPerPage']),
-    ...mapState('exercise', ['totalItems']),
+    // ...mapState('exercise', ['listExercise']),
+    ...mapState('exercise', [
+      'listExercise',
+      'currentPage ',
+      'totalPages',
+      'itemsPerPage',
+      'totalItems',
+      'title',
+      'type',
+      'subject_id',
+      'grade_id',
+    ]),
     ...mapState('category', ['listCategory']),
-    listExerciseByAdmin() {
-      return this.listExercise.filter((exam) => exam.user_id === null)
-    },
+    // listExerciseByAdmin() {
+    //   return this.listExercise.filter((exam) => exam.user_id === null)
+    // },
     totalPagesToShow() {
       const pages = []
       const startPage = Math.max(1, this.currentPageNumber - 3)
@@ -215,7 +219,7 @@ export default {
     this.currentPageNumber =
       parseInt(localStorage.getItem('currentPageNumberExercise')) || 1
 
-    this.getListExerciseAdmin()
+    this.getListExerciseAll()
     this.getCategory()
     localStorage.removeItem('questionData')
   },
@@ -223,7 +227,7 @@ export default {
     ...mapActions('exercise', ['getListExercise']),
     ...mapActions('exercise', ['activeExercise']),
     ...mapActions('category', ['getCategory']),
-    async getListExerciseAdmin() {
+    async getListExerciseAll() {
       try {
         await this.$store.dispatch('exercise/getListExercise', {
           page: this.currentPageNumber,
@@ -274,6 +278,10 @@ export default {
         this.currentPageNumber++
         await this.$store.dispatch('exercise/getListExercise', {
           page: this.currentPageNumber,
+          title: this.title,
+          type: this.type,
+          subject_id: this.subject_id,
+          grade_id: this.grade_id,
         })
       }
     },
@@ -282,6 +290,10 @@ export default {
         this.currentPageNumber--
         await this.$store.dispatch('exercise/getListExercise', {
           page: this.currentPageNumber,
+          title: this.title,
+          type: this.type,
+          subject_id: this.subject_id,
+          grade_id: this.grade_id,
         })
       }
     },
@@ -289,11 +301,21 @@ export default {
       this.currentPageNumber = pageNumber
       await this.$store.dispatch('exercise/getListExercise', {
         page: this.currentPageNumber,
+        title: this.title,
+        type: this.type,
+        subject_id: this.subject_id,
+        grade_id: this.grade_id,
       })
     },
     goToLastPages() {
       this.currentPageNumber = this.totalPages - 1
-      this.$store.dispatch('exam/getListExam', { page: this.currentPageNumber })
+      this.$store.dispatch('exam/getListExam', {
+        page: this.currentPageNumber,
+        title: this.title,
+        type: this.type,
+        subject_id: this.subject_id,
+        grade_id: this.grade_id,
+      })
     },
   },
 }

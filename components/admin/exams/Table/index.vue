@@ -44,7 +44,7 @@
       </thead>
       <tbody class="max-h-400 overflow-y-auto" @click="goToDetailExam">
         <tr
-          v-for="exam in listExamByAdmin"
+          v-for="exam in listExam"
           :key="exam.id"
           class="hover:bg-gray-50 cursor-pointer"
         >
@@ -53,8 +53,8 @@
             {{ exam.title ? truncateText(exam.title, 35) : '' }}
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
-            <!-- {{ exam.user === null ? 'Admin' : 'Giáo viên' }} -->
-            Admin
+            {{ exam.user === null ? 'Admin' : 'Giáo viên' }}
+            <!-- Admin -->
           </td>
           <td class="px-3 py-4 border-2 whitespace-no-wrap">
             {{ exam.category?.title }}
@@ -185,15 +185,21 @@ export default {
     }
   },
   computed: {
-    ...mapState('exam', ['listExam']),
-    ...mapState('exam', ['currentPage ']),
-    ...mapState('exam', ['totalPages']),
-    ...mapState('exam', ['itemsPerPage']),
-    ...mapState('exam', ['totalItems']),
+    ...mapState('exam', [
+      'listExam',
+      'currentPage ',
+      'totalPages',
+      'itemsPerPage',
+      'totalItems',
+      'title',
+      'type',
+      'subject_id',
+      'grade_id',
+    ]),
     ...mapState('category', ['listCategory']),
-    listExamByAdmin() {
-      return this.listExam.filter((exam) => exam.user_id === null)
-    },
+    // listExamByAdmin() {
+    //   return this.listExam.filter((exam) => exam.user_id === null)
+    // },
     totalPagesToShow() {
       const pages = []
       const startPage = Math.max(1, this.currentPageNumber - 3)
@@ -215,7 +221,7 @@ export default {
     this.currentPageNumber =
       parseInt(localStorage.getItem('currentPageNumberExam')) || 1
 
-    this.getListExamAdmin()
+    this.getListExamAll()
     this.getCategory()
     localStorage.removeItem('questionData')
   },
@@ -223,7 +229,7 @@ export default {
     ...mapActions('exam', ['getListExam']),
     ...mapActions('exam', ['activeExam']),
     ...mapActions('category', ['getCategory']),
-    async getListExamAdmin() {
+    async getListExamAll() {
       try {
         await this.$store.dispatch('exam/getListExam', {
           page: this.currentPageNumber,
@@ -273,6 +279,10 @@ export default {
         this.currentPageNumber++
         await this.$store.dispatch('exam/getListExam', {
           page: this.currentPageNumber,
+          title: this.title,
+          type: this.type,
+          subject_id: this.subject_id,
+          grade_id: this.grade_id,
         })
       }
     },
@@ -281,6 +291,10 @@ export default {
         this.currentPageNumber--
         await this.$store.dispatch('exam/getListExam', {
           page: this.currentPageNumber,
+          title: this.title,
+          type: this.type,
+          subject_id: this.subject_id,
+          grade_id: this.grade_id,
         })
       }
     },
@@ -288,11 +302,23 @@ export default {
       this.currentPageNumber = pageNumber
       await this.$store.dispatch('exam/getListExam', {
         page: this.currentPageNumber,
+        title: this.title,
+        type: this.type,
+        subject_id: this.subject_id,
+        grade_id: this.grade_id,
       })
+      console.log(this.type)
+      console.log(this.title)
     },
     goToLastPages() {
       this.currentPageNumber = this.totalPages - 1
-      this.$store.dispatch('exam/getListExam', { page: this.currentPageNumber })
+      this.$store.dispatch('exam/getListExam', {
+        page: this.currentPageNumber,
+        title: this.title,
+        type: this.type,
+        subject_id: this.subject_id,
+        grade_id: this.grade_id,
+      })
     },
   },
 }

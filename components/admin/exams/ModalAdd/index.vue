@@ -204,7 +204,7 @@ export default {
       showSuccessToast: false,
       showErrorToast: false,
       successMessage: 'Thêm đề thi thành công!.',
-      errorMessage: 'Lỗi! Dữ liệu bị trùng.',
+      errorMessage: 'Lỗi! Vui lòng thử lại.',
       currentPageExam: null,
     }
   },
