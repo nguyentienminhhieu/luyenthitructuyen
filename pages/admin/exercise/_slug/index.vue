@@ -1,9 +1,8 @@
 <template>
   <div class="p-3">
     <div>
-      <HeadingDetailExam />
+      <HeadingDetailExercise />
     </div>
-    <!-- {{ questions }} -->
     <div
       class="text-[#444444] bg-white flex justify-between border-b-2 mx-2 my-4 rounded-md py-3 pl-2 z-10"
     >
@@ -12,56 +11,49 @@
           <h1 class="flex text-xl font-medium">
             Title:
             <p class="ml-2 text-lg font-normal">
-              {{ detailExam.title }}
+              {{ detailExercise.title }}
             </p>
           </h1>
         </div>
         <div class="flex text-xl font-medium">
           Desciptions:
-          <p class="ml-2 text-lg font-normal">{{ detailExam.description }}</p>
-        </div>
-        <div class="">
-          <div class="flex text-xl font-medium">
-            Điểm:
-            <h3 class="ml-2 text-lg font-normal">{{ detailExam.max_score }}</h3>
-          </div>
-        </div>
-        <div class="flex text-xl font-medium">
-          Thời gian:
-          <h3 class="ml-2 text-lg font-normal">
-            {{ detailExam.duration }} Phút
-          </h3>
+          <p class="ml-2 text-lg font-normal">
+            {{ detailExercise.description }}
+          </p>
         </div>
       </div>
     </div>
-    <div>
-      <label
-        for="fileInput"
-        class="file-input-label bg-blue-500 text-white py-2 px-4 rounded cursor-pointer"
-      >
-        <span class="file-input-icon">📂</span> Choose File
-      </label>
-      <input
-        type="file"
-        id="fileInput"
-        @change="handleFileUpload"
-        class="hidden"
-      />
-      <!-- <ul>
-        <li v-for="(question, index) in questions" :key="index">
-          <h3>{{ question.content }}</h3>
-          <ul>
-            <li v-for="answer in question.answers" :key="answer.id">
-              {{ answer.content }} ({{ answer.is_correct ? 'Đúng' : 'Sai' }})
-            </li>
-          </ul>
-        </li>
-      </ul> -->
+    <div class="flex justify-between">
+      <!-- v-if="questions.length === 0" -->
+      <div>
+        <label
+          for="fileInput"
+          class="bg-[#273c75] hover:bg-[#31447b] text-white px-4 py-2 rounded-full font-medium cursor-pointer"
+        >
+          <i class="fa-sharp fa-regular fa-file-word"></i>
+          <span class="file-input-icon"></span> Choose Exercise File Word
+        </label>
+        <input
+          type="file"
+          id="fileInput"
+          @change="handleFileUpload"
+          class="hidden"
+        />
+      </div>
+      <div class="hidden">
+        <button
+          class="my-3 bg-[#273c75] hover:bg-[#31447b] text-white px-4 py-2 rounded-full font-medium cursor-pointer"
+          @click="shuffleQuestions"
+        >
+          <i class="fa-solid fa-rotate-left"></i>
+          Tráo Câu Hỏi
+        </button>
+      </div>
     </div>
     <div class="flex flex-row mt-4 mr-7 ml-3">
       <div class="redirect-question lg:w-1/5">
         <RedirectQuestion
-          :detail-exam="detailExamDeep"
+          :detail-exam="detailExerciseDeep"
           :questions="questions"
         />
       </div>
@@ -69,51 +61,60 @@
         <ListQuestions :questions-extends="questions" />
       </div>
     </div>
-    <BtnPushQ v-if="detailExam.user_id !== 1" @push-array="pushArray" />
+    <BtnPushQ v-if="detailExercise.user_id !== 1" @push-array="pushArray" />
     <SaveBtn
-      v-if="detailExam.user_id !== 1"
-      :detail-exam="detailExamDeep"
+      v-if="detailExercise.user_id !== 1"
+      :detail-exercise="detailExerciseDeep"
       :list-questions="questions"
-      @send-data="data"
+    />
+    <ToastSuccess
+      v-if="showSuccessToast"
+      class="z-50"
+      :message="successMessage"
     />
   </div>
 </template>
 <script>
 import mammoth from 'mammoth'
 import { mapActions, mapState } from 'vuex'
-import HeadingDetailExam from '~/components/admin/exams/DetailExam/Heading.vue'
-import ListQuestions from '~/components/admin/exams/DetailExam/List/ListQuestions.vue'
+import HeadingDetailExercise from '~/components/admin/exercise/DetailExercise/Heading.vue'
+import ListQuestions from '~/components/admin/exercise/DetailExercise/List/ListQuestions.vue'
+import RedirectQuestion from '~/components/admin/exercise/DetailExercise/RedirectQuestion.vue'
 import SaveBtn from '~/components/common/SaveBtn.vue'
 import BtnPushQ from '~/components/common/BtnPushQ.vue'
-import RedirectQuestion from '~/components/admin/exams/DetailExam/RedirectQuestion.vue'
+import ToastSuccess from '~/components/common/ToastSuccess.vue'
+
 export default {
-  name: 'DetailExam',
+  name: 'DetailExercise',
   components: {
-    HeadingDetailExam,
+    HeadingDetailExercise,
     ListQuestions,
     SaveBtn,
     BtnPushQ,
     RedirectQuestion,
+    ToastSuccess,
   },
   layout: 'defaultAdmin',
 
   data() {
     return {
-      saveExam: null,
       questions: [],
-      examID: null,
-      detailExamDeep: null,
-      questionsWords: [],
+      exerciseID: null,
+      detailExerciseDeep: null,
+      showSuccessToast: false,
+      successMessage: 'Tráo đề thành công! Save để lưu thay đổi.',
     }
   },
   computed: {
-    ...mapState('exam', ['detailExam']),
+    ...mapState('exercise', ['detailExercise']),
   },
   watch: {
-    detailExam: {
-      handler(newDetailExam) {
-        if (this.detailExam !== null) {
-          this.detailExamDeep = JSON.parse(JSON.stringify(this.detailExam))
+    detailExercise: {
+      handler(newDetailExercise) {
+        if (this.detailExercise !== null) {
+          this.detailExerciseDeep = JSON.parse(
+            JSON.stringify(this.detailExercise)
+          )
         }
       },
       deep: true,
@@ -138,14 +139,14 @@ export default {
     } else {
       this.questions = []
     }
-    if (this.$route.query.examID) {
-      this.examID = this.$route.query.examID
+    if (this.$route.query.exerciseID) {
+      this.exerciseID = this.$route.query.exerciseID
     }
-    await this.getDetailExam(this.examID)
-    this.questions = this.detailExamDeep.questions
+    await this.getDetailExercise(this.exerciseID)
+    this.questions = this.detailExerciseDeep.questions
   },
   methods: {
-    ...mapActions('exam', ['getDetailExam']),
+    ...mapActions('exercise', ['getDetailExercise']),
     pushArray() {
       const randomId = Math.floor(Math.random(10) * 100000)
       const newQuestion = {
@@ -181,9 +182,6 @@ export default {
       const clonedQuestions = JSON.parse(JSON.stringify(this.questions))
       localStorage.setItem('questionData', JSON.stringify(clonedQuestions))
     },
-    data(item) {
-      this.saveExam = item
-    },
     // eslint-disable-next-line require-await
     async handleFileUpload(event) {
       const file = event.target.files[0]
@@ -206,7 +204,7 @@ export default {
         mammoth
           .extractRawText({ arrayBuffer: fileContent })
           .then((result) => {
-            console.log('Raw Text:', result.value) // Thêm dòng này để log nội dung trích xuất
+            // console.log('Raw Text:', result.value) // Thêm dòng này để log nội dung trích xuất
             const json = this.parseRawTextToJSON(result.value)
             resolve(json)
           })
@@ -215,8 +213,7 @@ export default {
     },
     parseRawTextToJSON(rawText) {
       const lines = rawText.split('\n')
-      console.log('Lines:', lines) // Thêm dòng này để log dữ liệu lines
-
+      // console.log(lines)
       const questions = []
       let currentQuestion = null
 
@@ -247,19 +244,48 @@ export default {
           }
           questions.push(currentQuestion)
         } else if (line.startsWith('-')) {
-          // Câu trả lời
           const answerContent = line.substring(2).trim()
           const isCorrect = line.includes('(đúng)')
+          const explanation = []
+
+          let explanationIndex = lines.indexOf(line) + 1
+          while (
+            explanationIndex < lines.length &&
+            !lines[explanationIndex].startsWith('#') &&
+            !lines[explanationIndex].startsWith('-')
+          ) {
+            explanation.push(lines[explanationIndex].trim())
+            explanationIndex++
+          }
+          const explan = explanation.join(' ')
+
           currentQuestion.answers.push({
-            content: answerContent,
-            explanation: '',
+            content: answerContent.replace(/\(.*\)/, '').trim(),
+            explanation: explan,
             is_correct: isCorrect,
           })
         }
       })
 
-      console.log('Questions:', questions) // Thêm dòng này để log dữ liệu questions
+      console.log('Questions:', questions)
       return { questions }
+    },
+    shuffleQuestions() {
+      // Sử dụng thuật toán tráo phần tử Fisher-Yates (Knuth)
+      for (let i = this.questions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[this.questions[i], this.questions[j]] = [
+          this.questions[j],
+          this.questions[i],
+        ]
+      }
+
+      this.$set(this.detailExamDeep, 'questions', [...this.questions])
+      this.showSuccessToast = true
+      setTimeout(() => {
+        this.showSuccessToast = false
+      }, 2000)
+      console.log(this.detailExamDeep.questions)
     },
   },
 }
@@ -269,16 +295,5 @@ export default {
   .redirect-question {
     display: none;
   }
-}
-.file-input-container {
-  @apply relative inline-block;
-}
-
-.file-input-label {
-  @apply py-2 px-4 rounded cursor-pointer;
-}
-
-.file-input {
-  @apply absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer;
 }
 </style>

@@ -171,17 +171,28 @@
         <i class="fa-solid fa-angle-right"></i>
       </button>
     </div>
+    <ToastSuccess
+      v-if="showSuccessToast"
+      class="z-50"
+      :message="successMessage"
+    />
   </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import ToastSuccess from '~/components/common/ToastSuccess.vue'
 
 export default {
   name: 'TableExams',
+  components: {
+    ToastSuccess,
+  },
   data() {
     return {
       isActive: false,
       currentPageNumber: this.currentPage,
+      showSuccessToast: false,
+      successMessage: 'Thay đổi hoạt động thành công',
     }
   },
   computed: {
@@ -245,13 +256,17 @@ export default {
         }
         await this.activeExam(payload)
         await this.getListExam({ page: this.currentPageNumber })
+        this.showSuccessToast = true
+        setTimeout(() => {
+          this.showSuccessToast = false
+        }, 3000)
       } catch (error) {
         console.error('Lỗi server: ', error)
       }
     },
     detailExam(examItem) {
       this.$router.push({
-        path: `/admin/exams/examAdmin/${examItem.slug}`,
+        path: `/admin/exams/${examItem.slug}`,
         query: { examID: examItem.id },
       })
     },

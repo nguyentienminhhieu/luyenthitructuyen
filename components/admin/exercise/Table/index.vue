@@ -168,17 +168,28 @@
         <i class="fa-solid fa-angle-right"></i>
       </button>
     </div>
+    <ToastSuccess
+      v-if="showSuccessToast"
+      class="z-50"
+      :message="successMessage"
+    />
   </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import ToastSuccess from '~/components/common/ToastSuccess.vue'
 
 export default {
   name: 'TableExercise',
+  components: {
+    ToastSuccess,
+  },
   data() {
     return {
       isActive: false,
       currentPageNumber: this.currentPageNumber,
+      showSuccessToast: false,
+      successMessage: 'Thay đổi hoạt động thành công',
     }
   },
   computed: {
@@ -243,13 +254,17 @@ export default {
         }
         await this.activeExercise(payload)
         await this.getListExercise({ page: this.currentPageNumber })
+        this.showSuccessToast = true
+        setTimeout(() => {
+          this.showSuccessToast = false
+        }, 3000)
       } catch (error) {
         console.log('Lỗi server: ', error)
       }
     },
     detailExercise(exerciseItem) {
       this.$router.push({
-        path: `/admin/exercise/exerciseAdmin/${exerciseItem.slug}`,
+        path: `/admin/exercise/${exerciseItem.slug}`,
         query: { exerciseID: exerciseItem.id },
       })
       console.log(123)

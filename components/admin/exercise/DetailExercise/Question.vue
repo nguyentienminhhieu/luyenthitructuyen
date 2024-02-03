@@ -18,11 +18,18 @@
               <button @click="clearImage">
                 <i class="fa-solid fa-x"></i>
               </button>
-              <img
-                :src="question.file"
-                alt="Ảnh"
-                class="w-50 h-40 rounded-xl"
-              />
+              <div v-if="isAudioFile(question.file)">
+                <audio controls class="w-full rounded-xl">
+                  <source :src="question.file" type="audio/mp3" />
+                </audio>
+              </div>
+              <div v-else>
+                <img
+                  :src="question.file"
+                  alt="Ảnh"
+                  class="w-50 h-40 rounded-xl"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -61,6 +68,28 @@
               />
             </label>
           </button>
+          <button for="avatar" class="m-2">
+            <label
+              :for="`toggle-${question.random_Id || question.id}`"
+              class="text-black rounded-full font-medium cursor-pointer"
+            >
+              <i
+                class="fa-solid fa-music hover:bg-gray-400 rounded-full p-[5px]"
+              ></i>
+              <input
+                :id="`toggle-${question.random_Id || question.id}`"
+                type="audio/mp3"
+                class="hidden"
+                accept="file/*"
+                @change="
+                  handleFileAudioChange(
+                    question.random_Id || question.id,
+                    $event
+                  )
+                "
+              />
+            </label>
+          </button>
           <button @click="deleteQuestion">
             <i
               class="fa-regular fa-trash-can m-[2px] hover:bg-red-400 rounded-full p-[5px]"
@@ -87,7 +116,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import AnswerQuestion from './Answer.vue'
 import ToastError from '~/components/common/ToastError.vue'
 // import ListQuestions from '~/components/admin/exercise/DetailExercise/List/ListQuestions.vue'
@@ -189,6 +218,37 @@ export default {
         }
         reader.readAsDataURL(file)
       }
+    },
+    handleFileAudioChange(id, event) {
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        // eslint-disable-next-line no-self-compare
+        reader.onload = async (e) => {
+          const formData = new FormData()
+          formData.append('audio', file)
+          await this.uploadFile(formData)
+          if (typeof this.fileUpload === 'object') {
+            try {
+              if (this.fileUpload && this.fileUpload.url) {
+                // eslint-disable-next-line vue/no-mutating-props
+                this.question.file = this.fileUpload.url
+                console.log(this.question.file)
+              } else {
+                console.log('Không tìm thấy giá trị URL.')
+              }
+            } catch (error) {
+              console.error('Lỗi khi chuyển đổi dữ liệu JSON:', error)
+            }
+          } else {
+            console.error('FileData không có giá trị.')
+          }
+        }
+        reader.readAsDataURL(file)
+      }
+    },
+    isAudioFile(file) {
+      return file.endsWith('.mp3')
     },
     clearImage() {
       // eslint-disable-next-line vue/no-mutating-props

@@ -74,17 +74,16 @@
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
                 @click="toggleExamMenu"
               >
-                <div class="flex items-center">
-                  <!-- <i class="fa-solid fa-user-group "></i> -->
+                <nuxt-link to="/admin/exams" class="flex items-center">
                   <i class="fa-solid fa-pen-clip mr-2"></i>
                   <h1 class="menu-container">Exams</h1>
-                </div>
-                <i
+                </nuxt-link>
+                <!-- <i
                   class="fas fa-plus cursor-pointer"
                   :class="{ 'rotate-45': isExamMenu }"
-                ></i>
+                ></i> -->
               </div>
-              <div
+              <!-- <div
                 v-if="isExamMenu"
                 class="ml-4 bg-[#181F35] text-[#181F35] border-t-2 shadow-lg"
               >
@@ -100,23 +99,23 @@
                 >
                   Teacher
                 </nuxt-link>
-              </div>
+              </div> -->
             </li>
             <li class="mb-4 relative group">
               <div
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
                 @click="toggleExerciseMenu"
               >
-                <div class="flex items-center">
+                <nuxt-link to="/admin/exercise" class="flex items-center">
                   <i class="fa-solid fa-pen-ruler mr-2"></i>
                   <h1 class="menu-container">Exercise</h1>
-                </div>
-                <i
+                </nuxt-link>
+                <!-- <i
                   class="fas fa-plus cursor-pointer"
                   :class="{ 'rotate-45': isExerciseMenu }"
-                ></i>
+                ></i> -->
               </div>
-              <div
+              <!-- <div
                 v-if="isExerciseMenu"
                 class="ml-4 bg-[#181F35] text-[#181F35] border-t-2 shadow-lg"
               >
@@ -132,7 +131,7 @@
                 >
                   Teacher
                 </nuxt-link>
-              </div>
+              </div> -->
             </li>
             <li class="mb-4">
               <nuxt-link
@@ -259,9 +258,11 @@ export default {
       this.isMenuOpen.user = !this.isMenuOpen.user
     },
     toggleExamMenu() {
+      this.$router.push('/admin/exams')
       this.isExamMenu = !this.isExamMenu
     },
     toggleExerciseMenu() {
+      this.$router.push('/admin/exercise')
       this.isExerciseMenu = !this.isExerciseMenu
     },
     toggleAside() {

@@ -34,29 +34,32 @@
         </div>
       </div>
     </div>
-    <div>
-      <label
-        for="fileInput"
-        class="file-input-label bg-blue-500 text-white py-2 px-4 rounded cursor-pointer"
-      >
-        <span class="file-input-icon">📂</span> Choose File
-      </label>
-      <input
-        type="file"
-        id="fileInput"
-        @change="handleFileUpload"
-        class="hidden"
-      />
-      <!-- <ul>
-        <li v-for="(question, index) in questions" :key="index">
-          <h3>{{ question.content }}</h3>
-          <ul>
-            <li v-for="answer in question.answers" :key="answer.id">
-              {{ answer.content }} ({{ answer.is_correct ? 'Đúng' : 'Sai' }})
-            </li>
-          </ul>
-        </li>
-      </ul> -->
+    <div class="flex justify-between">
+      <!-- v-if="questions.length === 0" -->
+      <div>
+        <label
+          for="fileInput"
+          class="bg-[#273c75] hover:bg-[#31447b] text-white px-4 py-2 rounded-full font-medium cursor-pointer"
+        >
+          <i class="fa-sharp fa-regular fa-file-word"></i>
+          <span class="file-input-icon"></span> Choose Exam File Word
+        </label>
+        <input
+          type="file"
+          id="fileInput"
+          @change="handleFileUpload"
+          class="hidden"
+        />
+      </div>
+      <div class="hidden">
+        <button
+          class="my-3 bg-[#273c75] hover:bg-[#31447b] text-white px-4 py-2 rounded-full font-medium cursor-pointer"
+          @click="shuffleQuestions"
+        >
+          <i class="fa-solid fa-rotate-left"></i>
+          Tráo Câu Hỏi
+        </button>
+      </div>
     </div>
     <div class="flex flex-row mt-4 mr-7 ml-3">
       <div class="redirect-question lg:w-1/5">
@@ -76,6 +79,11 @@
       :list-questions="questions"
       @send-data="data"
     />
+    <ToastSuccess
+      v-if="showSuccessToast"
+      class="z-50"
+      :message="successMessage"
+    />
   </div>
 </template>
 <script>
@@ -86,6 +94,8 @@ import ListQuestions from '~/components/admin/exams/DetailExam/List/ListQuestion
 import SaveBtn from '~/components/common/SaveBtn.vue'
 import BtnPushQ from '~/components/common/BtnPushQ.vue'
 import RedirectQuestion from '~/components/admin/exams/DetailExam/RedirectQuestion.vue'
+import ToastSuccess from '~/components/common/ToastSuccess.vue'
+
 export default {
   name: 'DetailExam',
   components: {
@@ -94,6 +104,7 @@ export default {
     SaveBtn,
     BtnPushQ,
     RedirectQuestion,
+    ToastSuccess,
   },
   layout: 'defaultAdmin',
 
@@ -104,6 +115,8 @@ export default {
       examID: null,
       detailExamDeep: null,
       questionsWords: [],
+      showSuccessToast: false,
+      successMessage: 'Tráo đề thành công! Save để lưu thay đổi.',
     }
   },
   computed: {
@@ -184,6 +197,7 @@ export default {
     data(item) {
       this.saveExam = item
     },
+
     // eslint-disable-next-line require-await
     async handleFileUpload(event) {
       const file = event.target.files[0]
@@ -206,7 +220,7 @@ export default {
         mammoth
           .extractRawText({ arrayBuffer: fileContent })
           .then((result) => {
-            console.log('Raw Text:', result.value) // Thêm dòng này để log nội dung trích xuất
+            // console.log('Raw Text:', result.value) // Thêm dòng này để log nội dung trích xuất
             const json = this.parseRawTextToJSON(result.value)
             resolve(json)
           })
@@ -215,8 +229,7 @@ export default {
     },
     parseRawTextToJSON(rawText) {
       const lines = rawText.split('\n')
-      console.log('Lines:', lines) // Thêm dòng này để log dữ liệu lines
-
+      // console.log(lines)
       const questions = []
       let currentQuestion = null
 
@@ -247,19 +260,48 @@ export default {
           }
           questions.push(currentQuestion)
         } else if (line.startsWith('-')) {
-          // Câu trả lời
           const answerContent = line.substring(2).trim()
           const isCorrect = line.includes('(đúng)')
+          const explanation = []
+
+          let explanationIndex = lines.indexOf(line) + 1
+          while (
+            explanationIndex < lines.length &&
+            !lines[explanationIndex].startsWith('#') &&
+            !lines[explanationIndex].startsWith('-')
+          ) {
+            explanation.push(lines[explanationIndex].trim())
+            explanationIndex++
+          }
+          const explan = explanation.join(' ')
+
           currentQuestion.answers.push({
-            content: answerContent,
-            explanation: '',
+            content: answerContent.replace(/\(.*\)/, '').trim(),
+            explanation: explan,
             is_correct: isCorrect,
           })
         }
       })
 
-      console.log('Questions:', questions) // Thêm dòng này để log dữ liệu questions
+      console.log('Questions:', questions)
       return { questions }
+    },
+    shuffleQuestions() {
+      // Sử dụng thuật toán tráo phần tử Fisher-Yates (Knuth)
+      for (let i = this.questions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[this.questions[i], this.questions[j]] = [
+          this.questions[j],
+          this.questions[i],
+        ]
+      }
+
+      this.$set(this.detailExamDeep, 'questions', [...this.questions])
+      this.showSuccessToast = true
+      setTimeout(() => {
+        this.showSuccessToast = false
+      }, 2000)
+      console.log(this.detailExamDeep.questions)
     },
   },
 }
@@ -269,16 +311,5 @@ export default {
   .redirect-question {
     display: none;
   }
-}
-.file-input-container {
-  @apply relative inline-block;
-}
-
-.file-input-label {
-  @apply py-2 px-4 rounded cursor-pointer;
-}
-
-.file-input {
-  @apply absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer;
 }
 </style>
