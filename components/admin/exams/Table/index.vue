@@ -333,8 +333,7 @@ export default {
         type: this.type,
         subject_id: this.subject_id,
         grade_id: this.grade_id,
-        
-      })
+        })
     },
   },
 }

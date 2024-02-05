@@ -165,7 +165,7 @@
                 to="/admin/posts"
                 class="flex items-center justify-between p-3 hover:bg-gray-700 rounded transition duration-300 cursor-pointer"
               >
-                Quản lý bài viết
+                Quản lý bài viết dddd
               </nuxt-link>
             </li> -->
           </ul>
